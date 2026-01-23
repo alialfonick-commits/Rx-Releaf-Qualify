@@ -5,7 +5,7 @@ import { TableWrap } from "./tableWrap"
 export function RecentVisit() {
     return (
 
-        <div className="bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl px-4 py-5 mt-3">
+        <div className="bg-[#FFFFFF] border border-[#D7DED3] rounded-xl px-4 py-5 mt-3">
 
             <div className="pb-5 flex items-center justify-between">
                 <div className="flex items-center gap-3 [&_strong]:font-semibold [&_strong]:text-[20px] [&_strong]:text-[#2B3B33]">

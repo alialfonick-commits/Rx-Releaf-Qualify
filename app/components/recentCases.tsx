@@ -74,7 +74,7 @@ export default function ResentCases() {
         </div>
 
         <div
-         className={`flex gap-2 pt-5 [&_span]:font-semibold [&_span]:px-3.5 [&_span]:py-0.75 [&_span]:rounded-[25px]`}
+         className={`flex gap-2 pt-5 [&_span]:font-semibold [&_span]:px-3 [&_span]:py-0.5 [&_span]:rounded-[25px]`}
         >
          {item.tags.map((tag, i) => (
           <span key={i} className={item.tagStyle}>
