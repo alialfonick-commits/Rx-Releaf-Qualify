@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function VisitRequest() {
     return (
      <>
-      <div className="bg-[#5E6E66] rounded-xl p-6 text-white flex items-center justify-between [&_strong]:font-semibold [&_strong]:text-[30px] mb-3 [&_p]:font-normal [&_p]:text-[#FFFFFFCC]">
+      <div className="bg-[#5E6E66] rounded-xl p-6 text-white flex max-[992px]:flex-col items-center justify-between [&_strong]:font-semibold [&_strong]:text-[30px] mb-3 [&_p]:font-normal [&_p]:text-[#FFFFFFCC]">
         <div className="flex items-center gap-4">
         <Phone size={55} color="#2E291F" className="bg-[#DFA620] p-3 rounded-xl"/>
         <div>
