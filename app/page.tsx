@@ -1,5 +1,6 @@
 // import WelcomeBar from "./components/welcomeBar"
 // import VisitDetail  from "./components/visitDetail"
+import Cases from "./components/cases";
 import ResentCases from "./components/recentCases";
 import { RecentVisit } from "./components/recentVisit";
 import Stats from "./components/stats";
@@ -12,10 +13,11 @@ export default function Home() {
 
       {/* <WelcomeBar /> */}
       {/* <VisitDetail  /> */}
-      <VisitRequest />
-      <Stats />
-      <ResentCases />
-      <RecentVisit />
+      {/* <VisitRequest /> */}
+      {/* <Stats /> */}
+      {/* <ResentCases /> */}
+      {/* <RecentVisit /> */}
+      <Cases />
     </>
   );
 }
