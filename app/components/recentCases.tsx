@@ -45,12 +45,12 @@ export default function ResentCases() {
     </div>
     <Link href="#" className="flex text-[#476B59] font-semibold gap-1 items-center">View All <ArrowRight size={17} /></Link>
    </div>
-   <div className="grid grid-cols-3 gap-4">
+   <div className="grid sm:grid-cols-3 gap-4">
     {cases.map((item, index) => (
      <Link href={item.link} key={index} className="relative border border-[#DCE5DF] hover:border-[#5E6E66] p-4 rounded-xl">
 
-      <div className="flex items-center justify-between [&_span]:text-[#6A7C73]">
-       <div className="flex items-center gap-3 [&_strong]:text-[#2E3833] [&_strong]:leading-6 [&_strong]:block">
+      <div className="flex items-center justify-between [&_span]:text-sm [&_span]:text-[#6A7C73]">
+       <div className="flex items-center gap-3 [&_strong]:text-[#2E3833] [&_strong]:leading-6 [&_strong]:block [&_p]:text-[15px] [&_p]:text-[#6A7C73]">
         <UserRound color="#5E6E66" className="bg-[#476B591A] size-11 p-2 rounded-[50%]" />
         <div>
          <strong>{item.name}</strong>
@@ -64,7 +64,7 @@ export default function ResentCases() {
       <div className="flex justify-between">
 
        <div>
-        <div className="flex gap-2 items-center pt-4 [&_span]:bg-no-repeat [&_span]:bg-position-[left_center] [&_span]:text-[#6A7C73] [&_span]:pl-6">
+        <div className="flex gap-2 items-center pt-4 [&_span]:bg-no-repeat [&_span]:bg-position-[left_center] [&_span]:text-[#6A7C73] [&_span]:pl-6 [&_span]:text-[15px]">
          <span className="bg-[url('/images/calendar.png')] bg-size-[18px]">
           {item.date}
          </span>
@@ -74,7 +74,7 @@ export default function ResentCases() {
         </div>
 
         <div
-         className={`flex gap-2 pt-5 [&_span]:font-semibold [&_span]:px-3 [&_span]:py-0.5 [&_span]:rounded-[25px]`}
+         className={`flex gap-2 pt-5 text-sm [&_span]:font-semibold [&_span]:px-3 [&_span]:py-0.5 [&_span]:rounded-[25px]`}
         >
          {item.tags.map((tag, i) => (
           <span key={i} className={item.tagStyle}>
@@ -83,7 +83,7 @@ export default function ResentCases() {
          ))}
         </div>
        </div>
-       <ChevronRight color="#2E3833" size={20} className="absolute right-2.5 top-0 bottom-0 m-auto"/>
+       <ChevronRight color="#2E3833" size={20} className="absolute right-2.5 top-0 bottom-0 m-auto" />
 
       </div>
      </Link>

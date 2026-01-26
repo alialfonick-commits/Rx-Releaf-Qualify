@@ -16,7 +16,6 @@ export default function Home() {
       <Stats />
       <ResentCases />
       <RecentVisit />
-
     </>
   );
 }
