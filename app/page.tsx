@@ -1,5 +1,5 @@
 import WelcomeBar from "./components/welcomeBar"
-import VisitDetail  from "./Patient Dashboard/visitDetail"
+import VisitDetail  from "./patientDashboard/visitDetail"
 import Cases from "./components/cases";
 import ResentCases from "./components/recentCases";
 import { RecentVisit } from "./components/recentVisit";
