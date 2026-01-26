@@ -1,5 +1,5 @@
-// import WelcomeBar from "./components/welcomeBar"
-// import VisitDetail  from "./components/visitDetail"
+import WelcomeBar from "./components/welcomeBar"
+import VisitDetail  from "./Patient Dashboard/visitDetail"
 import Cases from "./components/cases";
 import ResentCases from "./components/recentCases";
 import { RecentVisit } from "./components/recentVisit";
@@ -11,13 +11,13 @@ export default function Home() {
   return (
     <>
 
-      {/* <WelcomeBar /> */}
-      {/* <VisitDetail  /> */}
+      <WelcomeBar />
+      <VisitDetail  />
       {/* <VisitRequest /> */}
       {/* <Stats /> */}
       {/* <ResentCases /> */}
       {/* <RecentVisit /> */}
-      <Cases />
+      {/* <Cases /> */}
     </>
   );
 }

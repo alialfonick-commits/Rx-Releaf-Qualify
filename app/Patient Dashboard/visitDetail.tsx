@@ -1,9 +1,4 @@
 import { Button } from "@/components/ui/button"
-import {
- Field,
- FieldGroup,
- FieldLabel,
-} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
  Select,
@@ -29,13 +24,12 @@ export default function VisitDetail() {
      <Stethoscope color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg" />
      <strong>Visit Details</strong>
     </div>
-    <form>
-     <FieldGroup>
-      <div className="grid grid-cols-3 gap-4">
 
-       <Field>
+
+      <div className="grid grid-cols-3 gap-4">
+       <div>
         <div className="flex items-center gap-2">
-         <FieldLabel htmlFor="form-clinic">Clinic</FieldLabel>
+         <label htmlFor="form-clinic">Clinic</label>
          <TooltipProvider>
           <Tooltip>
            <TooltipTrigger asChild>
@@ -54,10 +48,12 @@ export default function VisitDetail() {
          readOnly
          required
         />
-       </Field>
-       <Field>
+       </div>
+
+
+       <div>
         <div className="flex items-center gap-2">
-         <FieldLabel htmlFor="form-Patient-State">Patient State</FieldLabel>
+         <label htmlFor="form-Patient-State">Patient State</label>
          <TooltipProvider>
           <Tooltip>
            <TooltipTrigger asChild>
@@ -79,11 +75,11 @@ export default function VisitDetail() {
           <SelectItem value="nl">Normal</SelectItem>
          </SelectContent>
         </Select>
-       </Field>
+       </div>
 
-       <Field>
+       <div>
         <div className="flex items-center gap-2">
-         <FieldLabel htmlFor="form-type">Consultation Type</FieldLabel>
+         <label htmlFor="form-type">Consultation Type</label>
          <TooltipProvider>
           <Tooltip>
            <TooltipTrigger asChild>
@@ -102,12 +98,12 @@ export default function VisitDetail() {
          readOnly
          required
         />
-       </Field>
+       </div>
 
       </div>
       <div className="grid grid-cols-3 gap-4">
-       <Field>
-        <FieldLabel htmlFor="form-visit">Urgent Care Visit: Consultation + Prescription  sent to your..</FieldLabel>
+       <div>
+        <label htmlFor="form-visit">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
         <Select defaultValue="selectState">
          <SelectTrigger id="form-visit">
           <SelectValue />
@@ -118,9 +114,9 @@ export default function VisitDetail() {
           <SelectItem value="nl">Normal</SelectItem>
          </SelectContent>
         </Select>
-       </Field>
-       <Field>
-        <FieldLabel htmlFor="form-package">Pharmacy Package</FieldLabel>
+       </div>
+       <div>
+        <label htmlFor="form-package">Pharmacy Package</label>
         <Select defaultValue="us">
          <SelectTrigger id="form-package">
           <SelectValue />
@@ -131,16 +127,10 @@ export default function VisitDetail() {
           <SelectItem value="ca">Canada</SelectItem>
          </SelectContent>
         </Select>
-       </Field>
+       </div>
       </div>
-      <Field orientation="horizontal">
-       <Button type="button" variant="outline">
-        Cancel
-       </Button>
-       <Button type="submit">Submit</Button>
-      </Field>
-     </FieldGroup>
-    </form>
+  
+
    </div>
   </>
  )
