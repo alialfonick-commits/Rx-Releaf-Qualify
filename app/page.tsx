@@ -1,11 +1,13 @@
-import WelcomeBar from "./components/welcomeBar"
-import VisitDetail  from "./patientDashboard/visitDetail"
+import WelcomeBar from "./components/welcomeBar";
+import VisitDetail from "./patientDashboard/visitDetail";
 import Cases from "./components/cases";
 import ResentCases from "./components/recentCases";
 import RecentVisit from "./components/recentVisit";
 import Stats from "./components/stats";
 import VisitRequest from "./components/visitRequest";
 import Checkout from "./patientDashboard/checkout";
+import Thankyou from "./patientDashboard/thankyou";
+
 
 export default function Home() {
   return (
@@ -18,7 +20,9 @@ export default function Home() {
       {/* <ResentCases /> */}
       {/* <RecentVisit /> */}
       {/* <Cases /> */}
-      <Checkout />
+      {/* <Checkout /> */}
+      <Thankyou />
+
     </>
   );
 }
