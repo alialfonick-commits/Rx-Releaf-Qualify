@@ -5,19 +5,20 @@ import ResentCases from "./components/recentCases";
 import RecentVisit from "./components/recentVisit";
 import Stats from "./components/stats";
 import VisitRequest from "./components/visitRequest";
-
+import Checkout from "./patientDashboard/checkout";
 
 export default function Home() {
   return (
     <>
 
       {/* <WelcomeBar /> */}
-      <VisitDetail />
+      {/* <VisitDetail /> */}
       {/* <VisitRequest /> */}
       {/* <Stats /> */}
       {/* <ResentCases /> */}
       {/* <RecentVisit /> */}
       {/* <Cases /> */}
+      <Checkout />
     </>
   );
 }
