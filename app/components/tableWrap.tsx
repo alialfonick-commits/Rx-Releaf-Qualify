@@ -154,7 +154,7 @@ export function TableWrap() {
           <AlertDialogContent
            className="rounded-xl p-6 bg-white">
            <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-[18px] font-semibold text-[#2B3B33]">
+            <AlertDialogTitle className="flex items-center gap-2 text-[18px] font-semibold">
              <CreditCard color="#D9A520" />Send Payment Link
             </AlertDialogTitle>
 
@@ -292,7 +292,7 @@ export function TableWrap() {
        <TableCell>
         <Link
          href={visit.actionUrl}
-         className="text-[#2B3B33] font-medium"
+         className="font-medium"
         >
          View
         </Link>

@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+@layer base {
+  :root {
+    --foreground: #2B3B33;
+  }
+
+  body {
+    color: hsl(var(--foreground));
+  }
+}
