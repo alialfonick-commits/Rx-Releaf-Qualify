@@ -51,25 +51,25 @@ export default function Thankyou() {
         <div className="p-4 mt-3 rounded-xl bg-[#CCD7C680] [&_svg]:p-2 [&_svg]:rounded-lg [&_svg]:bg-[#CECFB6] [&>strong:first-child]:font-semibold! [&_strong]:font-medium! [&_p]:text-[15px] [&_p]:text-[#2B3B3399]">
           <strong>What Happen Next?</strong>
           <div className="flex items-center gap-3.5 pt-2">
-          <Clock4 size={40} color="#D39A05" />
-          <div>
-            <strong>Provider Review</strong>
-            <p>A licenses provider will review you case within 15-30 minutes</p>
-          </div>
-          </div>
-          <div className="flex items-center gap-3.5 pt-2">
-          <File size={40} color="#D39A05" />
-          <div>
-            <strong>Prescription Sent</strong>
-            <p>A licenses provider will review you case within 15-30 minutes</p>
-          </div>
+            <Clock4 size={40} color="#D39A05" />
+            <div>
+              <strong>Provider Review</strong>
+              <p>A licenses provider will review you case within 15-30 minutes</p>
+            </div>
           </div>
           <div className="flex items-center gap-3.5 pt-2">
-          <Phone size={40} color="#D39A05" />
-          <div>
-            <strong>Follow Up</strong>
-            <p>A licenses provider will review you case within 15-30 minutes</p>
+            <File size={40} color="#D39A05" />
+            <div>
+              <strong>Prescription Sent</strong>
+              <p>A licenses provider will review you case within 15-30 minutes</p>
+            </div>
           </div>
+          <div className="flex items-center gap-3.5 pt-2">
+            <Phone size={40} color="#D39A05" />
+            <div>
+              <strong>Follow Up</strong>
+              <p>A licenses provider will review you case within 15-30 minutes</p>
+            </div>
           </div>
         </div>
 

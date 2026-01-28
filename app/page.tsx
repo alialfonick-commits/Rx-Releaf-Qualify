@@ -7,6 +7,8 @@ import Stats from "./components/stats";
 import VisitRequest from "./components/visitRequest";
 import Checkout from "./patientDashboard/checkout";
 import Thankyou from "./patientDashboard/thankyou";
+import ViewVisitDetails from "./components/viewVisitDetails";
+import AdminLogin from "./adminDashboard/adminLogin";
 
 
 export default function Home() {
@@ -21,7 +23,9 @@ export default function Home() {
       {/* <RecentVisit /> */}
       {/* <Cases /> */}
       {/* <Checkout /> */}
-      <Thankyou />
+      {/* <Thankyou /> */}
+      {/* <ViewVisitDetails /> */}
+      <AdminLogin />
 
     </>
   );
