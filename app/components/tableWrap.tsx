@@ -106,7 +106,7 @@ export function TableWrap() {
      </TableRow>
     </TableHeader>
 
-    <TableBody>
+    <TableBody className="[&_tr]:hover:bg-gray-50">
      {visits.map((visit) => (
       <TableRow key={visit.visitid}>
        <TableCell className="font-medium text-[#486B57]">

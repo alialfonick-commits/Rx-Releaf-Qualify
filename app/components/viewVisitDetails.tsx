@@ -118,7 +118,7 @@ export default function ViewVisitDetails() {
        </div>
       </div>
 
-      <div className="pt-4 [&_span]:bg-[#E8EDEA] [&_span]:border [&_span]:border-[#D7DED3] [&_span]:mt-2 [&_span]:rounded-lg [&_span]:px-4 [&_span]:py-3 [&_span]:block">
+      <div className="pt-4 [&_span]:bg-[#E8EDEA] [&_span]:border [&_span]:border-[#D7DED3] [&_span]:mt-2 [&_span]:rounded-lg [&_span]:p-4 [&_span]:block">
        <p>Reason for visit</p>
        <span>Patient reports moderate sinus pressure and congestion for the last 4 days. No fever, but experiencing mild fatigue and occasional dry cough.</span>
       </div>

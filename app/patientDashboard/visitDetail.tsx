@@ -51,7 +51,11 @@ function isValidDate(date: Date | undefined) {
     return !isNaN(date.getTime())
 }
 
-export default function VisitDetail() {
+export default function VisitDetail({
+    onNext,
+  }: {
+    onNext: () => void;
+  }) {
 
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(
@@ -70,7 +74,7 @@ export default function VisitDetail() {
                 </div>
 
 
-                <div className="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-4 space-y-4 max-[1300px]:items-center max-md:items-end [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
+                <div className="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-4 space-y-4 [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
 
                     <div>
                         <div className="flex items-center gap-2">
@@ -145,7 +149,7 @@ export default function VisitDetail() {
                     </div>
 
                     <div>
-                        <label htmlFor="form-visit">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
+                        <label htmlFor="form-visit" className="sm:whitespace-nowrap flex overflow-hidden">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
                         <Select defaultValue="selectState">
                             <SelectTrigger id="form-visit">
                                 <SelectValue />
@@ -305,7 +309,12 @@ export default function VisitDetail() {
 
                 <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
                     <Button className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
-                    <Button className="bg-[#D39A05] hover:bg-[#5E6E66]">Next</Button>
+                    <Button
+  onClick={onNext}
+  className="bg-[#D39A05] hover:bg-[#5E6E66]"
+>
+  Next
+</Button>
                 </div>
 
 

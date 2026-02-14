@@ -2,7 +2,14 @@ import { CircleCheckBig, Clock4, CreditCard, File, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 
-export default function Thankyou() {
+export default function Thankyou({
+  onBack,
+  onHome,
+}: {
+  onBack: () => void;
+  onHome: () => void;
+}) {
+
   return (
     <>
 
@@ -79,8 +86,20 @@ export default function Thankyou() {
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
-          <Button className="bg-[#5E6E66] hover:bg-[#D39A05]">Back to Checkout</Button>
-          <Button className="bg-[#D39A05] hover:bg-[#5E6E66]">back to home</Button>
+        <Button
+  onClick={onBack}
+  className="bg-[#5E6E66] hover:bg-[#D39A05]"
+>
+  Back to Checkout
+</Button>
+
+<Button
+  onClick={onHome}
+  className="bg-[#D39A05] hover:bg-[#5E6E66]"
+>
+  Back to Home
+</Button>
+
         </div>
 
       </div>

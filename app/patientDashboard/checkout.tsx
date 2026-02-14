@@ -1,14 +1,21 @@
 import { Check, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button"
 
-export default function Checkout() {
+export default function Checkout({
+  onBack,
+  onNext,
+}: {
+  onBack: () => void;
+  onNext: () => void;
+}) {
+
   return (
     <>
 
       <div className="max-w-170 px-3.75 mx-auto [&_strong]:font-semibold">
-        <div className="border border-[#D7DED3] shadow-[0px_1px_2px_0px_#0000000D] px-5 py-6 rounded-xl [&_p]:text-[#677E73] [&_p]:text-sm">
+        <div className="border border-[#D7DED3] shadow-[0px_1px_2px_0px_#0000000D] px-5 py-6 rounded-xl [&_strong]:text-xl [&_p]:text-[#677E73] [&_p]:text-sm">
           <strong>Order Summary</strong>
-          <div className="flex justify-between pt-3">
+          <div className="flex justify-between pt-4">
             <div>
               <span>Urgent Care Consultation + Prescription</span>
               <p>Licensed provider consultation</p>
@@ -42,9 +49,21 @@ export default function Checkout() {
           <p>Secure checkout powered by industry-standard encryption</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
-          <Button className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
-          <Button className="bg-[#D39A05] hover:bg-[#5E6E66]">Next</Button>
+        <div className="grid grid-cols-2 gap-3 pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
+        <Button
+  onClick={onBack}
+  className="bg-[#5E6E66] hover:bg-[#D39A05]"
+>
+  Back
+</Button>
+
+<Button
+  onClick={onNext}
+  className="bg-[#D39A05] hover:bg-[#5E6E66]"
+>
+  Next
+</Button>
+
         </div>
 
       </div>
