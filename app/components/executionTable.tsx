@@ -65,7 +65,7 @@ const cases = [
 function StatusBadge({ status }: { status: string }) {
  if (status === "Blocked") {
   return (
-   <span className="bg-[#D74242] text-white mx-auto w-28 flex justify-center py-1 rounded-full font-medium">
+   <span className="bg-[#D74242] text-white mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
     Blocked
    </span>
   )
@@ -73,7 +73,7 @@ function StatusBadge({ status }: { status: string }) {
 
  if (status === "In Progress") {
   return (
-   <span className="bg-[#3399CC26] text-[#3399CC] mx-auto w-28 flex justify-center py-1 rounded-full font-medium">
+   <span className="bg-[#3399CC26] text-[#3399CC] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
     In Progress
    </span>
   )
@@ -81,7 +81,7 @@ function StatusBadge({ status }: { status: string }) {
 
  if (status === "Completed") {
   return (
-   <span className="bg-[#39AC6326] text-[#39AC63] mx-auto w-28 flex justify-center py-1 rounded-full font-medium">
+   <span className="bg-[#39AC6326] text-[#39AC63] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
     Completed
    </span>
   )
@@ -89,7 +89,7 @@ function StatusBadge({ status }: { status: string }) {
 
  if (status === "Pending") {
   return (
-   <span className="bg-[#DFA62026] text-[#322A1B] mx-auto w-28 flex justify-center py-1 rounded-full font-medium">
+   <span className="bg-[#DFA62026] text-[#322A1B] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
     Pending
    </span>
   )

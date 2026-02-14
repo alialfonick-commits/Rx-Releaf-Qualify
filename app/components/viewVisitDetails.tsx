@@ -6,7 +6,7 @@ export default function ViewVisitDetails() {
   <>
    <div className="[&_p]:text-[#6A7C73] [&_span]:text-sm [&_span]:capitalize [&_strong]:font-semibold [&_strong]:text-[18px]">
 
-    <div className="flex justify-between items-center pb-4 gap-3 max-sm:flex-col max-sm:items-start">
+    <div className="flex justify-between items-center pb-4 gap-3 md:flex-row flex-col max-sm:items-start">
 
      <div className="flex items-center gap-2 [&_Button]:p-0 [&_strong]:font-medium [&_strong]:text-[20px] [&_p]:text-sm [&_Button]:cursor-pointer">
       <Button><ArrowLeft className="size-6!" /></Button>
@@ -25,7 +25,7 @@ export default function ViewVisitDetails() {
 
     <div className="grid grid-cols-12 gap-2">
 
-     <div className="bg-[#FFFFFF] max-[849px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
       <div className="flex items-center gap-2">
        <User color="#5E6E66" size={22} />
        <strong>Patient Details</strong>
@@ -74,7 +74,7 @@ export default function ViewVisitDetails() {
 
      </div>
 
-     <div className="bg-[#FFFFFF] max-[849px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
 
       <strong>Coordination Status</strong>
       <div className="bg-[#EFEFEF] h-px mt-3 mb-4"></div>
@@ -99,7 +99,7 @@ export default function ViewVisitDetails() {
 
     <div className="grid grid-cols-12 gap-2 mt-2">
 
-     <div className="bg-[#FFFFFF] max-[849px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
       <div className="flex items-center gap-2">
        <User color="#5E6E66" size={22} />
        <strong>Visit Information</strong>
@@ -139,7 +139,7 @@ export default function ViewVisitDetails() {
 
      </div>
 
-     <div className="bg-[#FFFFFF] max-[849px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
 
       <strong>Status History</strong>
       <div className="bg-[#EFEFEF] h-px mt-3 mb-4"></div>

@@ -3,7 +3,7 @@ import { CircleCheckBig, Clock4, FolderOpen, Phone } from "lucide-react";
 export default function Stats() {
     return (
         <>
-        <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3 [&_span]:text-[#6A7C73] [&_strong]:text-[40px] [&_strong]:text-[#2E3833] [&_svg]:bg-[#476B591A] [&_svg]:p-3 [&_svg]:rounded-[15px]">
+        <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3 [&_span]:text-[#6A7C73] max-sm:[&_strong]:text-[30px] [&_strong]:text-[40px] [&_strong]:text-[#2E3833] [&_svg]:bg-[#476B591A] [&_svg]:p-3 [&_svg]:rounded-[15px]">
             <div className="flex items-center justify-between border border-[#DCE5DF] bg-white rounded-xl px-4 py-5">
                 <div className="flex flex-col">
                 <span>Active Cases</span>

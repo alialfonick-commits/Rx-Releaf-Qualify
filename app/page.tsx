@@ -20,6 +20,7 @@ import ResentCases from "./components/recentCases";
 import RecentVisit from "./components/recentVisit";
 import Stats from "./components/stats";
 import VisitRequest from "./components/visitRequest";
+import VirtualStep1 from "./components/virtualStep1";
 import Checkout from "./patientDashboard/checkout";
 import Thankyou from "./patientDashboard/thankyou";
 import ViewVisitDetails from "./components/viewVisitDetails";
@@ -40,6 +41,7 @@ type PageType =
   | "executionMonitoring";
 
 export default function Home() {
+  const [staffStep, setStaffStep] = useState<"dashboard" | "virtualStep1">("dashboard");
   const [activePage, setActivePage] = useState<PageType>("welcome");
   const [welcomeStep, setWelcomeStep] = useState<
     "visit" | "checkout" | "thankyou"
@@ -74,15 +76,29 @@ export default function Home() {
           </>
         );
 
-      case "staff":
-        return (
-          <>
-            <VisitRequest />
-            <Stats />
-            <ResentCases />
-            <RecentVisit />
-          </>
-        );
+        case "staff":
+          return (
+            <>
+              {staffStep === "dashboard" && (
+                <>
+                  <VisitRequest onCreate={() => setStaffStep("virtualStep1")} />
+                  <Stats />
+                  <ResentCases />
+                  <RecentVisit />
+                </>
+              )}
+        
+              {staffStep === "virtualStep1" && (
+                <VirtualStep1
+                  onBack={() => setStaffStep("dashboard")}
+                  // onNext={() => setStaffStep("virtualStep2")
+                  onNext={() => console.log("Next clicked")}
+                />
+              )}
+            </>
+          );
+        
+        
 
       case "cases":
         return <Cases />;
@@ -110,7 +126,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-[#6B7C72] relative">
 
-      <div className="md:hidden fixed top-4 left-4 z-50">
+      <div className="md:hidden fixed top-0 left-0 z-50 bg-[#5E6E66] w-full">
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="text-white p-2 rounded-md bg-[#5E6E66]"
@@ -151,7 +167,7 @@ export default function Home() {
               className="mx-auto"
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 [&_button]:text-start">
 
             <SidebarButton
               icon={<ClipboardList size={18} />}
@@ -249,7 +265,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-[#F6F7F2] px-4 py-2 max-md:p-0! md:ml-0 overflow-y-auto w-full">
+      <div className="bg-[#F6F7F2] px-4 py-2 shadow-[1px_0px_10px_4px_#00000021] max-md:pt-13! max-md:p-2! md:ml-0 overflow-y-auto w-full">
         {renderPage()}
       </div>
     </div>

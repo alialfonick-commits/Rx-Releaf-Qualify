@@ -4,7 +4,7 @@ import ExecutionTable from "./executionTable";
 export default function ExecutionMonitoring() {
  return (
   <>
-   <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3 [&_span]:text-[#6A7C73] [&_strong]:text-[40px] [&_strong]:text-[#2E3833] [&_svg]:p-3 [&_svg]:rounded-[15px]">
+   <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 [&_span]:text-[#6A7C73] sm:[&_strong]:text-[40px] [&_strong]:text-[32px] [&_strong]:text-[#2E3833] [&_svg]:p-3 [&_svg]:rounded-[15px]">
     <div className="flex items-center gap-4 border border-[#EEB32BCC] bg-[#F9F3E4] rounded-xl px-4 py-5">
      <FolderOpen color="#222222" size={55} className="bg-[#EEB32B26]"/>
      <div className="flex flex-col">

@@ -53,9 +53,9 @@ function isValidDate(date: Date | undefined) {
 
 export default function VisitDetail({
     onNext,
-  }: {
+}: {
     onNext: () => void;
-  }) {
+}) {
 
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(
@@ -310,11 +310,11 @@ export default function VisitDetail({
                 <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
                     <Button className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
                     <Button
-  onClick={onNext}
-  className="bg-[#D39A05] hover:bg-[#5E6E66]"
->
-  Next
-</Button>
+                        onClick={onNext}
+                        className="bg-[#D39A05] hover:bg-[#5E6E66]"
+                    >
+                        Next
+                    </Button>
                 </div>
 
 
