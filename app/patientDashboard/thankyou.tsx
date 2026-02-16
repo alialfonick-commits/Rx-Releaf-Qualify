@@ -13,10 +13,10 @@ export default function Thankyou({
   return (
     <>
 
-      <div className="max-w-170 px-3.75 mx-auto pt-7 [&_strong]:font-semibold">
+      <div className="max-w-2xl px-3.75 mx-auto pt-7 [&_strong]:font-semibold">
 
-        <div className="flex text-center flex-col items-center pb-5 [&_svg]:bg-[#CCD7C680] [&_svg]:rounded-full [&_svg]:p-3 [&_h2]:font-semibold [&_h2]:text-[26px] [&_h2]:pt-2 [&_h2]:text-[#000000]">
-          <CircleCheckBig size={65} color="#5E6E66" />
+        <div className="flex text-center flex-col items-center pb-5 [&_svg]:bg-[#CCD7C680] [&_svg]:rounded-full [&_svg]:p-3.5 [&_h2]:tracking-[1px] [&_h2]:font-semibold [&_h2]:text-[32px] [&_h2]:pt-2 [&_h2]:text-[#000000]">
+          <CircleCheckBig size={75} color="#5E6E66" />
           <h2>Thank You!</h2>
           <p>Your consultation request has been submitted successfully.</p>
         </div>
@@ -48,7 +48,7 @@ export default function Thankyou({
 
           <div className="bg-[#D7DED3] h-px mt-2"></div>
 
-          <div className="flex justify-between items-center pt-4.5 text-[18px] [&_span]:font-bold [&_span]:text-[#D39A05]">
+          <div className="flex justify-between items-center pt-4.5 text-[18px] [&_span]:font-bold [&_span]:text-[#D39A05] [&_span:last-child]:text-[20px]">
             <strong>Total</strong>
             <span>$54.99</span>
           </div>
@@ -85,7 +85,7 @@ export default function Thankyou({
           <p>Contact: <Link href="mailto:support@rxreleaf.com">support@rxreleaf.com</Link></p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
+        <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
         <Button
   onClick={onBack}
   className="bg-[#5E6E66] hover:bg-[#D39A05]"

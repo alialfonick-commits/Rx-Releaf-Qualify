@@ -7,7 +7,7 @@ import {
  AlertDialogContent,
  AlertDialogHeader,
  AlertDialogTitle,
-} from "../components/paylinkDialogComp"
+} from "../components/paymentlinkDialogComp"
 
 export default function AdminLogin() {
  return (

@@ -61,23 +61,22 @@ export default function VirtualStep1({
 
 
  const [open, setOpen] = React.useState(false)
- const [date, setDate] = React.useState<Date | undefined>(
-  new Date("2025-06-01")
- )
- const [month, setMonth] = React.useState<Date | undefined>(date)
- const [value, setValue] = React.useState(formatDate(date))
+ const [date, setDate] = React.useState<Date | undefined>(undefined)
+ const [month, setMonth] = React.useState<Date | undefined>(new Date())
+ const [value, setValue] = React.useState("")
+
 
  return (
   <>
 
-   <div className="bg-[#FFFFFF] border border-[#D7DED3] rounded-xl p-6 [&_strong]:font-semibold [&_strong]:text-[20px] [&_strong]:text-[#2B3B33]">
+   <div className="bg-[#FFFFFF] border border-[#D7DED3] rounded-xl sm:p-6 p-4 [&_strong]:font-semibold [&_strong]:text-[20px] [&_strong]:text-[#2B3B33]">
     <div className="flex items-center gap-3 pb-5">
      <Stethoscope color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg" />
      <strong>Visit Details</strong>
     </div>
 
 
-    <div className="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-4 space-y-4 [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
+    <div className="grid md:grid-cols-3 sm:grid-cols-2 sm:gap-4 space-y-4 [&_label]:font-medium [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
 
      <div>
       <div className="flex items-center gap-2">
@@ -197,7 +196,7 @@ export default function VirtualStep1({
 
    </div>
 
-   <div className="bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6 mt-2 [&_strong]:font-semibold [&_strong]:text-[20px]">
+   <div className="bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4 mt-2 [&_strong]:font-semibold [&_strong]:text-[20px]">
     <div className="flex items-center gap-3 pb-5">
      <User color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg" />
      <strong>Patient Information</strong>
@@ -334,7 +333,7 @@ export default function VirtualStep1({
 
     </div>
 
-    <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-5 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
+    <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
      <Button onClick={onBack} className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
      <Button
       onClick={onNext}

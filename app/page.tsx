@@ -29,6 +29,8 @@ import Image from "next/image";
 import ViewCases from "./components/viewCases";
 import Payments from "./components/payments";
 import ExecutionMonitoring from "./components/executionMonitoring";
+import VirtualStep2 from "./components/virtualStep2";
+import AdminOverview from "./components/adminOverview";
 
 type PageType =
   | "welcome"
@@ -38,10 +40,11 @@ type PageType =
   | "visitDetails"
   | "admin"
   | "Payments"
-  | "executionMonitoring";
+  | "executionMonitoring"
+  | "overview";
 
 export default function Home() {
-  const [staffStep, setStaffStep] = useState<"dashboard" | "virtualStep1">("dashboard");
+  const [staffStep, setStaffStep] = useState<"dashboard" | "virtualStep1" | "virtualStep2">("dashboard");
   const [activePage, setActivePage] = useState<PageType>("welcome");
   const [welcomeStep, setWelcomeStep] = useState<
     "visit" | "checkout" | "thankyou"
@@ -76,29 +79,33 @@ export default function Home() {
           </>
         );
 
-        case "staff":
-          return (
-            <>
-              {staffStep === "dashboard" && (
-                <>
-                  <VisitRequest onCreate={() => setStaffStep("virtualStep1")} />
-                  <Stats />
-                  <ResentCases />
-                  <RecentVisit />
-                </>
-              )}
-        
-              {staffStep === "virtualStep1" && (
-                <VirtualStep1
-                  onBack={() => setStaffStep("dashboard")}
-                  // onNext={() => setStaffStep("virtualStep2")
-                  onNext={() => console.log("Next clicked")}
-                />
-              )}
-            </>
-          );
-        
-        
+      case "staff":
+        return (
+          <>
+            {staffStep === "dashboard" && (
+              <>
+                <VisitRequest onCreate={() => setStaffStep("virtualStep1")} />
+                <Stats />
+                <ResentCases />
+                <RecentVisit />
+              </>
+            )}
+
+            {staffStep === "virtualStep1" && (
+              <VirtualStep1
+                onBack={() => setStaffStep("dashboard")}
+                onNext={() => setStaffStep("virtualStep2")}
+              />
+            )}
+
+            {staffStep === "virtualStep2" && (
+              <VirtualStep2
+                onBack={() => setStaffStep("virtualStep1")}
+                onNext={() => console.log("Next Step")}
+              />
+            )}
+          </>
+        );
 
       case "cases":
         return <Cases />;
@@ -117,6 +124,9 @@ export default function Home() {
 
       case "executionMonitoring":
         return <ExecutionMonitoring />
+
+      case "overview":
+        return <AdminOverview />
 
       default:
         return null;
@@ -143,7 +153,7 @@ export default function Home() {
       )}
 
       <div
-        className={`fixed top-0 left-0 w-75 h-full bg-[#5E6E66] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
+        className={`fixed top-0 left-0 w-[300px] h-full bg-[#5E6E66] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:h-auto`}
       >
         {isSidebarOpen && (
@@ -248,6 +258,17 @@ export default function Home() {
                 setIsSidebarOpen(false);
               }}
             />
+
+            <SidebarButton
+              icon={<LayoutDashboard size={18} />}
+              label="Overview"
+              active={activePage === "overview"}
+              onClick={() => {
+                setActivePage("overview");
+                setIsSidebarOpen(false);
+              }}
+            />
+
           </div>
         </div>
 
@@ -265,7 +286,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-[#F6F7F2] px-4 py-2 shadow-[1px_0px_10px_4px_#00000021] max-md:pt-13! max-md:p-2! md:ml-0 overflow-y-auto w-full">
+      <div className="bg-[#F6F7F2] px-4 py-2 shadow-[1px_0px_10px_4px_#00000021] max-md:pt-13! max-md:p-2! overflow-y-auto w-full">
         {renderPage()}
       </div>
     </div>

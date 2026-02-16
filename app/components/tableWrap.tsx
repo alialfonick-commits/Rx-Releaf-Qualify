@@ -15,8 +15,8 @@ import {
  AlertDialogDescription,
  AlertDialogFooter,
  AlertDialogCancel,
-} from "./paylinkDialogComp"
-import { Checkbox } from "./paylinkCheckboxComp"
+} from "./paymentlinkDialogComp"
+import { Checkbox } from "./paymentlinkCheckboxComp"
 import {
  Field,
  FieldGroup,

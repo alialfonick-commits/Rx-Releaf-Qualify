@@ -39,7 +39,7 @@ export default function ResentCases() {
   <div className="bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl px-4 py-5 mt-3">
 
    <div className="pb-5 flex items-center justify-between">
-    <div className="flex items-center gap-3 [&_strong]:font-semibold [&_strong]:text-[20px]">
+    <div className="flex items-center gap-3 [&_strong]:font-semibold [&_strong]:text-[18px] sm:[&_strong]:text-[20px]">
      <FolderOpen color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg" />
      <strong>Recent Cases</strong>
     </div>
@@ -49,9 +49,9 @@ export default function ResentCases() {
     {cases.map((item, index) => (
      <Link href={item.link} key={index} className="relative border border-[#DCE5DF] hover:border-[#5E6E66] p-4 rounded-xl">
 
-      <div className="flex items-center justify-between [&_span]:text-sm [&_span]:text-[#6A7C73]">
-       <div className="flex items-center gap-3 [&_strong]:text-[#2E3833] [&_strong]:leading-6 [&_strong]:block [&_p]:text-[15px] [&_p]:text-[#6A7C73]">
-        <UserRound color="#5E6E66" className="bg-[#476B591A] size-11 p-2 rounded-[50%]" />
+      <div className="flex items-center justify-between [&_span]:text-end [&_span]:text-sm [&_span]:text-[#6A7C73]">
+       <div className="flex items-center gap-2 sm:gap-3 [&_strong]:text-[#2E3833] [&_strong]:leading-6 [&_strong]:block [&_p]:text-[15px] [&_p]:text-[#6A7C73]">
+        <UserRound color="#5E6E66" className="bg-[#476B591A] sm:size-11 size-9 p-1.5 sm:p-2 rounded-[50%]" />
         <div>
          <strong>{item.name}</strong>
          <p>Case # {item.caseId}</p>
@@ -74,7 +74,7 @@ export default function ResentCases() {
         </div>
 
         <div
-         className={`flex gap-2 pt-5 text-sm [&_span]:font-semibold [&_span]:px-3 [&_span]:py-0.5 [&_span]:rounded-[25px]`}
+         className={`flex gap-2 pt-5 text-[13px] [&_span]:font-semibold [&_span]:px-3 [&_span]:py-0.5 [&_span]:rounded-[25px]`}
         >
          {item.tags.map((tag, i) => (
           <span key={i} className={item.tagStyle}>
@@ -83,7 +83,7 @@ export default function ResentCases() {
          ))}
         </div>
        </div>
-       <ChevronRight color="#2E3833" size={20} className="absolute right-2.5 top-0 bottom-0 m-auto" />
+       <ChevronRight color="#2E3833" size={20} className="absolute right-4 top-0 bottom-0 m-auto" />
 
       </div>
      </Link>
