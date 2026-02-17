@@ -307,7 +307,7 @@ function SidebarButton({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl focus-visible:outline-none cursor-pointer transition ${active
+      className={`flex items-center gap-3 w-full sm:px-4 px-3 sm:py-3 py-2 sm:rounded-xl rounded-lg max-sm:text-[15px] focus-visible:outline-none cursor-pointer transition ${active
         ? "bg-[#384740]"
         : "hover:bg-[#4E6056]/70"
         }`}

@@ -61,7 +61,7 @@ function AlertDialogContent({
         {...props}
       >
         <AlertDialogCancel
-          className="absolute right-4 top-4 text-[#2B363B] cursor-pointer"
+          className="absolute right-3 top-4 text-[#2B363B] cursor-pointer border-0 shadow-none"
         >
           <X className="size-4" />
         </AlertDialogCancel>

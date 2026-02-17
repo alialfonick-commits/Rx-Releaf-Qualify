@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 import { Input } from "../components/patientInputComp"
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar } from "../components/dobCalendarComp"
 import { CalendarIcon } from "lucide-react"
 import { Field } from "@/components/ui/field"
 import {

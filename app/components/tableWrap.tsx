@@ -182,15 +182,16 @@ export function TableWrap() {
             <strong>Select Delivery Method</strong>
             <FieldSet>
              <FieldGroup className="gap-3">
-              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3">
+              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="sms"
                 name="sms"
                 defaultChecked
+                className="cursor-pointer"
                />
                <FieldLabel
                 htmlFor="sms"
-                className="font-normal"
+                className="font-normal cursor-pointer"
                >
                 <div className="flex items-center gap-2 [&_span]:block [&_span]:text-[#6A7C73]">
                  <MessageSquare className="bg-[#F1F4F2] p-2.5 rounded-xl" color="#6A7C73" size={40} />
@@ -201,15 +202,16 @@ export function TableWrap() {
                 </div>
                </FieldLabel>
               </Field>
-              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3">
+              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="email"
                 name="email"
                 defaultChecked
+                className="cursor-pointer"
                />
                <FieldLabel
                 htmlFor="email"
-                className="font-normal"
+                className="font-normal cursor-pointer"
                >
                 <div className="flex items-center gap-2 [&_span]:block [&_span]:text-[#6A7C73]">
                  <Mail className="bg-[#F1F4F2] p-2.5 rounded-xl" color="#6A7C73" size={40} />
@@ -224,16 +226,16 @@ export function TableWrap() {
             </FieldSet>
            </div>
 
-           <div className="border border-[#0DA2E733] bg-[#0DA2E70D] rounded-lg p-3 text-sm [&_strong]:text-[#2B363B] [&_strong]:font-medium [&_strong]:text-[16px] [&_p]:text-[#6A7C73] [&_span]:font-medium [&_span]:text-[#2B363B] [&_div]:flex [&_div]:items-center [&_div]:gap-2 [&_div]:pt-1">
+           <div className="border border-[#0DA2E733] bg-[#0DA2E70D] rounded-lg p-3 text-sm [&_strong]:text-[#2B363B] [&_strong]:font-medium [&_strong]:text-[16px] [&_p]:text-[#6A7C73] [&_span]:font-medium [&_span]:text-[#2B363B] [&_svg]:text-[#0DA2E7] [&_div]:flex [&_div]:items-center [&_div]:gap-2 [&_div]:pt-1">
             <strong>Secure Payment Link Features</strong>
             <div>
-             <LinkIcon size={15} color="#0DA2E7" /> <p>Case-bound: linked to this specific visit request</p>
+             <LinkIcon size={15} /> <p>Case-bound: linked to this specific visit request</p>
             </div>
             <div>
-             <Shield size={15} color="#0DA2E7" /> <p>Single-use: can only be used once</p>
+             <Shield size={15} /> <p>Single-use: can only be used once</p>
             </div>
             <div>
-             <Clock size={15} color="#0DA2E7" /> <p>Time-limited: expires in 24 hours</p>
+             <Clock size={15} /> <p>Time-limited: expires in 24 hours</p>
             </div>
            </div>
            <p className="text-[13px] text-[#6A7C73] leading-4.5">This payment link supports the coordination of your visit request. Payment completion does not confirm any appointment or provider assignment.</p>

@@ -6,7 +6,7 @@ export default function ViewVisitDetails() {
   <>
    <div className="[&_p]:text-[#6A7C73] [&_span]:text-sm [&_span]:capitalize [&_strong]:font-semibold [&_strong]:text-[18px]">
 
-    <div className="flex justify-between items-center pb-4 gap-3 md:flex-row flex-col max-sm:items-start">
+    <div className="flex justify-between items-center pb-4 gap-3 md:flex-row flex-col max-md:items-start">
 
      <div className="flex items-center gap-2 [&_Button]:p-0 [&_strong]:font-medium [&_strong]:text-[20px] [&_p]:text-sm [&_Button]:cursor-pointer">
       <Button><ArrowLeft className="size-6!" /></Button>
@@ -85,11 +85,11 @@ export default function ViewVisitDetails() {
         <p>Your visit has been schedule</p>
        </div>
       </div>
-      <div className="pt-9 flex justify-between items-center [&_span]:text-[#2E3833] [&_span]:text-[18px]">
+      <div className="pt-9 flex justify-between items-center [&_span]:text-[#2E3833] sm:[&_span]:text-[18px] [&_span]:text-[16px]">
        <p>Provider Status</p>
        <span>Confirmed</span>
       </div>
-      <div className="pt-3 flex justify-between items-center [&_span]:text-[#39AC63] [&_span]:text-[18px]">
+      <div className="pt-3 flex justify-between items-center [&_span]:text-[#39AC63] sm:[&_span]:text-[18px] [&_span]:text-[16px]">
        <p>Execution Sync</p>
        <span>Healthy</span>
       </div>

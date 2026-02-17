@@ -7,9 +7,30 @@ import {
  SelectTrigger,
  SelectValue,
 } from "../components/patientSelectComp"
+import {
+ Combobox,
+ ComboboxChip,
+ ComboboxChips,
+ ComboboxChipsInput,
+ ComboboxContent,
+ ComboboxEmpty,
+ ComboboxItem,
+ ComboboxList,
+ ComboboxValue,
+ useComboboxAnchor,
+} from "../components/formComboboxComp"
 import { Stethoscope } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "../components/clinicalIntakeTextareaComp"
+
+const symptoms = [
+ "Headache",
+ "Dizziness",
+ "Fatigue",
+ "Flu",
+ "Fever",
+ "Other (please mention)",
+] as const
 
 export default function VirtualStep2({
  onBack,
@@ -19,6 +40,7 @@ export default function VirtualStep2({
  onNext: () => void;
 }) {
 
+ const anchor = useComboboxAnchor()
 
  return (
   <>
@@ -30,7 +52,7 @@ export default function VirtualStep2({
      </div>
      <p className="text-[#6A7C73] pb-2 text-[15px]">Please answer the following clinical questions to help us cordinate your visit.</p>
 
-     <div className="space-y-4 [&_label]:font-medium [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
+     <div className="space-y-4 [&_label]:text-[#6A7C73] [&_label]:font-medium [&_label]:text-sm [&>div]:flex [&>div]:flex-col [&>div]:gap-2">
 
       <div>
        <label htmlFor="form-Reason">What is the primary reason for this visit? *</label>
@@ -89,8 +111,41 @@ export default function VirtualStep2({
       </div>
 
       <div>
+      <label htmlFor="form-symtpoms">Any Symptoms?? (Please mention)</label>
+       <Combobox
+        multiple
+        autoHighlight
+        items={symptoms}
+        defaultValue={[symptoms[0]]}
+       >
+        <ComboboxChips ref={anchor} className="w-full max-w-xs">
+         <ComboboxValue>
+          {(values) => (
+           <React.Fragment>
+            {values.map((value: string) => (
+             <ComboboxChip key={value}>{value}</ComboboxChip>
+            ))}
+            <ComboboxChipsInput />
+           </React.Fragment>
+          )}
+         </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchor}>
+         <ComboboxEmpty>No items found.</ComboboxEmpty>
+         <ComboboxList>
+          {(item) => (
+           <ComboboxItem key={item} value={item}>
+            {item}
+           </ComboboxItem>
+          )}
+         </ComboboxList>
+        </ComboboxContent>
+       </Combobox>
+      </div>
+
+      <div>
        <label htmlFor="form-notes">Additional notes or concerns</label>
-       <Textarea placeholder="Please share any additional information that may help with your visit coordination..." required/>
+       <Textarea placeholder="Please share any additional information that may help with your visit coordination..." required />
       </div>
 
      </div>

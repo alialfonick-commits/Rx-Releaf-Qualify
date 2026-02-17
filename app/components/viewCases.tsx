@@ -5,14 +5,14 @@ export default function ViewCases() {
  return (
   <>
 
-   <div className="max-w-4xl w-full [&_p]:text-[#6A7C73] [&_span]:text-sm [&_strong]:font-semibold [&_strong]:text-[18px]">
+   <div className="max-w-4xl w-full [&_p]:text-[#6A7C73] [&_span]:text-sm [&_strong]:font-semibold sm:[&_strong]:text-[18px] [&_strong]:text-[16px] max-sm:[&_p]:text-[15px]">
     <Button className="text-[#2E3833] mb-4 cursor-pointer">
      <ArrowLeft className="size-6" />Back to Cases
     </Button>
-    <div className="flex justify-between sm:items-center mb-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6 max-sm:flex-col max-sm:gap-3">
+    <div className="flex justify-between sm:items-center mb-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-3 max-sm:pt-1.5! max-sm:flex-col max-sm:gap-3">
 
      <div>
-      <strong className="text-[22px]! font-medium text-[#2E3833]">Sarah Johnson</strong>
+      <strong className="sm:text-[22px]! font-medium text-[#2E3833]">Sarah Johnson</strong>
       <span className="block">Case #SVC-001</span>
       <p className="flex items-center gap-3 pt-3 text-sm">
        <span className="flex items-center gap-1">
@@ -41,7 +41,7 @@ export default function ViewCases() {
      <strong>Status Update:</strong> We are coordinating your visit. Pending provider acceptance. Next steps coming shortly.
     </div>
 
-    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4">
 
      <div className="flex items-center gap-2">
       <User color="#5E6E66" size={20} />
@@ -50,7 +50,7 @@ export default function ViewCases() {
 
      <div className="bg-[#EFEFEF] h-px mt-3 mb-5"></div>
 
-     <div className="grid sm:grid-cols-2 grid-cols-1 gap-6 [&_svg]:text-[#5E6E66] [&_p]:flex [&_p]:items-center [&_p]:gap-1 [&_p]:pb-0.75">
+     <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-2 [&_svg]:text-[#5E6E66] [&_p]:flex [&_p]:items-center [&_p]:gap-1 [&_p]:pb-0.75">
 
       <div>
        <p>
@@ -100,7 +100,7 @@ export default function ViewCases() {
 
     </div>
 
-    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4">
 
      <div className="flex items-center gap-2">
       <Stethoscope color="#5E6E66" size={20} />
@@ -109,7 +109,7 @@ export default function ViewCases() {
 
      <div className="bg-[#EFEFEF] h-px mt-3 mb-5"></div>
 
-     <div className="grid sm:grid-cols-2 grid-cols-1 gap-6">
+     <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 gap-2">
 
       <div>
        <p>Consultation Type</p>
@@ -132,7 +132,7 @@ export default function ViewCases() {
 
     </div>
 
-    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+    <div className="mt-4 bg-[#FFFFFF] shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4">
 
      <div className="flex items-center gap-2">
       <CreditCard color="#5E6E66" size={20} />
