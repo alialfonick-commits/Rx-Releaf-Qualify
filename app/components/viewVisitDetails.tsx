@@ -33,7 +33,7 @@ export default function ViewVisitDetails() {
 
       <div className="bg-[#EFEFEF] h-px mt-3 mb-4"></div>
 
-      <div className="grid sm:grid-cols-3 grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-3 grid-cols-2 sm:gap-6 gap-4">
        <div>
         <p>Visit ID</p>
         <span>SVC-001</span>
@@ -74,7 +74,7 @@ export default function ViewVisitDetails() {
 
      </div>
 
-     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-4 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4">
 
       <strong>Coordination Status</strong>
       <div className="bg-[#EFEFEF] h-px mt-3 mb-4"></div>
@@ -99,7 +99,7 @@ export default function ViewVisitDetails() {
 
     <div className="grid grid-cols-12 gap-2 mt-2">
 
-     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl p-6">
+     <div className="bg-[#FFFFFF] max-[992px]:col-span-12 col-span-8 shadow-[0px_1px_2px_0px_#0000000D] border border-[#D7DED3] rounded-xl sm:p-6 p-4">
       <div className="flex items-center gap-2">
        <User color="#5E6E66" size={22} />
        <strong>Visit Information</strong>
@@ -125,7 +125,7 @@ export default function ViewVisitDetails() {
 
       <div className="pt-5">
        <p>Symtops</p>
-       <div className="flex flex-wrap gap-2 pt-2 [&_span]:bg-[#E8EDEA] [&_span]:py-2 [&_span]:px-5 [&_span]:rounded-full">
+       <div className="flex flex-wrap gap-2 pt-2 [&_span]:bg-[#E8EDEA] [&_span]:py-2 [&_span]:px-4 sm:[&_span]:px-5 [&_span]:rounded-full">
         <span>Headache</span>
         <span>Dizziness</span>
         <span>Fatigue</span>

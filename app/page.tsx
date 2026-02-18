@@ -153,7 +153,7 @@ export default function Home() {
       )}
 
       <div
-        className={`fixed top-0 left-0 w-[300px] h-full bg-[#5E6E66] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
+        className={`fixed top-0 left-0 w-75 h-full bg-[#5E6E66] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:h-auto`}
       >
         {isSidebarOpen && (
@@ -168,7 +168,7 @@ export default function Home() {
         )}
 
         <div>
-          <div className="mb-2 border-b border-[#506259] pb-6">
+          <div className="mb-4 border-b border-[#506259] pb-5">
             <Image
               src="/images/logo.webp"
               alt="RX Releaf Logo"
