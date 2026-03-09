@@ -4,6 +4,7 @@ import { Input } from "../components/patientInputComp"
 import { Calendar } from "../components/dobCalendarComp"
 import { CalendarIcon } from "lucide-react"
 import { Field } from "@/components/ui/field"
+import { US_STATES } from "@/lib/constants/usStates";
 import {
  InputGroup,
  InputGroupAddon,
@@ -61,7 +62,51 @@ export default function VisitDetail({
  const [date, setDate] = React.useState<Date | undefined>(undefined)
  const [month, setMonth] = React.useState<Date | undefined>(new Date())
  const [value, setValue] = React.useState("")
- 
+ const [selectedState, setSelectedState] = React.useState("");
+ const [exams, setExams] = React.useState([]);
+ const [selectedExamId, setSelectedExamId] = React.useState("");
+ const [pharmacyPackages, setPharmacyPackages] = React.useState([]);
+ const [selectedPackage, setSelectedPackage] = React.useState("");
+
+ React.useEffect(() => {
+  async function fetchExams() {
+    const res = await fetch("/api/exams");
+    const data = await res.json();
+    console.log(data)
+    // Adjust this depending on actual response shape
+    setExams(data.exams || data);
+  }
+
+  fetchExams();
+}, []);
+
+React.useEffect(() => {
+  if (!selectedState || !selectedExamId) return;
+
+  async function fetchPackages() {
+    try {
+      const res = await fetch("/api/pharmacy-packages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          examId: Number(selectedExamId),
+          state: selectedState,
+        }),
+      });
+
+      const data = await res.json();
+
+      setPharmacyPackages(data.packages || data);
+    } catch (error) {
+      console.error("Failed to fetch pharmacy packages", error);
+    }
+  }
+
+  fetchPackages();
+}, [selectedState, selectedExamId]);
+
 
  return (
   <>
@@ -112,15 +157,23 @@ export default function VisitDetail({
         </Tooltip>
        </TooltipProvider>
       </div>
-      <Select defaultValue="selectState">
-       <SelectTrigger id="form-Patient-State">
-        <SelectValue />
-       </SelectTrigger>
-       <SelectContent>
-        <SelectItem value="selectState">Select your state</SelectItem>
-        <SelectItem value="cl">Critical</SelectItem>
-        <SelectItem value="nl">Normal</SelectItem>
-       </SelectContent>
+      <Select
+        value={selectedState}
+        onValueChange={(value) => {
+          setSelectedState(value);
+        }}
+        >
+        <SelectTrigger id="form-Patient-State">
+            <SelectValue placeholder="Select your state" />
+        </SelectTrigger>
+
+        <SelectContent>
+          {US_STATES.map((state) => (
+          <SelectItem key={state.value} value={state.value}>
+            {state.label}
+          </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
      </div>
 
@@ -149,29 +202,51 @@ export default function VisitDetail({
 
      <div>
       <label htmlFor="form-visit" className="sm:whitespace-nowrap flex overflow-hidden">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
-      <Select defaultValue="selectState">
-       <SelectTrigger id="form-visit">
-        <SelectValue />
-       </SelectTrigger>
-       <SelectContent>
-        <SelectItem value="selectState">Select your state</SelectItem>
-        <SelectItem value="cl">Critical</SelectItem>
-        <SelectItem value="nl">Normal</SelectItem>
-       </SelectContent>
+      <Select
+        value={selectedExamId}
+        onValueChange={(value) => {
+          setSelectedExamId(value);
+          console.log("Selected Exam ID:", value);
+        }}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Select treatment" />
+        </SelectTrigger>
+
+        <SelectContent>
+          {exams.map((exam: any) => (
+            <SelectItem key={exam.id} value={exam.id}>
+              {exam.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
      </div>
 
      <div>
       <label htmlFor="form-package">Pharmacy Package</label>
-      <Select defaultValue="us">
-       <SelectTrigger id="form-package">
-        <SelectValue />
-       </SelectTrigger>
-       <SelectContent>
-        <SelectItem value="us">Provider Selects</SelectItem>
-        <SelectItem value="uk">United Kingdom</SelectItem>
-        <SelectItem value="ca">Canada</SelectItem>
-       </SelectContent>
+      <Select
+        value={selectedPackage}
+        onValueChange={(value) => {
+          setSelectedPackage(value);
+          console.log("Selected Pharmacy Package:", value);
+        }}
+        disabled={!selectedState || !selectedExamId}
+      >
+        <SelectTrigger id="form-package">
+          <SelectValue placeholder="Select pharmacy package" />
+        </SelectTrigger>
+
+        <SelectContent>
+          {pharmacyPackages.map((pkg: any) => (
+            <SelectItem
+              key={pkg.exam_pos_id}
+              value={String(pkg.exam_pos_id)}
+            >
+              {pkg.title} - ${pkg.qualiphy_total_price}
+            </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
      </div>
 
