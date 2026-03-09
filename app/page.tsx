@@ -189,7 +189,7 @@ export default function Home() {
               }}
             />
 
-            <SidebarButton
+            {/* <SidebarButton
               icon={<LayoutDashboard size={18} />}
               label="Dashboard"
               active={activePage === "staff"}
@@ -267,7 +267,7 @@ export default function Home() {
                 setActivePage("overview");
                 setIsSidebarOpen(false);
               }}
-            />
+            /> */}
 
           </div>
         </div>
