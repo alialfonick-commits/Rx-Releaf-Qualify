@@ -216,7 +216,7 @@ React.useEffect(() => {
         <SelectContent>
           {exams.map((exam: any) => (
             <SelectItem key={exam.id} value={exam.id}>
-              {exam.name}
+              {exam.title}
             </SelectItem>
           ))}
         </SelectContent>
