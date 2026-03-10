@@ -113,7 +113,7 @@ React.useEffect(() => {
 
    <div className="bg-[#FFFFFF] border border-[#D7DED3] rounded-xl sm:p-6 p-4 [&_strong]:font-semibold [&_strong]:text-[20px] [&_strong]:text-[#2B3B33] [&_label]:font-medium">
     <div className="flex items-center gap-3 pb-5">
-     <Stethoscope color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg" />
+     <Stethoscope color="#5E6E66" className="bg-[#CCD7C6] size-10 p-2 rounded-lg text-[#5E6E66]" />
      <strong>Visit Details</strong>
     </div>
 
@@ -140,6 +140,7 @@ React.useEffect(() => {
        placeholder="Rx Releaf"
        readOnly
        required
+       className="cursor-not-allowed"
       />
      </div>
 
@@ -151,7 +152,7 @@ React.useEffect(() => {
          <TooltipTrigger asChild>
           <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
          </TooltipTrigger>
-         <TooltipContent className="">
+         <TooltipContent>
           <p>Enter your full legal name</p>
          </TooltipContent>
         </Tooltip>
@@ -197,6 +198,7 @@ React.useEffect(() => {
        placeholder="Urgent Care Visit: Consultation + Prescription  sent to your.."
        readOnly
        required
+       className="cursor-not-allowed"
       />
      </div>
 
