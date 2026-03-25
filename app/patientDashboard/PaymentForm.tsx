@@ -1,14 +1,18 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 interface PaymentFormProps {
   amount: number
 }
 
 export default function PaymentForm({ amount }: PaymentFormProps) {
-
+  const initialized = useRef(false)
+  
   useEffect(() => {
+
+    if (initialized.current) return
+    initialized.current = true
 
     async function initSquare() {
 

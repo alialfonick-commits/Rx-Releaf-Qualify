@@ -83,6 +83,7 @@ export default function VisitDetail() {
  const [email, setEmail] = React.useState("")
  const [phone, setPhone] = React.useState("")
  const [birthSex, setBirthSex] = React.useState("")
+ const [errors, setErrors] = React.useState<any>({});
 
  React.useEffect(() => {
   async function fetchExams() {
@@ -96,37 +97,38 @@ export default function VisitDetail() {
   fetchExams();
 }, []);
 
-React.useEffect(() => {
-  if (!selectedState || !selectedExamId) return;
+// React.useEffect(() => {
+//   if (!selectedState || !selectedExamId) return;
 
-  async function fetchPackages() {
-    try {
-      const res = await fetch("/api/pharmacy-packages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          examId: Number(selectedExamId),
-          state: selectedState,
-        }),
-      });
+//   async function fetchPackages() {
+//     try {
+//       const res = await fetch("/api/pharmacy-packages", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           examId: Number(selectedExamId),
+//           state: selectedState,
+//         }),
+//       });
 
-      const data = await res.json();
-      setPharmacyPackages(data.packages || data);
+//       const data = await res.json();
+//       setPharmacyPackages(data.packages || data);
   
-    } catch (error) {
-      console.error("Failed to fetch pharmacy packages", error);
-    }
-  }
+//     } catch (error) {
+//       console.error("Failed to fetch pharmacy packages", error);
+//     }
+//   }
 
-  fetchPackages();
-}, [selectedState, selectedExamId]);
+//   fetchPackages();
+// }, [selectedState, selectedExamId]);
 
 const dispatch = useDispatch()
 const router = useRouter()
 
 const handleNext = () => {
+if (!validateForm()) return;
 
  dispatch(setVisitDetails({
   state: selectedState,
@@ -146,6 +148,36 @@ const handleNext = () => {
 
  router.push("/payment")
 }
+
+const validateForm = () => {
+  let newErrors: any = {};
+
+  if (!selectedState) newErrors.selectedState = "State is required";
+  if (!selectedExamId) newErrors.selectedExamId = "Please select a treatment";
+
+  if (!firstName.trim()) newErrors.firstName = "First name is required";
+  if (!lastName.trim()) newErrors.lastName = "Last name is required";
+
+  if (!email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+    newErrors.email = "Invalid email";
+  }
+
+  if (!phone.trim()) {
+    newErrors.phone = "Phone is required";
+  }
+
+  if (!value) newErrors.dob = "Date of birth is required";
+
+  if (!birthSex || birthSex === "bs") {
+    newErrors.birthSex = "Select birth sex";
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
 
  return (
   <>
@@ -178,7 +210,7 @@ const handleNext = () => {
        type="text"
        placeholder="Rx Releaf"
        readOnly
-       required
+       disabled
       />
      </div>
 
@@ -200,6 +232,7 @@ const handleNext = () => {
         value={selectedState}
         onValueChange={(value) => {
           setSelectedState(value);
+          setErrors((prev: any) => ({ ...prev, selectedState: "" }));
         }}
         >
         <SelectTrigger id="form-Patient-State">
@@ -214,6 +247,9 @@ const handleNext = () => {
           ))}
         </SelectContent>
       </Select>
+      {errors.selectedState && (
+        <p className="text-red-500 text-xs">{errors.selectedState}</p>
+      )}
      </div>
 
      <div>
@@ -232,10 +268,12 @@ const handleNext = () => {
       </div>
       <Input
        id="form-type"
+       className="not-allowed"
        type="text"
        placeholder="Urgent Care Visit: Consultation + Prescription  sent to your.."
        readOnly
        required
+       disabled
       />
      </div>
 
@@ -265,6 +303,16 @@ const handleNext = () => {
      <div>
       <label htmlFor="form-package">Pharmacy Package</label>
       <Select
+        disabled
+      >
+        <SelectTrigger id="form-package">
+          <SelectValue placeholder="Provider Selects (Best Price)" />
+        </SelectTrigger>
+
+        <SelectContent>
+        </SelectContent>
+      </Select>
+      {/* <Select
         value={selectedPackage}
         onValueChange={(value) => {
           setSelectedPackage(value);
@@ -294,7 +342,7 @@ const handleNext = () => {
             </SelectItem>
           ))}
         </SelectContent>
-      </Select>
+      </Select> */}
      </div>
 
     </div>
