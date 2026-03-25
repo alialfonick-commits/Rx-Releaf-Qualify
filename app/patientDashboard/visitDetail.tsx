@@ -31,7 +31,21 @@ import {
 } from "../components/formTooltip"
 import { Info, Stethoscope, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useDispatch } from "react-redux"
+import { setVisitDetails } from "@/store/visitSlice"
+import { setPatientInfo } from "@/store/patientSlice"
+import { useRouter } from "next/navigation"
 
+type PharmacyPackage = {
+  exam_pos_id: number
+  order_set_id: number
+  title: string
+  pharmacy_id: number
+  turnaround_time: string
+  pharmacy_name: string
+  integration_partner: number
+  qualiphy_total_price: string
+}
 
 function formatDate(date: Date | undefined) {
  if (!date) {
@@ -52,11 +66,7 @@ function isValidDate(date: Date | undefined) {
  return !isNaN(date.getTime())
 }
 
-export default function VisitDetail({
- onNext,
-}: {
- onNext: () => void;
-}) {
+export default function VisitDetail() {
 
  const [open, setOpen] = React.useState(false)
  const [date, setDate] = React.useState<Date | undefined>(undefined)
@@ -65,8 +75,14 @@ export default function VisitDetail({
  const [selectedState, setSelectedState] = React.useState("");
  const [exams, setExams] = React.useState([]);
  const [selectedExamId, setSelectedExamId] = React.useState("");
- const [pharmacyPackages, setPharmacyPackages] = React.useState([]);
+ const [pharmacyPackages, setPharmacyPackages] = React.useState<PharmacyPackage[]>([]);
  const [selectedPackage, setSelectedPackage] = React.useState("");
+ const [selectedPackagePrice, setselectedPackagePrice] = React.useState("");
+ const [firstName, setFirstName] = React.useState("")
+ const [lastName, setLastName] = React.useState("")
+ const [email, setEmail] = React.useState("")
+ const [phone, setPhone] = React.useState("")
+ const [birthSex, setBirthSex] = React.useState("")
 
  React.useEffect(() => {
   async function fetchExams() {
@@ -97,8 +113,8 @@ React.useEffect(() => {
       });
 
       const data = await res.json();
-
       setPharmacyPackages(data.packages || data);
+  
     } catch (error) {
       console.error("Failed to fetch pharmacy packages", error);
     }
@@ -107,6 +123,29 @@ React.useEffect(() => {
   fetchPackages();
 }, [selectedState, selectedExamId]);
 
+const dispatch = useDispatch()
+const router = useRouter()
+
+const handleNext = () => {
+
+ dispatch(setVisitDetails({
+  state: selectedState,
+  examId: selectedExamId,
+  packageId: selectedPackage,
+  packagePrice: selectedPackagePrice
+ }))
+
+ dispatch(setPatientInfo({
+  firstName,
+  lastName,
+  email,
+  phone,
+  dob: value,
+  birthSex
+ }))
+
+ router.push("/payment")
+}
 
  return (
   <>
@@ -229,7 +268,15 @@ React.useEffect(() => {
         value={selectedPackage}
         onValueChange={(value) => {
           setSelectedPackage(value);
-          console.log("Selected Pharmacy Package:", value);
+          const selected = pharmacyPackages.find(
+            (pkg: any) => String(pkg.exam_pos_id) === value
+          )
+      
+          if (selected) {
+            setselectedPackagePrice(selected.qualiphy_total_price)
+          }
+      
+          console.log("Selected Pharmacy Package:", value)
         }}
         disabled={!selectedState || !selectedExamId}
       >
@@ -270,6 +317,7 @@ React.useEffect(() => {
        id="first-name"
        type="text"
        placeholder="Enter first name"
+       onChange={(e) => setFirstName(e.target.value)}
        required
       />
      </div>
@@ -280,6 +328,7 @@ React.useEffect(() => {
        id="last-name"
        type="text"
        placeholder="Enter last name"
+       onChange={(e) => setLastName(e.target.value)}
        required
       />
      </div>
@@ -290,6 +339,7 @@ React.useEffect(() => {
        id="email"
        type="text"
        placeholder="you@example.com"
+       onChange={(e) => setEmail(e.target.value)}
        required
       />
      </div>
@@ -300,6 +350,7 @@ React.useEffect(() => {
        id="phone"
        type="text"
        placeholder="(555) 123-4567"
+       onChange={(e) => setPhone(e.target.value)}
        required
       />
      </div>
@@ -366,7 +417,7 @@ React.useEffect(() => {
 
      <div>
       <label htmlFor="birth-sex">Birth Sex</label>
-      <Select defaultValue="bs">
+      <Select defaultValue="bs" value={birthSex} onValueChange={(value) => setBirthSex(value)}>
        <SelectTrigger id="birth-sex">
         <SelectValue />
        </SelectTrigger>
@@ -384,7 +435,7 @@ React.useEffect(() => {
     <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
      <Button className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
      <Button
-      onClick={onNext}
+      onClick={handleNext}
       className="bg-[#D39A05] hover:bg-[#5E6E66]"
      >
       Next

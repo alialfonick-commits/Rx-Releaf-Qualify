@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,7 +24,13 @@ export default function RootLayout({
       <body
         className={`${poppins.className} font-sans antialiased bg-[#F6F7F2]`}
       >
+      <Providers>
         {children}
+      </Providers>
+      <Script
+          src="https://sandbox.web.squarecdn.com/v1/square.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
