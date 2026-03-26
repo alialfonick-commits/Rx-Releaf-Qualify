@@ -1,14 +1,30 @@
+'use client'
 import { CircleCheckBig, Clock4, CreditCard, File, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function Thankyou({
-  onBack,
-  onHome,
-}: {
-  onBack: () => void;
-  onHome: () => void;
-}) {
+export default function Thankyou() {
+
+  const [orderId, setOrderId] = useState("");
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
+  
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+  
+    setOrderId(params.get("orderId") || "");
+    setAmount(params.get("amount") || "");
+    setDate(params.get("date") || "");
+  }, []);
+
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : ""
 
   return (
     <>
@@ -29,14 +45,14 @@ export default function Thankyou({
 
           <div className="flex justify-between items-center text-sm text-[#2B3B33]! [&_p]:text-[#2B3B33]! [&_p]:font-medium [&_span]:font-semibold">
             <p>Order Id</p>
-            <span>RXR-ZIIFZ3</span>
+            <span>{orderId}</span>
           </div>
 
           <div className="bg-[#D7DED3] h-px mt-2"></div>
 
           <div className="flex justify-between items-center pt-4.5 text-sm">
             <p>Date</p>
-            <span>December 8, 2025</span>
+            <span>{formattedDate}</span>
           </div>
 
           <div className="bg-[#D7DED3] h-px mt-2"></div>
@@ -50,7 +66,7 @@ export default function Thankyou({
 
           <div className="flex justify-between items-center pt-4.5 text-[18px] [&_span]:font-bold [&_span]:text-[#D39A05] [&_span:last-child]:text-[20px]">
             <strong>Total</strong>
-            <span>$54.99</span>
+            <span>${amount}</span>
           </div>
 
         </div>
@@ -87,14 +103,12 @@ export default function Thankyou({
 
         <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
         <Button
-  onClick={onBack}
   className="bg-[#5E6E66] hover:bg-[#D39A05]"
 >
   Back to Checkout
 </Button>
 
 <Button
-  onClick={onHome}
   className="bg-[#D39A05] hover:bg-[#5E6E66]"
 >
   Back to Home

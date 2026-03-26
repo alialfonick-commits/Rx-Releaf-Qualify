@@ -1,13 +1,17 @@
+'use client'
 import { Check, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
+import PaymentForm from "@/app/patientDashboard/PaymentForm"
 
-export default function Checkout({
-  onBack,
-  onNext,
-}: {
-  onBack: () => void;
-  onNext: () => void;
-}) {
+
+export default function Checkout() {
+
+ const visit = useSelector((state:RootState)=>state.visit)
+
+ const platformFee = 5
+ const total = visit.packagePrice + platformFee
 
   return (
     <>
@@ -20,17 +24,17 @@ export default function Checkout({
               <span>Urgent Care Consultation + Prescription</span>
               <p>Licensed provider consultation</p>
             </div>
-            <span>$49.99</span>
+            <span>${visit.packagePrice}</span>
           </div>
           <div className="bg-[#D7DED3] h-px mt-2"></div>
           <div className="flex justify-between items-center pt-5 text-sm">
             <p>Platform Fee</p>
-            <span>$5.00</span>
+            <span>${platformFee}</span>
           </div>
           <div className="bg-[#D7DED3] h-px mt-2"></div>
           <div className="flex justify-between items-center pt-4.5 [&_strong]:text-xl [&_span]:text-xl [&_span]:font-bold [&_span]:text-[#D39A05]">
             <strong>Total</strong>
-            <span>$54.99</span>
+            <span>${total}</span>
           </div>
         </div>
 
@@ -50,19 +54,20 @@ export default function Checkout({
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
-          <Button
-            onClick={onBack}
+          {/* <Button
+            
             className="bg-[#5E6E66] hover:bg-[#D39A05]"
           >
             Back
-          </Button>
+          </Button> */}
 
-          <Button
-            onClick={onNext}
+          {/* <Button
+            
             className="bg-[#D39A05] hover:bg-[#5E6E66]"
           >
             Next
-          </Button>
+          </Button> */}
+          <PaymentForm amount={total} />
 
         </div>
 
