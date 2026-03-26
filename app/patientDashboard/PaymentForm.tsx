@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { useEffect, useRef } from "react"
 
 interface PaymentFormProps {
@@ -8,7 +9,7 @@ interface PaymentFormProps {
 
 export default function PaymentForm({ amount }: PaymentFormProps) {
   const initialized = useRef(false)
-  
+
   useEffect(() => {
 
     if (initialized.current) return
@@ -55,9 +56,9 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
         })
 
         const data = await res.json()
-
+     
         if (data.success) {
-          window.location.href = "/thank-you?orderId=" + data.orderId
+          window.location.href = `/thank-you?orderId=${data.orderId}&amount=${data.amount}&date=${data.date}`
         } else {
           alert("Payment failed")
         }
@@ -73,7 +74,12 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
   return (
     <>
       <div id="card-container"></div>
-
+      <Button
+            
+            className="bg-[#5E6E66] hover:bg-[#D39A05]"
+          >
+            Back
+          </Button>
       <button
         id="pay-btn"
         className="bg-[#D39A05] text-white px-6 py-3 rounded"

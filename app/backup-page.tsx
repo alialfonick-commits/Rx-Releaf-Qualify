@@ -51,87 +51,86 @@ export default function Home() {
   >("visit");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const renderPage = () => {
-    switch (activePage) {
-      case "welcome":
-        return (
-          <>
-            {welcomeStep === "visit" && (
-              <>
-                <WelcomeBar />
-                <VisitDetail onNext={() => setWelcomeStep("checkout")} />
-              </>
-            )}
+  // const renderPage = () => {
+  //   switch (activePage) {
+  //     case "welcome":
+  //       return (
+  //         <>
+  //           {welcomeStep === "visit" && (
+  //             <>
+  //               <WelcomeBar />
+  //             </>
+  //           )}
 
-            {welcomeStep === "checkout" && (
-              <Checkout
-                onBack={() => setWelcomeStep("visit")}
-                onNext={() => setWelcomeStep("thankyou")}
-              />
-            )}
+  //           {welcomeStep === "checkout" && (
+  //             <Checkout
+  //               onBack={() => setWelcomeStep("visit")}
+  //               onNext={() => setWelcomeStep("thankyou")}
+  //             />
+  //           )}
 
-            {welcomeStep === "thankyou" && (
-              <Thankyou
-                onBack={() => setWelcomeStep("checkout")}
-                onHome={() => setWelcomeStep("visit")}
-              />
-            )}
-          </>
-        );
+  //           {welcomeStep === "thankyou" && (
+  //             <Thankyou
+  //               onBack={() => setWelcomeStep("checkout")}
+  //               onHome={() => setWelcomeStep("visit")}
+  //             />
+  //           )}
+  //         </>
+  //       );
 
-      case "staff":
-        return (
-          <>
-            {staffStep === "dashboard" && (
-              <>
-                <VisitRequest onCreate={() => setStaffStep("virtualStep1")} />
-                <Stats />
-                <ResentCases />
-                <RecentVisit />
-              </>
-            )}
+  //     case "staff":
+  //       return (
+  //         <>
+  //           {staffStep === "dashboard" && (
+  //             <>
+  //               <VisitRequest onCreate={() => setStaffStep("virtualStep1")} />
+  //               <Stats />
+  //               <ResentCases />
+  //               <RecentVisit />
+  //             </>
+  //           )}
 
-            {staffStep === "virtualStep1" && (
-              <VirtualStep1
-                onBack={() => setStaffStep("dashboard")}
-                onNext={() => setStaffStep("virtualStep2")}
-              />
-            )}
+  //           {staffStep === "virtualStep1" && (
+  //             <VirtualStep1
+  //               onBack={() => setStaffStep("dashboard")}
+  //               onNext={() => setStaffStep("virtualStep2")}
+  //             />
+  //           )}
 
-            {staffStep === "virtualStep2" && (
-              <VirtualStep2
-                onBack={() => setStaffStep("virtualStep1")}
-                onNext={() => console.log("Next Step")}
-              />
-            )}
-          </>
-        );
+  //           {staffStep === "virtualStep2" && (
+  //             <VirtualStep2
+  //               onBack={() => setStaffStep("virtualStep1")}
+  //               onNext={() => console.log("Next Step")}
+  //             />
+  //           )}
+  //         </>
+  //       );
 
-      case "cases":
-        return <Cases />;
+  //     case "cases":
+  //       return <Cases />;
 
-      case "viewCases":
-        return <ViewCases />
+  //     case "viewCases":
+  //       return <ViewCases />
 
-      case "visitDetails":
-        return <ViewVisitDetails />;
+  //     case "visitDetails":
+  //       return <ViewVisitDetails />;
 
-      case "admin":
-        return <AdminLogin />;
+  //     case "admin":
+  //       return <AdminLogin />;
 
-      case "Payments":
-        return <Payments />
+  //     case "Payments":
+  //       return <Payments />
 
-      case "executionMonitoring":
-        return <ExecutionMonitoring />
+  //     case "executionMonitoring":
+  //       return <ExecutionMonitoring />
 
-      case "overview":
-        return <AdminOverview />
+  //     case "overview":
+  //       return <AdminOverview />
 
-      default:
-        return null;
-    }
-  };
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <div className="flex min-h-screen bg-[#6B7C72] relative">
@@ -287,7 +286,7 @@ export default function Home() {
       </div>
 
       <div className="bg-[#F6F7F2] px-4 py-2 shadow-[1px_0px_10px_4px_#00000021] max-md:pt-13! max-md:p-2! overflow-y-auto w-full">
-        {renderPage()}
+        {/* npm  */}
       </div>
     </div>
   );

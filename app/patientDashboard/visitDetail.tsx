@@ -134,7 +134,7 @@ if (!validateForm()) return;
   state: selectedState,
   examId: selectedExamId,
   packageId: selectedPackage,
-  packagePrice: selectedPackagePrice
+  packagePrice: 89
  }))
 
  dispatch(setPatientInfo({
@@ -283,6 +283,7 @@ const validateForm = () => {
         value={selectedExamId}
         onValueChange={(value) => {
           setSelectedExamId(value);
+          setErrors((prev: any) => ({ ...prev, selectedExamId: "" }));
           console.log("Selected Exam ID:", value);
         }}
       >
@@ -298,6 +299,9 @@ const validateForm = () => {
           ))}
         </SelectContent>
       </Select>
+      {errors.selectedExamId && (
+        <p className="text-red-500 text-xs">{errors.selectedExamId}</p>
+      )}
      </div>
 
      <div>
@@ -365,9 +369,15 @@ const validateForm = () => {
        id="first-name"
        type="text"
        placeholder="Enter first name"
-       onChange={(e) => setFirstName(e.target.value)}
+       onChange={(e) => {
+        setFirstName(e.target.value)
+        setErrors((prev: any) => ({ ...prev, firstName: "" }));
+       }}
        required
       />
+      {errors.firstName && (
+        <p className="text-red-500 text-xs">{errors.firstName}</p>
+      )}
      </div>
 
      <div>
@@ -376,9 +386,15 @@ const validateForm = () => {
        id="last-name"
        type="text"
        placeholder="Enter last name"
-       onChange={(e) => setLastName(e.target.value)}
+       onChange={(e) => {
+        setLastName(e.target.value)
+        setErrors((prev: any) => ({ ...prev, lastName: "" }));
+       }}
        required
       />
+      {errors.lastName && (
+        <p className="text-red-500 text-xs">{errors.lastName}</p>
+      )}
      </div>
 
      <div>
@@ -387,9 +403,15 @@ const validateForm = () => {
        id="email"
        type="text"
        placeholder="you@example.com"
-       onChange={(e) => setEmail(e.target.value)}
+       onChange={(e) => {
+        setEmail(e.target.value)
+        setErrors((prev: any) => ({ ...prev, email: "" }));
+      }}
        required
       />
+      {errors.email && (
+        <p className="text-red-500 text-xs">{errors.email}</p>
+      )}
      </div>
 
      <div>
@@ -398,9 +420,15 @@ const validateForm = () => {
        id="phone"
        type="text"
        placeholder="(555) 123-4567"
-       onChange={(e) => setPhone(e.target.value)}
-       required
+       onChange={(e) => {
+        setPhone(e.target.value)
+        setErrors((prev: any) => ({ ...prev, phone: "" }));
+      }}
+      required
       />
+      {errors.phone && (
+        <p className="text-red-500 text-xs">{errors.phone}</p>
+      )}
      </div>
 
      <div>
@@ -451,6 +479,7 @@ const validateForm = () => {
             month={month}
             onMonthChange={setMonth}
             onSelect={(date) => {
+             setErrors((prev: any) => ({ ...prev, dob: "" }));
              setDate(date)
              setValue(formatDate(date))
              setOpen(false)
@@ -461,13 +490,21 @@ const validateForm = () => {
         </InputGroupAddon>
        </InputGroup>
       </Field>
+      {errors.dob && (
+        <p className="text-red-500 text-xs">{errors.dob}</p>
+      )}
      </div>
 
      <div>
       <label htmlFor="birth-sex">Birth Sex</label>
-      <Select defaultValue="bs" value={birthSex} onValueChange={(value) => setBirthSex(value)}>
+      <Select defaultValue="bs" 
+        value={birthSex} 
+        onValueChange={(value) => {
+          setBirthSex(value)
+          setErrors((prev: any) => ({ ...prev, birthSex: "" }));
+        }}>
        <SelectTrigger id="birth-sex">
-        <SelectValue />
+        <SelectValue placeholder="Gender" />
        </SelectTrigger>
        <SelectContent>
         <SelectItem value="bs">Select birth sex</SelectItem>
@@ -476,8 +513,10 @@ const validateForm = () => {
         <SelectItem value="custom">Custom</SelectItem>
        </SelectContent>
       </Select>
+      {errors.birthSex && (
+        <p className="text-red-500 text-xs">{errors.birthSex}</p>
+     )}
      </div>
-
     </div>
 
     <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
