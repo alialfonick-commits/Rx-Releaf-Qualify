@@ -73,16 +73,16 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
 
   return (
     <>
-      <div id="card-container"></div>
+      <div id="card-container" className="col-span-12"></div>
       <Button
             
-            className="bg-[#5E6E66] hover:bg-[#D39A05]"
+            className="bg-[#5E6E66] col-span-6 hover:bg-[#D39A05]"
           >
             Back
           </Button>
       <button
         id="pay-btn"
-        className="bg-[#D39A05] text-white px-6 py-3 rounded"
+        className="bg-[#D39A05] hover:bg-[#5E6E66] col-span-6 text-white px-6 py-1! rounded"
       >
         Pay ${amount}
       </button>

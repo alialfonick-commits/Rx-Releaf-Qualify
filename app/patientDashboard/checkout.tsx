@@ -53,7 +53,7 @@ export default function Checkout() {
           <p>Secure checkout powered by industry-standard encryption</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
+        <div className="grid grid-cols-12 gap-3 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
           {/* <Button
             
             className="bg-[#5E6E66] hover:bg-[#D39A05]"

@@ -210,7 +210,7 @@ const validateForm = () => {
        type="text"
        placeholder="Rx Releaf"
        readOnly
-       disabled
+       className="cursor-not-allowed"
       />
      </div>
 
@@ -277,7 +277,7 @@ const validateForm = () => {
       />
      </div>
 
-     <div>
+     <div className="overflow-hidden">
       <label htmlFor="form-visit" className="sm:whitespace-nowrap flex overflow-hidden">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
       <Select
         value={selectedExamId}
@@ -287,11 +287,11 @@ const validateForm = () => {
           console.log("Selected Exam ID:", value);
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger className="whitespace-nowrap">
           <SelectValue placeholder="Select treatment" />
         </SelectTrigger>
 
-        <SelectContent>
+        <SelectContent className='sm:max-w-108.75 max-w-80'>
           {exams.map((exam: any) => (
             <SelectItem key={exam.id} value={exam.id}>
               {exam.title}
@@ -418,6 +418,7 @@ const validateForm = () => {
       <label htmlFor="phone">Phone Number</label>
       <Input
        id="phone"
+       maxLength={20}
        type="text"
        placeholder="(555) 123-4567"
        onChange={(e) => {
