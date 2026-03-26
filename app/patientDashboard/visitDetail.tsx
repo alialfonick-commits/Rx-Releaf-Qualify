@@ -519,7 +519,7 @@ const validateForm = () => {
      </div>
     </div>
 
-    <div className="max-w-104 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
+    <div className="max-w-55 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
      <Button
       onClick={handleNext}
       className="bg-[#D39A05] hover:bg-[#5E6E66]"
