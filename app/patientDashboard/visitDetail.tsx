@@ -200,7 +200,7 @@ const validateForm = () => {
           <Info color="#2B3B33" className="h-4 w-4 cursor-pointer" />
          </TooltipTrigger>
          <TooltipContent>
-          <p>Enter your full legal name</p>
+          <p>Clinic</p>
          </TooltipContent>
         </Tooltip>
        </TooltipProvider>
@@ -223,7 +223,7 @@ const validateForm = () => {
           <Info className="h-4 w-4 text-muted-foreground cursor-pointer" />
          </TooltipTrigger>
          <TooltipContent className="">
-          <p>Enter your full legal name</p>
+          <p>Select Patient State</p>
          </TooltipContent>
         </Tooltip>
        </TooltipProvider>
@@ -261,7 +261,7 @@ const validateForm = () => {
           <Info color="#2B3B33" className="h-4 w-4 cursor-pointer" />
          </TooltipTrigger>
          <TooltipContent>
-          <p>Enter your full legal name</p>
+          <p>Consultation Type</p>
          </TooltipContent>
         </Tooltip>
        </TooltipProvider>
