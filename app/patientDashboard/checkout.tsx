@@ -1,14 +1,27 @@
 'use client'
 import { Check, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
 import PaymentForm from "@/app/patientDashboard/PaymentForm"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function Checkout() {
 
  const visit = useSelector((state:RootState)=>state.visit)
+ const [isHydrated, setIsHydrated] = useState(false)
+ const router = useRouter()
+
+ useEffect(() => {
+  setIsHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (isHydrated && !visit.packagePrice) {
+      router.push("/")
+    }
+  }, [isHydrated, visit.packagePrice])
 
  const platformFee = 5
  const total = visit.packagePrice + platformFee
@@ -54,25 +67,10 @@ export default function Checkout() {
         </div>
 
         <div className="grid grid-cols-12 gap-3 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer">
-          {/* <Button
-            
-            className="bg-[#5E6E66] hover:bg-[#D39A05]"
-          >
-            Back
-          </Button> */}
-
-          {/* <Button
-            
-            className="bg-[#D39A05] hover:bg-[#5E6E66]"
-          >
-            Next
-          </Button> */}
           <PaymentForm amount={total} />
 
         </div>
-
       </div>
-
     </>
   );
 }

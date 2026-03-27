@@ -24,12 +24,14 @@ export default function RootLayout({
       <body
         className={`${poppins.className} font-sans antialiased bg-[#F6F7F2]`}
       >
-      <Providers>
-        {children}
-      </Providers>
+      <div className="flex min-h-screen bg-[#6B7C72] relative">
+        <Providers>
+          {children}
+        </Providers>
+      </div>
       <Script
           src="https://sandbox.web.squarecdn.com/v1/square.js"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
       </body>
     </html>
