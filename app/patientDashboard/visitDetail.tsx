@@ -250,6 +250,7 @@ const validateForm = () => {
       {errors.selectedState && (
         <p className="text-red-500 text-xs">{errors.selectedState}</p>
       )}
+      
      </div>
 
      <div>
