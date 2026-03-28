@@ -1,5 +1,5 @@
 export const US_STATES = [
-    { value: "AL", label: "Alabama" },
+    // { value: "AL", label: "Alabama" },
     { value: "AK", label: "Alaska" },
     { value: "AZ", label: "Arizona" },
     { value: "AR", label: "Arkansas" },
@@ -22,7 +22,7 @@ export const US_STATES = [
     { value: "MA", label: "Massachusetts" },
     { value: "MI", label: "Michigan" },
     { value: "MN", label: "Minnesota" },
-    { value: "MS", label: "Mississippi" },
+    // { value: "MS", label: "Mississippi" },
     { value: "MO", label: "Missouri" },
     { value: "MT", label: "Montana" },
     { value: "NE", label: "Nebraska" },
