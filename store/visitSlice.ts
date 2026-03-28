@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const visitSlice = createSlice({
- name: "visit",
- initialState: {
+// ✅ define initialState separately (important)
+const initialState = {
   clinic: "RxReleaf",
   state: "",
   examId: "",
@@ -10,13 +9,20 @@ const visitSlice = createSlice({
   packageId: "",
   packageTitle: "",
   packagePrice: 0
- },
- reducers: {
-  setVisitDetails: (state, action) => {
-   return { ...state, ...action.payload }
+}
+
+const visitSlice = createSlice({
+  name: "visit",
+  initialState,
+  reducers: {
+    setVisitDetails: (state, action) => {
+      return { ...state, ...action.payload }
+    },
+
+    // ✅ ADD THIS
+    clearVisit: () => initialState
   }
- }
 })
 
-export const { setVisitDetails } = visitSlice.actions
+export const { setVisitDetails, clearVisit } = visitSlice.actions
 export default visitSlice.reducer

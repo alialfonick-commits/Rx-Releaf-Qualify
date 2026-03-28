@@ -8,9 +8,27 @@ const client = new SquareClient({
 })
 
 export async function POST(req: Request) {
+  function formatDOB(dob: string) {
+    // already correct format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+      return dob
+    }
+  
+    const date = new Date(dob)
+  
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid DOB format")
+    }
+  
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+  
+    return `${year}-${month}-${day}`
+  }
   try {
     const body = await req.json()
-    const { token, amount } = body
+    const { token, amount, visit, patient } = body
 
     const response = await client.payments.create({
       sourceId: token,
@@ -21,10 +39,39 @@ export async function POST(req: Request) {
       },
     })
 
-    const payment = response.payment // ✅ FIX
+    const payment = response.payment // FIX
 
     if (!payment) {
       throw new Error("Payment failed")
+    }
+
+    let qualiphyData = null
+    console.log(formatDOB(patient.dob))
+    try {
+      const qualiphyRes = await fetch(
+        `https://api.qualiphy.me/api/exam_invite`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            api_key: process.env.QUALIPHY_API_KEY,
+            exams: visit.examId,
+            first_name: patient.firstName,
+            last_name: patient.lastName,
+            email: patient.email,
+            phone_number: patient.phone,
+            tele_state: visit.state,
+            dob: formatDOB(patient.dob),
+          })
+        }
+      )
+
+      qualiphyData = await qualiphyRes.json()
+      console.log(qualiphyData)
+    } catch (err) {
+      console.error("Qualiphy API error:", err)
     }
 
     return NextResponse.json({
@@ -36,6 +83,7 @@ export async function POST(req: Request) {
       date: payment.createdAt,
       receiptUrl: payment.receiptUrl,
       status: payment.status,
+      qualiphy: qualiphyData
     })
 
   } catch (error: any) {

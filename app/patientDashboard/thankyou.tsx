@@ -3,12 +3,14 @@ import { CircleCheckBig, Clock4, CreditCard, File, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Thankyou() {
 
   const [orderId, setOrderId] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
+  const router = useRouter()
   
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -102,17 +104,19 @@ export default function Thankyou() {
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
-        <Button
-  className="bg-[#5E6E66] hover:bg-[#D39A05]"
->
-  Back to Checkout
-</Button>
+        {/* <Button
+          onClick={() => router.push("/")}
+          className="bg-[#5E6E66] hover:bg-[#D39A05]"
+        >
+          Back to Checkout
+        </Button> */}
 
-<Button
-  className="bg-[#D39A05] hover:bg-[#5E6E66]"
->
-  Back to Home
-</Button>
+        <Button
+          onClick={() => router.push("/")}
+          className="bg-[#D39A05] hover:bg-[#5E6E66] col-span-2"
+        >
+          Back to Home
+        </Button>
 
         </div>
 
