@@ -48,11 +48,10 @@ type PharmacyPackage = {
   qualiphy_total_price: string
 }
 
-
 export default function VisitDetail() {
 
-const [open, setOpen] = React.useState(false)
-const [date, setDate] = React.useState<Date | undefined>()
+ const [open, setOpen] = React.useState(false)
+ const [date, setDate] = React.useState<Date | undefined>()
  const [selectedState, setSelectedState] = React.useState("");
  const [exams, setExams] = React.useState([]);
  const [selectedExamId, setSelectedExamId] = React.useState("");
@@ -123,7 +122,7 @@ if (!validateForm()) return;
   lastName,
   email,
   phone,
-  dob: value,
+  dob: date ? format(date, "MM/dd/yyyy") : "",
   birthSex
  }))
 
@@ -149,7 +148,7 @@ const validateForm = () => {
     newErrors.phone = "Phone is required";
   }
 
-  if (!value) newErrors.dob = "Date of birth is required";
+  if (!date) newErrors.dob = "Date of birth is required";
 
   if (!birthSex || birthSex === "bs") {
     newErrors.birthSex = "Select birth sex";
