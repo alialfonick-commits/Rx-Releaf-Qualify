@@ -35,6 +35,7 @@ import { useDispatch } from "react-redux"
 import { setVisitDetails } from "@/store/visitSlice"
 import { setPatientInfo } from "@/store/patientSlice"
 import { useRouter } from "next/navigation"
+import { format } from "date-fns"
 
 type PharmacyPackage = {
   exam_pos_id: number
@@ -47,31 +48,10 @@ type PharmacyPackage = {
   qualiphy_total_price: string
 }
 
-function formatDate(date: Date | undefined) {
- if (!date) {
-  return ""
- }
-
- return date.toLocaleDateString("en-US", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
- })
-}
-
-function isValidDate(date: Date | undefined) {
- if (!date) {
-  return false
- }
- return !isNaN(date.getTime())
-}
-
 export default function VisitDetail() {
 
  const [open, setOpen] = React.useState(false)
- const [date, setDate] = React.useState<Date | undefined>(undefined)
- const [month, setMonth] = React.useState<Date | undefined>(new Date())
- const [value, setValue] = React.useState("")
+ const [date, setDate] = React.useState<Date | undefined>()
  const [selectedState, setSelectedState] = React.useState("");
  const [exams, setExams] = React.useState([]);
  const [selectedExamId, setSelectedExamId] = React.useState("");
@@ -432,64 +412,57 @@ const validateForm = () => {
      </div>
 
      <div>
-      <Field>
-       <label htmlFor="dob">Date of Birth</label>
-       <InputGroup>
-        <InputGroupInput
-         id="date-required"
-         value={value}
-         placeholder="MM/DD/YYY"
-         onChange={(e) => {
-          const date = new Date(e.target.value)
-          setValue(e.target.value)
-          if (isValidDate(date)) {
-           setDate(date)
-           setMonth(date)
-          }
-         }}
-         onKeyDown={(e) => {
-          if (e.key === "ArrowDown") {
-           e.preventDefault()
-           setOpen(true)
-          }
-         }}
-        />
-        <InputGroupAddon align="inline-end">
-         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-           <InputGroupButton
-            id="date-picker"
-            variant="ghost"
-            size="icon-xs"
-            aria-label="Select date"
-           >
-            <CalendarIcon />
-            <span className="sr-only">Select date</span>
-           </InputGroupButton>
-          </PopoverTrigger>
-          <PopoverContent
-           className="w-auto overflow-hidden p-0"
-           align="end"
-           alignOffset={-8}
-           sideOffset={10}
-          >
-           <Calendar
-            mode="single"
-            selected={date}
-            month={month}
-            onMonthChange={setMonth}
-            onSelect={(date) => {
-             setErrors((prev: any) => ({ ...prev, dob: "" }));
-             setDate(date)
-             setValue(formatDate(date))
-             setOpen(false)
+       <Field>
+        <label htmlFor='dob'>Date of Birth</label>
+
+        <Popover open={open} onOpenChange={setOpen} modal>
+            <PopoverTrigger asChild>
+            <button type="button" className="w-full text-left">
+                <InputGroup>
+                <InputGroupInput
+                    id='date-required'
+                    value={date ? format(date, "MM/dd/yyyy") : ""}
+                    placeholder='MM/DD/YYYY'
+                    readOnly
+                />
+                <InputGroupAddon align='inline-end'>
+                    <InputGroupButton variant='ghost' size='icon-xs'>
+                    <CalendarIcon />
+                    </InputGroupButton>
+                </InputGroupAddon>
+                </InputGroup>
+            </button>
+            </PopoverTrigger>
+
+            <PopoverContent
+            className='w-auto p-0 z-50'
+            align='end'
+            sideOffset={10}
+            onInteractOutside={(e) => {
+                const target = e.target as HTMLElement
+                if (target.closest('[data-radix-select-content]')) {
+                e.preventDefault()
+                }
             }}
-           />
-          </PopoverContent>
-         </Popover>
-        </InputGroupAddon>
-       </InputGroup>
-      </Field>
+            onPointerDownOutside={(e) => {
+                const target = e.target as HTMLElement
+                if (target.closest('[data-radix-select-content]')) {
+                e.preventDefault()
+                }
+            }}
+            >
+            <Calendar
+                mode='single'
+                selected={date}
+                onSelect={(selectedDate) => {
+                setDate(selectedDate)
+                setOpen(false)
+                }}
+                captionLayout="dropdown"
+            />
+            </PopoverContent>
+        </Popover>
+        </Field>
       {errors.dob && (
         <p className="text-red-500 text-xs">{errors.dob}</p>
       )}
