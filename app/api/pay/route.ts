@@ -45,6 +45,35 @@ export async function POST(req: Request) {
       throw new Error("Payment failed")
     }
 
+    let hubspotData = null
+
+    try {
+      const hubspotRes = await fetch(
+        "https://api.hubapi.com/crm/v3/objects/contacts",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            properties: {
+              email: patient.email,
+              firstname: patient.firstName,
+              lastname: patient.lastName,
+              phone: patient.phone,
+            },
+          }),
+        }
+      )
+
+      hubspotData = await hubspotRes.json()
+      console.log("HubSpot:", hubspotData)
+
+    } catch (err) {
+      console.error("HubSpot API error:", err)
+    }
+
     let qualiphyData = null
     console.log(formatDOB(patient.dob))
     try {
