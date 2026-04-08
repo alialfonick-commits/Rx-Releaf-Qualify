@@ -29,7 +29,7 @@ import Image from "next/image";
 import ViewCases from "./components/viewCases";
 import Payments from "./components/payments";
 import ExecutionMonitoring from "./components/executionMonitoring";
-import VirtualStep2 from "./components/virtualStep2";
+// import VirtualStep2 from "./components/virtualStep2";
 import AdminOverview from "./components/adminOverview";
 
 type PageType =
