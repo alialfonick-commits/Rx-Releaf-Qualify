@@ -3,7 +3,7 @@ import { Phone } from "lucide-react";
 export default function VisitRequest({ onCreate }: { onCreate: () => void }) {
   return (
     <>
-      <div className="bg-[#5E6E66] rounded-xl p-6 text-white flex max-[992px]:flex-col items-center max-[992px]:items-start justify-between [&_strong]:font-semibold sm:[&_strong]:text-[24px] [&_strong]:text-[19px] max-sm:[&_strong]:pb-1.25 max-sm:[&_strong]:leading-6 max-sm:[&_strong]:block mb-3 max-sm:[&_p]:text-[14px] max-sm:[&_p]:leading-5 [&_p]:font-normal [&_p]:text-[#FFFFFFCC]">
+      <div className="bg-[#708E86] rounded-xl p-6 text-white flex max-[992px]:flex-col items-center max-[992px]:items-start justify-between [&_strong]:font-semibold sm:[&_strong]:text-[24px] [&_strong]:text-[19px] max-sm:[&_strong]:pb-1.25 max-sm:[&_strong]:leading-6 max-sm:[&_strong]:block mb-3 max-sm:[&_p]:text-[14px] max-sm:[&_p]:leading-5 [&_p]:font-normal [&_p]:text-[#FFFFFFCC]">
         <div className="flex sm:items-center gap-4 max-[992px]:pb-2">
           <Phone size={55} color="#2E291F" className="bg-[#DFA620] p-3 rounded-xl max-sm:w-24.5! max-sm:h-12!" />
           <div>

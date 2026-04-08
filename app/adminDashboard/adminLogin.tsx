@@ -22,7 +22,7 @@ export default function AdminLogin() {
 
     <AlertDialogContent
      className="rounded-xl overflow-hidden p-0 bg-white border-transparent">
-     <AlertDialogHeader className="bg-[#5E6E66] py-6 text-white [&_p]:font-light [&_p]:text-sm [&_p]:text-[#FFFFFF99]">
+     <AlertDialogHeader className="bg-[#708E86] py-6 text-white [&_p]:font-light [&_p]:text-sm [&_p]:text-[#FFFFFF99]">
       <AlertDialogTitle className="flex flex-col items-center text-[20px] font-medium">
        <FingerprintPattern className="bg-[#DFA620] rounded-lg p-2 mb-2" size={55} />Admin Portal
        <p>Authorized Personnel Only</p>
@@ -45,7 +45,7 @@ export default function AdminLogin() {
        placeholder="***************"
        required
       />
-      <Button className="bg-[#D39A05] hover:bg-[#5E6E66] rounded-lg w-full py-3 uppercase mt-8 text-white cursor-pointer">Log in to dashboard</Button>
+      <Button className="bg-[#D39A05] hover:bg-[#708E86] rounded-lg w-full py-3 uppercase mt-8 text-white cursor-pointer">Log in to dashboard</Button>
      </div>
     </AlertDialogContent>
    </AlertDialog>

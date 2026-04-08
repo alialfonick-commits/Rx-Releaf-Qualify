@@ -29,10 +29,10 @@ export default function SideBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return(
     <>
-      <div className="md:hidden fixed top-0 left-0 z-50 bg-[#5E6E66] w-full">
+      <div className="md:hidden fixed top-0 left-0 z-50 bg-[#708E86] w-full">
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="text-white p-2 rounded-md bg-[#5E6E66]"
+          className="text-white p-2 rounded-md bg-[#708E86]"
         >
           <Menu size={24} />
         </button>
@@ -45,7 +45,7 @@ export default function SideBar() {
       )}
 
     <div
-      className={`fixed top-0 left-0 w-75 h-full bg-[#5E6E66] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
+      className={`fixed top-0 left-0 w-75 h-full bg-[#708E86] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
       ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:h-auto`}
     >
       {isSidebarOpen && (
@@ -162,11 +162,11 @@ export default function SideBar() {
         </div>
       </div>
 
-      <div className="bg-[#506259] rounded-xl p-4 text-sm mt-4">
+      <div className="bg-[#57746D] rounded-xl p-4 text-sm mt-4">
         <p className="text-[#FFFFFFCC] mb-2 text-[16px]">Need help?</p>
         <p className="text-[#FFFFFF99]">
-          Contact support at <a href="mailto:support@rxreleaf.com"
-          className="text-[#C3A260] block">support@rxreleaf.com</a>
+          Contact support at <a href="mailto:admin@rxreleaf.com"
+          className="text-[#C3A260] block">admin@rxreleaf.com</a>
         </p>
       </div>
     </div>
@@ -188,7 +188,7 @@ function SidebarButton({
     <button
       onClick={onClick}
       className={`flex items-center gap-3 w-full sm:px-4 px-3 sm:py-3 py-2 sm:rounded-xl rounded-lg max-sm:text-[15px] focus-visible:outline-none cursor-pointer transition ${active
-      ? "bg-[#384740]"
+      ? "bg-[#57746D]"
       : "hover:bg-[#4E6056]/70"
       }`}
     >

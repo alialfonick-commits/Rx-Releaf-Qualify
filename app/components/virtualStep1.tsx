@@ -334,10 +334,10 @@ export default function VirtualStep1({
     </div>
 
     <div className="grid grid-cols-2 gap-2 max-w-104 mx-auto w-full pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:cursor-pointer [&_button]:uppercase">
-     <Button onClick={onBack} className="bg-[#5E6E66] hover:bg-[#D39A05]">Back</Button>
+     <Button onClick={onBack} className="bg-[#708E86] hover:bg-[#D39A05]">Back</Button>
      <Button
       onClick={onNext}
-      className="bg-[#D39A05] hover:bg-[#5E6E66]"
+      className="bg-[#D39A05] hover:bg-[#708E86]"
      >
       Next
      </Button>
