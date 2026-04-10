@@ -3,6 +3,7 @@
 import { Provider } from "react-redux";
 import { store, persistor } from "@/store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { SessionProvider } from "next-auth/react";
 
 export default function Providers({
   children,
@@ -10,10 +11,12 @@ export default function Providers({
   children: React.ReactNode;
 }) {
   return (
-    <Provider store={store}>
-      <PersistGate loading={<div className="p-4 text-center">Loading...</div>} persistor={persistor}>
-        {children}
-      </PersistGate>
-    </Provider>
+    <SessionProvider>
+      <Provider store={store}>
+        <PersistGate loading={<div className="p-4 text-center">Loading...</div>} persistor={persistor}>
+          {children}
+        </PersistGate>
+      </Provider>
+    </SessionProvider>
   );
 }

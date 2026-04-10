@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//////////////////////
+// ENUMS
+//////////////////////
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum BirthSex {
+  MALE
+  FEMALE
+}
+
+enum ConsultationType {
+  URGENT_CARE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+//////////////////////
+// USER (Admin / Staff)
+//////////////////////
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+
+  exams     Exam[]
+}
+
+//////////////////////
+// PATIENT
+//////////////////////
+
+model Patient {
+  id        String   @id @default(uuid())
+
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  dob       DateTime
+  birthSex  BirthSex
+
+  createdAt DateTime @default(now())
+
+  exams     Exam[]
+}
+
+//////////////////////
+// EXAM (Core Model)
+//////////////////////
+
+model Exam {
+  id                 String   @id @default(uuid())
+
+  // 🔗 Relations
+  patientId          String
+  staffId            String?
+
+  patient            Patient  @relation(fields: [patientId], references: [id])
+  staff              User? @relation(fields: [staffId], references: [id])
+
+  //////////////////////
+  // 🏥 VISIT DETAILS
+  //////////////////////
+
+  clinic             String   @default("Rx Releaf")
+  patientState       String
+  consultationType   ConsultationType @default(URGENT_CARE)
+  examId             Int
+  examName           String
+  pharmacyPackage    String   @default("Provider Selects (Best Price)")
+
+  //////////////////////
+  // 💳 PAYMENT (Deferred Flow)
+  //////////////////////
+
+  paymentStatus      PaymentStatus @default(PENDING)
+  paymentId          String?   // Square transaction ID
+  paymentLink        String?   // link sent via SMS/email
+
+  //////////////////////
+  // 📅 META
+  //////////////////////
+
+  createdAt          DateTime @default(now())
+}
