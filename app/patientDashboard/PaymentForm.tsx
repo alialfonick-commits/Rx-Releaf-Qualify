@@ -141,7 +141,7 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
       {/* Back Button */}
       <Button
        onClick={() => router.push("/")}
-       className="bg-[#5E6E66] col-span-6 hover:bg-[#D39A05]">
+       className="bg-[#708E86] col-span-6 hover:bg-[#D39A05]">
         Back
       </Button>
 
@@ -149,7 +149,7 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
       <Button
         onClick={handlePayment}
         disabled={loading || paying}
-        className="bg-[#D39A05] hover:bg-[#5E6E66] col-span-6 text-white px-6 rounded disabled:opacity-50 flex items-center justify-center"
+        className="bg-[#D39A05] hover:bg-[#708E86] col-span-6 text-white px-6 rounded disabled:opacity-50 flex items-center justify-center"
       >
         {paying ? (
           <span className="flex items-center gap-2">

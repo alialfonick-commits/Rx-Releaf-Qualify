@@ -100,20 +100,20 @@ export default function Thankyou() {
 
         <div className="text-center border border-[#D7DED3] p-5 mt-3 rounded-xl bg-white [&_strong]:font-normal! [&_p]:text-[#D39A05]">
           <strong>Question about your order?</strong>
-          <p>Contact: <Link href="mailto:support@rxreleaf.com">support@rxreleaf.com</Link></p>
+          <p>Contact: <Link href="mailto:admin@rxreleaf.com">admin@rxreleaf.com</Link></p>
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-6 [&_Button]:py-6 [&_Button]:w-full [&_Button]:text-white [&_Button]:uppercase [&_Button]:cursor-pointer">
         {/* <Button
           onClick={() => router.push("/")}
-          className="bg-[#5E6E66] hover:bg-[#D39A05]"
+          className="bg-[#708E86] hover:bg-[#D39A05]"
         >
           Back to Checkout
         </Button> */}
 
         <Button
           onClick={() => router.push("/")}
-          className="bg-[#D39A05] hover:bg-[#5E6E66] col-span-2"
+          className="bg-[#D39A05] hover:bg-[#708E86] col-span-2"
         >
           Back to Home
         </Button>
