@@ -1,4 +1,4 @@
-import SideBar from "../components/sideBar";
+import SideBar from "../components/sidebar/sideBar";
 import Thankyou from "../patientDashboard/thankyou";
 
 export default function ThankyouPage() {

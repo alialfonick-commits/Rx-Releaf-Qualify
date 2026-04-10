@@ -12,6 +12,9 @@ import {
     CreditCard,
   } from "lucide-react";
 import { useState } from "react";
+import { useSession } from "next-auth/react"
+import { sidebarConfig } from "./SidebarConfig"
+import { usePathname, useRouter } from "next/navigation"
 
 type PageType =
   | "welcome"
@@ -25,6 +28,13 @@ type PageType =
   | "overview";
 
 export default function SideBar() {
+  const { data: session } = useSession()
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const role = session?.user?.role || "PUBLIC"
+  const items = sidebarConfig[role as keyof typeof sidebarConfig]
+
   const [activePage, setActivePage] = useState<PageType>("welcome");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return(
@@ -70,15 +80,18 @@ export default function SideBar() {
           />
         </div>
         <div className="space-y-2 [&_button]:text-start">
-          <SidebarButton
-            icon={<ClipboardList size={18} />}
-            label="Exams"
-            active={activePage === "welcome"}
-            onClick={() => {
-              setActivePage("welcome");
-              setIsSidebarOpen(false);
-            }}
-          />
+          {items.map((item) => {
+          const Icon = item.icon
+            return (
+              <SidebarButton
+                key={item.path}
+                icon={<Icon size={18} />}
+                label={item.label}
+                active={pathname === item.path}
+                onClick={() => router.push(item.path)}
+              />
+            )
+          })}
 
           {/* <SidebarButton
           icon={<LayoutDashboard size={18} />}

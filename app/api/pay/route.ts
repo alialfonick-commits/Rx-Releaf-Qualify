@@ -1,6 +1,7 @@
 import { SquareClient, SquareEnvironment } from "square"
 import { v4 as uuid } from "uuid"
 import { NextResponse } from "next/server"
+import { PrismaClient, BirthSex, ConsultationType, PaymentStatus } from "@prisma/client"
 
 const client = new SquareClient({
   token: process.env.SQUARE_ACCESS_TOKEN,
@@ -8,6 +9,8 @@ const client = new SquareClient({
 })
 
 export async function POST(req: Request) {
+  const prisma = new PrismaClient()
+
   function formatDOB(dob: string) {
     // already correct format
     if (/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
@@ -45,11 +48,73 @@ export async function POST(req: Request) {
       throw new Error("Payment failed")
     }
 
+    const existingPatient = await prisma.patient.findFirst({
+      where: { email: patient.email }
+    })
+    
+    const createdPatient = existingPatient
+    ? existingPatient
+    : await prisma.patient.create({
+        data: {
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          email: patient.email,
+          phone: patient.phone,
+          dob: new Date(patient.dob),
+          birthSex: patient.birthSex as BirthSex
+        }
+    })
+    
+    const exam = await prisma.exam.create({
+      data: {
+        patientId: createdPatient.id,
+        staffId: null,
+    
+        patientState: visit.state,
+        consultationType: ConsultationType.URGENT_CARE,
+        examId: visit.examId,
+        examName: visit.examName,
+    
+        paymentStatus: PaymentStatus.PAID,
+        paymentId: payment.id,
+        paymentLink: payment.receiptUrl
+      }
+    })
+
+    let hubspotData = null
+
+    try {
+      const hubspotRes = await fetch(
+        "https://api.hubapi.com/crm/v3/objects/contacts",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            properties: {
+              email: patient.email,
+              firstname: patient.firstName,
+              lastname: patient.lastName,
+              phone: patient.phone,
+            },
+          }),
+        }
+      )
+
+      hubspotData = await hubspotRes.json()
+      console.log("HubSpot:", hubspotData)
+
+    } catch (err) {
+      console.error("HubSpot API error:", err)
+    }
+
     let qualiphyData = null
-    console.log(formatDOB(patient.dob))
+ 
     try {
       const qualiphyRes = await fetch(
-        `https://api.qualiphy.me/api/exam_invite`,
+        `https://api.qualiphy.me/api/exam_invite_test`,
         {
           method: "POST",
           headers: {

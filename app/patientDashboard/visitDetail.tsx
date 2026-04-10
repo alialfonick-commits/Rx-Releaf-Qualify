@@ -69,7 +69,6 @@ export default function VisitDetail() {
   async function fetchExams() {
     const res = await fetch("/api/exams");
     const data = await res.json();
-    console.log(data)
     // Adjust this depending on actual response shape
     setExams(data.exams || data);
   }
@@ -230,6 +229,7 @@ const validateForm = () => {
       {errors.selectedState && (
         <p className="text-red-500 text-xs">{errors.selectedState}</p>
       )}
+      
      </div>
 
      <div>
@@ -481,8 +481,8 @@ const validateForm = () => {
        </SelectTrigger>
        <SelectContent>
         <SelectItem value="bs">Select birth sex</SelectItem>
-        <SelectItem value="men">Men</SelectItem>
-        <SelectItem value="women">Women</SelectItem>
+        <SelectItem value="MALE">Men</SelectItem>
+        <SelectItem value="FEMALE">Women</SelectItem>
         <SelectItem value="custom">Custom</SelectItem>
        </SelectContent>
       </Select>
