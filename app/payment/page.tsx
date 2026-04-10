@@ -1,4 +1,4 @@
-import SideBar from "../components/sideBar"
+import SideBar from "../components/sidebar/sideBar"
 import Checkout from "../patientDashboard/checkout"
 
 export default function PaymentPage() {

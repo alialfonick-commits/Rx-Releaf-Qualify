@@ -8,12 +8,12 @@ const prisma = new PrismaClient()
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
 
-  // 🔒 Only staff allowed
+  // Only staff allowed
   if (!session || session.user.role !== "STAFF") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  // ✅ Typed request body
+  // Typed request body
   const body: {
     firstName: string
     lastName: string
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     treatment
   } = body
 
-  // ❗ Basic validation
+  // Basic validation
   if (
     !firstName ||
     !lastName ||
@@ -65,10 +65,10 @@ export async function POST(req: Request) {
     }
   })
 
-  // 💳 Generate fake payment link (for now)
+  // Generate fake payment link (for now)
   const paymentLink = `https://pay.example.com/${Date.now()}`
 
-  // 📝 Create exam
+  // Create exam
   const exam = await prisma.exam.create({
     data: {
       patientId: patient.id,
@@ -76,7 +76,8 @@ export async function POST(req: Request) {
 
       patientState,
       consultationType: ConsultationType.URGENT_CARE,
-      treatment,
+      examId: Math.floor(Math.random() * 100000),
+      examName: treatment,
 
       paymentStatus: "PENDING",
       paymentLink
