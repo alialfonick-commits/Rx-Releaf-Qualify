@@ -2,7 +2,7 @@
 import { Check, Shield } from "lucide-react";
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import PaymentForm from "@/app/patientDashboard/PaymentForm"
+import PaymentForm from "@/app/(with-sidebar)/(public)/patientDashboard/PaymentForm"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
