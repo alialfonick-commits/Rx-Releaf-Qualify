@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
-import { Input } from "../components/patientInputComp"
-import { Calendar } from "../components/dobCalendarComp"
+import { Input } from "../../../components/patientInputComp"
+import { Calendar } from "../../../components/dobCalendarComp"
 import { CalendarIcon } from "lucide-react"
 import { Field } from "@/components/ui/field"
 import { US_STATES } from "@/lib/constants/usStates";
@@ -10,25 +10,25 @@ import {
  InputGroupAddon,
  InputGroupButton,
  InputGroupInput,
-} from "../components/dobInputComp"
+} from "../../../components/dobInputComp"
 import {
  Popover,
  PopoverContent,
  PopoverTrigger,
-} from "../components/dobPopoverComp"
+} from "../../../components/dobPopoverComp"
 import {
  Select,
  SelectContent,
  SelectItem,
  SelectTrigger,
  SelectValue,
-} from "../components/patientSelectComp"
+} from "../../../components/patientSelectComp"
 import {
  Tooltip,
  TooltipContent,
  TooltipProvider,
  TooltipTrigger,
-} from "../components/formTooltip"
+} from "../../../components/formTooltip"
 import { Info, Stethoscope, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useDispatch } from "react-redux"
@@ -417,7 +417,8 @@ const validateForm = () => {
 
         <Popover open={open} onOpenChange={setOpen} modal>
             <PopoverTrigger asChild>
-            <button type="button" className="w-full text-left">
+            {/* <button type="button" className="w-full text-left"> */}
+              <div className="w-full text-left cursor-pointer">
                 <InputGroup>
                 <InputGroupInput
                     id='date-required'
@@ -431,7 +432,8 @@ const validateForm = () => {
                     </InputGroupButton>
                 </InputGroupAddon>
                 </InputGroup>
-            </button>
+              </div>
+            {/* </button> */}
             </PopoverTrigger>
 
             <PopoverContent

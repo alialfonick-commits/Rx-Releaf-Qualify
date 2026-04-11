@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Script from "next/script";
-import SideBar from "./components/sidebar/sideBar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,14 +24,9 @@ export default function RootLayout({
       <body
         className={`${poppins.className} font-sans antialiased bg-[#F6F7F2]`}
       >
-      <div className="flex min-h-screen bg-[#6B7C72] relative">
         <Providers>
-          <SideBar />
-          <div className="bg-[#F6F7F2] px-4 py-2 shadow-[1px_0px_10px_4px_#00000021] max-md:pt-13! max-md:p-2! overflow-y-auto w-full">
-            {children}
-          </div>
+          {children}
         </Providers>
-      </div>
       <Script
           src="https://sandbox.web.squarecdn.com/v1/square.js"
           strategy="beforeInteractive"

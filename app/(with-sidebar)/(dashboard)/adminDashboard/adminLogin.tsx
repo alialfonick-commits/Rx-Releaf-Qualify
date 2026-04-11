@@ -1,5 +1,5 @@
 import { FingerprintPattern } from "lucide-react";
-import { Input } from "../components/patientInputComp"
+import { Input } from "../../../components/patientInputComp"
 import { Button } from "@/components/ui/button"
 import {
  AlertDialog,
@@ -7,7 +7,7 @@ import {
  AlertDialogContent,
  AlertDialogHeader,
  AlertDialogTitle,
-} from "../components/paymentlinkDialogComp"
+} from "../../../components/paymentlinkDialogComp"
 
 export default function AdminLogin() {
  return (
