@@ -4,10 +4,11 @@ import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { getSession } from "next-auth/react"
-import { ArrowRight, Lock, Mail } from "lucide-react"
+import { ArrowRight, Eye, EyeOff, Lock, Mail } from "lucide-react"
 import Link from "next/link"
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
@@ -66,25 +67,24 @@ export default function LoginPage() {
               <Lock color="#708E86" size={18} /> Password
             </label>
 
-            <div>
+            <div className="relative">
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="●●●●●●●"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
 
-            <div className="text-right mt-2 [&_button]:text-sm [&_button]:text-[#708E86] [&_button]:cursor-pointer">
               <button
                 type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708E86] cursor-pointer"
               >
-                Forgot Password ?
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
-
           <button
             type="submit"
             className="w-full bg-[#6F8E86] text-white py-3 rounded-[10px] flex items-center justify-center gap-2 shadow-[0px_0px_40px_0px_#5ACCF24D] hover:bg-[#D39A05] cursor-pointer transition"
