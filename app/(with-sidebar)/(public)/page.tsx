@@ -9,7 +9,7 @@ export default function Home() {
         <strong>Welcome to Rx ReLeaf</strong>
         <p>Complete the form below to start your urgent care consultation. A licensed provider will review your information and respond within minutes.</p>
       </div>
-      <VisitDetail />
+      <VisitDetail mode="public" />
     </>
   );
 }

@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   })
 
-  // ✅ Handle login route
+  // ✅ Handle login route FIRST
   if (pathname === "/login") {
     if (token) {
       if (token.role === "ADMIN") {
@@ -23,19 +23,19 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // 🔒 Not logged in
+  // ❌ Now protect routes
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url))
   }
 
-  // 🔐 Admin only
+  // Admin only
   if (pathname.startsWith("/admin")) {
     if (token.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/unauthorized", req.url))
     }
   }
 
-  // 👨‍⚕️ Staff only
+  // Staff only
   if (pathname.startsWith("/staff")) {
     if (token.role !== "STAFF") {
       return NextResponse.redirect(new URL("/unauthorized", req.url))

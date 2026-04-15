@@ -48,12 +48,17 @@ type PharmacyPackage = {
   qualiphy_total_price: string
 }
 
-export default function VisitDetail() {
+type Exam = {
+  id: number
+  title: string
+}
+
+export default function VisitDetail({ mode = "public" }: { mode?: "public" | "staff" }) {
 
  const [open, setOpen] = React.useState(false)
  const [date, setDate] = React.useState<Date | undefined>()
  const [selectedState, setSelectedState] = React.useState("");
- const [exams, setExams] = React.useState([]);
+ const [exams, setExams] = React.useState<Exam[]>([]);
  const [selectedExamId, setSelectedExamId] = React.useState("");
  const [pharmacyPackages, setPharmacyPackages] = React.useState<PharmacyPackage[]>([]);
  const [selectedPackage, setSelectedPackage] = React.useState("");
@@ -125,7 +130,51 @@ if (!validateForm()) return;
   birthSex
  }))
 
- router.push("/payment")
+  if (mode === "public") {
+    router.push("/payment")
+  }
+
+  if (mode === "staff") {
+    createExamForStaff()
+  }
+}
+
+const createExamForStaff = async () => {
+  try {
+    const res = await fetch("/api/staff/exams", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        visit: {
+          state: selectedState,
+          examId: selectedExamId,
+          examName: exams.find((e: any) => e.id === Number(selectedExamId))?.title
+        },
+        patient: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          dob: date,
+          birthSex
+        }
+      })
+    })
+
+    const data = await res.json()
+
+    if (data.success) {
+      alert("Exam created successfully")
+      router.push("/staff/visits")
+    } else {
+      alert("Failed to create exam")
+    }
+
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const validateForm = () => {
