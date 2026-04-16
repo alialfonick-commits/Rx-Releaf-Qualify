@@ -1,6 +1,6 @@
 import { Phone } from "lucide-react";
 
-export default function VisitRequest({ onCreate }: { onCreate: () => void }) {
+const VisitRequest = () => {
   return (
     <>
       <div className="bg-[#708E86] rounded-xl px-4 py-6 text-white flex max-sm:flex-col max-sm:gap-4 items-start justify-between [&_strong]:font-medium sm:[&_strong]:text-[20px] [&_strong]:text-[18px] max-sm:[&_strong]:pb-1.25 max-sm:[&_strong]:leading-6 max-sm:[&_strong]:block mb-3 2xl:[&_p]:text-base sm:[&_p]:text-[15px] max-sm:[&_p]:leading-5 [&_p]:font-normal [&_p]:text-[#FFFFFFCC]">
@@ -12,7 +12,6 @@ export default function VisitRequest({ onCreate }: { onCreate: () => void }) {
           </div>
         </div>
         <button
-          onClick={onCreate}
           className="bg-[#DFA620] hover:bg-white transition-all bg-[url('/images/plussign.png')] bg-no-repeat bg-position-[left_12px_center] font-semibold sm:bg-size-[18px] bg-size-[16px] text-[#2E291F] pl-9 px-4 2xl:py-3 py-2.5 rounded-lg cursor-pointer max-sm:text-sm w-fit"
         >
           Create Request
@@ -23,3 +22,4 @@ export default function VisitRequest({ onCreate }: { onCreate: () => void }) {
     </>
   );
 }
+export default VisitRequest;
