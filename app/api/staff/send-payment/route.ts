@@ -14,7 +14,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false })
   }
 
-  await sendPaymentEmail(exam.patient.email, exam.paymentLink)
+  await sendPaymentEmail(
+    exam.patient.email,
+    `${exam.patient.firstName} ${exam.patient.lastName}`,
+    exam.paymentLink
+  )
 
   return NextResponse.json({ success: true })
 }

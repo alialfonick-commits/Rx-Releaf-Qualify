@@ -97,7 +97,11 @@ export async function POST(req: Request) {
     })
   
     try {
-      await sendPaymentEmail(email, paymentLink)
+      await sendPaymentEmail(
+        email,
+        `${firstName} ${lastName}`,
+        paymentLink
+      )
     } catch (err) {
       console.error("Email failed:", err)
     }

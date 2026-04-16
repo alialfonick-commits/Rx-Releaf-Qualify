@@ -265,7 +265,7 @@ export function TableWrap({
 
        <TableCell>
         <Link
-         href="#"
+         href={`/staff/visits/${visit.id}`}
          className="font-medium"
         >
          View
