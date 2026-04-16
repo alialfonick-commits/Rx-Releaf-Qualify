@@ -33,6 +33,7 @@ import {
  Mail,
  Shield,
  CreditCard,
+ User,
 } from "lucide-react"
 import { Link as LinkIcon } from "lucide-react"
 import Link from "next/link"
@@ -87,22 +88,24 @@ export function TableWrap({
        </TableCell>
 
        <TableCell>
-        <div className="flex items-center gap-2">
-         <UserRound className="size-4 text-[#6A7C73]" />
+        <div className="flex items-center gap-1">
+         <User className="size-4 text-[#6A7C73]" />
          {visit.patient.firstName} {visit.patient.lastName}
         </div>
        </TableCell>
 
-       <TableCell>{visit.consultationType}</TableCell>
+       <TableCell className="capitalize">
+        {visit.consultationType}
+       </TableCell>
 
        <TableCell>
         <div className="flex flex-col gap-0.5">
-         <span className="flex items-center gap-1 text-sm text-[#2E3833]">
-          <Calendar className="size-4" />
+         <span className="flex items-center gap-1 text-[13px] text-[#2E3833]">
+          <Calendar className="size-3.5" />
           {new Date(visit.createdAt).toLocaleDateString()}
          </span>
-         <span className="flex items-center gap-1 text-[12px] text-[#6A7C73]">
-          <Clock className="size-4" />
+         <span className="flex items-center gap-1 text-[12px] text-[#6A7C73] mt-px">
+          <Clock className="size-3.5" />
           {new Date(visit.createdAt).toLocaleTimeString()}
          </span>
         </div>
@@ -118,8 +121,8 @@ export function TableWrap({
         ) : (
          <AlertDialog>
           <AlertDialogTrigger asChild>
-           <button className="flex items-center gap-2 border w-fit bg-[#EEB32B26] border-[#F5A623] text-[#322A1B] px-2 py-1 rounded-lg font-semibold cursor-pointer">
-            <Send className="size-4" />
+           <button className="flex items-center gap-1.5 border w-fit bg-[#EEB32B26] border-[#F5A623] text-[#322A1B] px-2 py-1 rounded-lg font-medium cursor-pointer text-[13px]">
+            <Send className="size-4" color="#DFA620" />
             Send link
            </button>
           </AlertDialogTrigger>
@@ -231,33 +234,33 @@ export function TableWrap({
 
        <TableCell>
         <span className="flex items-center gap-1 text-[#2E3833]">
-         <MapPin className="size-4" color="#6A7C73" />
+         <MapPin className="size-3.5" color="#6A7C73" />
          {visit.patientState}
         </span>
        </TableCell>
-       <TableCell>
+       <TableCell className="[&_span]:px-3.5 [&_span]:py-1 [&_span]:rounded-full [&_span]:font-medium [&_span]:text-[13px]">
         {visit.status === "IN_PROGRESS" && (
-         <span className="bg-[#DFA62026] text-[#322A1B] px-6 py-1 rounded-full font-semibold">
+         <span className="bg-[#DFA62026] text-[#322A1B]">
           In Progress
          </span>
         )}
         {visit.status === "COMPLETED" && (
-         <span className="bg-[#39AC6326] text-[#39AC63] px-6 py-1 rounded-full font-semibold">
+         <span className="bg-[#39AC6326] text-[#39AC63]">
           Completed
          </span>
         )}
         {visit.status === "PENDING" && (
-         <span className="bg-[#DFA62026] text-[#322A1B] px-4 py-1 rounded-full font-semibold">
+         <span className="bg-[#DFA62026] text-[#322A1B]">
           Pending Provider
          </span>
         )}
         {visit.status === "CANCELLED" && (
-         <span className="bg-[#D74242] text-[#ffffff] px-6.5 py-1 rounded-full font-semibold">
+         <span className="bg-[#D74242] text-[#ffffff]">
           Cancelled
          </span>
         )}
         {visit.status === "INVITED" && (
-         <span className="bg-[#3399CC26] text-[#3399CC] px-6.5 py-1 rounded-full font-semibold">
+         <span className="bg-[#3399CC26] text-[#3399CC]">
           Scheduled
          </span>
         )}
@@ -266,7 +269,7 @@ export function TableWrap({
        <TableCell>
         <Link
          href={`/staff/visits/${visit.id}`}
-         className="font-medium"
+         className="font-medium hover:text-[#DFA620]"
         >
          View
         </Link>
