@@ -12,8 +12,7 @@ export const sidebarConfig = {
   ],
   STAFF: [
     { label: "Dashboard", path: "/staff/dashboard", icon: ClipboardList },
-    { label: "Cases", path: "/staff/cases", icon: Folder },
-    { label: "Payments", path: "/staff/payments", icon: CreditCard }
+    { label: "Exams / Visits", path: "/staff/visits", icon: Folder },
   ],
   PUBLIC: [
     { label: "Home", path: "/", icon: ClipboardList }

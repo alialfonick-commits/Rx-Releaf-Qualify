@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CircleX, Clock4, SquarePen, User } from "lucide-react";
 
-export default function ViewVisitDetails() {
+export default function ViewVisitDetails({ visit }: { visit: any }) {
  return (
   <>
    <div className="[&_p]:text-[#6A7C73] [&_span]:text-sm [&_span]:capitalize [&_strong]:font-semibold [&_strong]:text-[18px]">
@@ -12,7 +12,7 @@ export default function ViewVisitDetails() {
       <Button><ArrowLeft className="size-6!" /></Button>
       <div>
        <strong>Visit Details</strong>
-       <p>Created on <span>Dec26, 2025, 10:30AM</span></p>
+       <p>Created on <span>{new Date(visit.createdAt).toLocaleString()}</span></p>
       </div>
      </div>
 
@@ -36,39 +36,39 @@ export default function ViewVisitDetails() {
       <div className="grid sm:grid-cols-3 grid-cols-2 sm:gap-6 gap-4">
        <div>
         <p>Visit ID</p>
-        <span>SVC-001</span>
+        <span>{visit.id.slice(0, 6)}</span>
        </div>
        <div>
         <p>Patient Name</p>
-        <span>Sarah Clair</span>
+        <span>{visit.patient.firstName} {visit.patient.lastName}</span>
        </div>
        <div>
         <p>Contact</p>
-        <span>+1 (550) 235 6668</span>
+        <span>{visit.patient.phone}</span>
        </div>
        <div>
         <p>Type</p>
-        <span>initial consultation</span>
+        <span>{visit.consultationType}</span>
        </div>
        <div>
         <p>Date & Time</p>
-        <span>Dec26, 2025, 10:30AM</span>
+        <span>{new Date(visit.createdAt).toLocaleString()}</span>
        </div>
        <div>
         <p>Location</p>
-        <span>texas</span>
+        <span>{visit.patientState}</span>
        </div>
        <div>
         <p>Provider</p>
-        <span>Dr. Michael Chen</span>
+        <span>{visit.providerName || "Pending"}</span>
        </div>
        <div>
         <p>Status</p>
-        <span className="bg-[#3399CC26] rounded-full px-4 py-1 text-[#3399CC] font-semibold mt-1 block w-fit">scheduled</span>
+        <span className="bg-[#3399CC26] rounded-full px-4 py-1 text-[#3399CC] font-semibold mt-1 block w-fit">{visit.status}</span>
        </div>
        <div>
         <p>Payment</p>
-        <span className="bg-[#3399CC26] rounded-full px-4 py-1 text-[#3399CC] font-semibold mt-1 block w-fit">Paid</span>
+        <span className="bg-[#3399CC26] rounded-full px-4 py-1 text-[#3399CC] font-semibold mt-1 block w-fit">{visit.paymentStatus}</span>
        </div>
       </div>
 

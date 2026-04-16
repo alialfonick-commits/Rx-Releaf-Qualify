@@ -37,58 +37,31 @@ import {
 import { Link as LinkIcon } from "lucide-react"
 import Link from "next/link"
 
-const visits = [
- {
-  visitid: "VIS-001",
-  patient: "Sarah Clair",
-  type: "Initial Consultation",
-  date: "2024-01-15",
-  time: "10:00 AM",
-  provider: "Dr. Michael Chen",
-  payment: "Send link",
-  location: "Virtual",
-  status: "In Progress",
-  actionUrl: "#",
- },
- {
-  visitid: "VIS-002",
-  patient: "Robert Williams",
-  type: "Follow-up",
-  date: "2024-01-15",
-  time: "11:30 AM",
-  provider: "Dr. Emily Davis",
-  payment: "Send link",
-  location: "Virtual",
-  status: "In Progress",
-  actionUrl: "#",
- },
- {
-  visitid: "VIS-003",
-  patient: "Maria Garcia",
-  type: "Renewal",
-  date: "2024-01-15",
-  time: "2:00 PM",
-  provider: "Dr. James Wilson",
-  payment: "Paid",
-  location: "Virtual",
-  status: "Completed",
-  actionUrl: "#",
- },
- {
-  visitid: "VIS-004",
-  patient: "David Brown",
-  type: "Initial Consultation",
-  date: "2024-01-16",
-  time: "9:00 AM",
-  provider: "Pending Assignment",
-  payment: "Paid",
-  location: "Virtual",
-  status: "Pending Provider",
-  actionUrl: "#",
- },
-]
+export function TableWrap({
+    visits,
+    loading
+  }: {
+    visits: any[]
+    loading?: boolean
+  }) {
 
-export function TableWrap() {
+  const handleSend = async (id: string) => {
+    await fetch("/api/staff/send-payment", {
+      method: "POST",
+      body: JSON.stringify({ examId: id })
+    })
+  
+    alert("Payment link sent")
+  }
+
+  if (loading) {
+    return <p className="p-4">Loading...</p>
+  }
+
+  if (!visits || visits.length === 0) {
+    return <p className="p-4">No visits found</p>
+  }
+
  return (
   <div className="border border-[#DCE5DF] rounded-xl overflow-hidden">
    <Table>
@@ -108,37 +81,37 @@ export function TableWrap() {
 
     <TableBody className="[&_tr]:hover:bg-gray-50">
      {visits.map((visit) => (
-      <TableRow key={visit.visitid}>
+      <TableRow key={visit.id}>
        <TableCell className="font-medium text-[#486B57]">
-        {visit.visitid}
+            {visit.id.slice(0, 6)}
        </TableCell>
 
        <TableCell>
         <div className="flex items-center gap-2">
          <UserRound className="size-4 text-[#6A7C73]" />
-         {visit.patient}
+         {visit.patient.firstName} {visit.patient.lastName}
         </div>
        </TableCell>
 
-       <TableCell>{visit.type}</TableCell>
+       <TableCell>{visit.consultationType}</TableCell>
 
        <TableCell>
         <div className="flex flex-col gap-0.5">
          <span className="flex items-center gap-1 text-sm text-[#2E3833]">
           <Calendar className="size-4" />
-          {visit.date}
+          {new Date(visit.createdAt).toLocaleDateString()}
          </span>
          <span className="flex items-center gap-1 text-[12px] text-[#6A7C73]">
           <Clock className="size-4" />
-          {visit.time}
+          {new Date(visit.createdAt).toLocaleTimeString()}
          </span>
         </div>
        </TableCell>
 
-       <TableCell>{visit.provider}</TableCell>
+       <TableCell>{visit.providerName || "Pending"}</TableCell>
 
        <TableCell>
-        {visit.payment === "Paid" ? (
+        {visit.paymentStatus === "Paid" ? (
          <span className="bg-[#39AC6326] text-[#39AC63] px-9.5 py-1 rounded-full font-semibold">
           Paid
          </span>
@@ -259,32 +232,31 @@ export function TableWrap() {
        <TableCell>
         <span className="flex items-center gap-1 text-[#2E3833]">
          <MapPin className="size-4" color="#6A7C73" />
-         {visit.location}
+         {visit.patientState}
         </span>
        </TableCell>
-
        <TableCell>
-        {visit.status === "In Progress" && (
+        {visit.status === "IN_PROGRESS" && (
          <span className="bg-[#DFA62026] text-[#322A1B] px-6 py-1 rounded-full font-semibold">
           In Progress
          </span>
         )}
-        {visit.status === "Completed" && (
+        {visit.status === "COMPLETED" && (
          <span className="bg-[#39AC6326] text-[#39AC63] px-6 py-1 rounded-full font-semibold">
           Completed
          </span>
         )}
-        {visit.status === "Pending Provider" && (
+        {visit.status === "PENDING" && (
          <span className="bg-[#DFA62026] text-[#322A1B] px-4 py-1 rounded-full font-semibold">
           Pending Provider
          </span>
         )}
-        {visit.status === "Cancelled" && (
+        {visit.status === "CANCELLED" && (
          <span className="bg-[#D74242] text-[#ffffff] px-6.5 py-1 rounded-full font-semibold">
           Cancelled
          </span>
         )}
-        {visit.status === "Scheduled" && (
+        {visit.status === "INVITED" && (
          <span className="bg-[#3399CC26] text-[#3399CC] px-6.5 py-1 rounded-full font-semibold">
           Scheduled
          </span>
@@ -293,7 +265,7 @@ export function TableWrap() {
 
        <TableCell>
         <Link
-         href={visit.actionUrl}
+         href={`/staff/visits/${visit.id}`}
          className="font-medium"
         >
          View

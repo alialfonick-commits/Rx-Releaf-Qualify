@@ -36,6 +36,14 @@ enum PaymentStatus {
   FAILED
 }
 
+enum ExamStatus {
+  PENDING
+  INVITED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
 //////////////////////
 // USER (Admin / Staff)
 //////////////////////
@@ -74,37 +82,32 @@ model Patient {
 //////////////////////
 
 model Exam {
-  id                 String   @id @default(uuid())
+  id            String   @id @default(uuid())
 
-  // 🔗 Relations
-  patientId          String
-  staffId            String?
+  patientId     String
+  staffId       String?
 
-  patient            Patient  @relation(fields: [patientId], references: [id])
-  staff              User? @relation(fields: [staffId], references: [id])
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  staff         User?    @relation(fields: [staffId], references: [id])
 
-  //////////////////////
-  // 🏥 VISIT DETAILS
-  //////////////////////
+  // Visit Info
+  patientState  String
+  consultationType ConsultationType
+  isPhoneVisit  Boolean @default(false)
 
-  clinic             String   @default("Rx Releaf")
-  patientState       String
-  consultationType   ConsultationType @default(URGENT_CARE)
-  examId             Int
-  examName           String
-  pharmacyPackage    String   @default("Provider Selects (Best Price)")
+  // Qualiphy
+  examId        Int
+  examName      String
+  providerName  String?   // from webhook
 
-  //////////////////////
-  // 💳 PAYMENT (Deferred Flow)
-  //////////////////////
+  // Status
+  status        ExamStatus @default(PENDING)
 
-  paymentStatus      PaymentStatus @default(PENDING)
-  paymentId          String?   // Square transaction ID
-  paymentLink        String?   // link sent via SMS/email
+  // Payment
+  paymentStatus PaymentStatus
+  paymentId     String?
+  paymentLink   String?
 
-  //////////////////////
-  // 📅 META
-  //////////////////////
-
-  createdAt          DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
