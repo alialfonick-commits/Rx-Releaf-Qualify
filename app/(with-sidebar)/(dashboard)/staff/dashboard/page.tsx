@@ -1,5 +1,6 @@
 "use client"
 
+import Navbar from "@/app/components/navbar"
 import RecentVisit from "@/app/components/recentVisit"
 import Stats from "@/app/components/stats"
 import VisitRequest from "@/app/components/visitRequest"
@@ -23,8 +24,9 @@ export default function StaffDashboard() {
   const { stats } = data
 
   return (
+  
     <>
-      <h1>Staff Dashboard</h1>
+      <Navbar />
       <VisitRequest />
       {/* Stats */}
       <Stats stats={data.stats} />

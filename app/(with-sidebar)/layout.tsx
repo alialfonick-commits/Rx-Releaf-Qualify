@@ -1,3 +1,4 @@
+import Navbar from "../components/navbar";
 import SideBar from "../components/sidebar/sideBar";
 
 export default function WithSidebarLayout({

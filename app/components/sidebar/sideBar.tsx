@@ -1,99 +1,125 @@
 'use client'
-import Image from "next/image";
+import Image from 'next/image'
 import {
-    LayoutDashboard,
-    Folder,
-    Shield,
-    Menu,
-    X,
-    FolderOpen,
-    FileText,
-    ClipboardList,
-    CreditCard,
-  } from "lucide-react";
-import { useState } from "react";
-import { useSession } from "next-auth/react"
-import { sidebarConfig } from "./SidebarConfig"
-import { usePathname, useRouter } from "next/navigation"
+  LayoutDashboard,
+  Folder,
+  Shield,
+  Menu,
+  X,
+  FolderOpen,
+  FileText,
+  ClipboardList,
+  CreditCard,
+  EllipsisVertical,
+  LogOut
+} from 'lucide-react'
+import { useState } from 'react'
+import { useSession, signOut } from 'next-auth/react'
+import { sidebarConfig } from './SidebarConfig'
+import { usePathname, useRouter } from 'next/navigation'
 
 type PageType =
-  | "welcome"
-  | "staff"
-  | "cases"
-  | "viewCases"
-  | "visitDetails"
-  | "admin"
-  | "Payments"
-  | "executionMonitoring"
-  | "overview";
+  | 'welcome'
+  | 'staff'
+  | 'cases'
+  | 'viewCases'
+  | 'visitDetails'
+  | 'admin'
+  | 'Payments'
+  | 'executionMonitoring'
+  | 'overview'
 
-export default function SideBar() {
+export default function SideBar () {
   const { data: session } = useSession()
+  
   const pathname = usePathname()
   const router = useRouter()
 
-  const role = session?.user?.role || "PUBLIC"
+  const role = session?.user?.role || 'PUBLIC'
   const items = sidebarConfig[role as keyof typeof sidebarConfig]
 
-  const [activePage, setActivePage] = useState<PageType>("welcome");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  return(
+  const [activePage, setActivePage] = useState<PageType>('welcome')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  const handleLogout = async () => {
+    // Optional: call your API to revoke tokens, log activity, etc.
+
+    await signOut({
+      callbackUrl: "/login", // where to go after logout
+      redirect: true,        // default is true; explicit for clarity
+    });
+  };
+
+  return (
     <>
-      <div className="xl:hidden fixed top-0 left-0 z-50 bg-[#708E86] w-full">
+      <div className='xl:hidden fixed top-3 right-0 left-auto z-9 w-full text-end'>
+        {/* <div className='mb-4 border-b border-[#506259] pb-5'>
+          <Image
+            src='/images/logo.webp'
+            alt='RX Releaf Logo'
+            width={130}
+            height={70}
+            className='mx-auto'
+          />
+        </div> */}
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="text-white p-2 rounded-md bg-[#708E86]"
+          className='text-white px-1.25 py-1 content-center rounded-l-lg text-xs bg-[#708E86] border border-white hover:bg-[#57746D] transition'
         >
-          <Menu size={24} />
+          <span className="text-[7px] [writing-mode:vertical-rl] align-middle font-semibold capitalize tracking-widest text-[#FFFFFFCC]">
+          <EllipsisVertical size={26} className='-ml-1.5 center' /> Menu
+          </span>
         </button>
       </div>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 xl:hidden"
+          className='fixed inset-0 bg-black/40 z-40 xl:hidden'
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
-    <div
-      className={`fixed top-0 left-0 w-75 h-full bg-[#708E86] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
-      ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} xl:translate-x-0 xl:static xl:h-auto`}
-    >
-      {isSidebarOpen && (
-      <div className="flex justify-end mb-4 xl:hidden absolute">
-        <button
-          onClick={() => setIsSidebarOpen(false)}
-          className="text-white p-2 rounded-md hover:bg-[#4E6056]/50"
-        >
-          <X size={24} />
-        </button>
-      </div>
-      )}
+      <div
+        className={`fixed top-0 left-0 w-75 h-full bg-[#708E86] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
+      ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } xl:translate-x-0 xl:static xl:h-auto`}
+      >
+        {isSidebarOpen && (
+          <div className='flex justify-end mb-4 xl:hidden absolute'>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className='text-white p-2 rounded-md hover:bg-[#4E6056]/50'
+            >
+              <X size={24} />
+            </button>
+          </div>
+        )}
 
-      <div>
-        <div className="mb-4 border-b border-[#506259] pb-5">
-          <Image
-          src="/images/logo.webp"
-          alt="RX Releaf Logo"
-          width={130}
-          height={70}
-          className="mx-auto"
-          />
-        </div>
-        <div className="space-y-2 [&_button]:text-start">
-          {items.map((item) => {
-          const Icon = item.icon
-            return (
-              <SidebarButton
-                key={item.path}
-                icon={<Icon size={18} />}
-                label={item.label}
-                active={pathname === item.path}
-                onClick={() => router.push(item.path)}
-              />
-            )
-          })}
+        <div>
+          <div className='mb-4 border-b border-[#506259] pb-5'>
+            <Image
+              src='/images/logo.webp'
+              alt='RX Releaf Logo'
+              width={130}
+              height={70}
+              className='mx-auto'
+            />
+          </div>
+          <div className='space-y-2 [&_button]:text-start'>
+            {items.map(item => {
+              const Icon = item.icon
+              return (
+                <SidebarButton
+                  key={item.path}
+                  icon={<Icon size={18} />}
+                  label={item.label}
+                  active={pathname === item.path}
+                  onClick={() => router.push(item.path)}
+                />
+              )
+            })}
 
-          {/* <SidebarButton
+            {/* <SidebarButton
           icon={<LayoutDashboard size={18} />}
           label="Dashboard"
           active={activePage === "staff"}
@@ -172,41 +198,42 @@ export default function SideBar() {
               setIsSidebarOpen(false);
           }}
           /> */}
+          </div>
         </div>
-      </div>
 
-      <div className="bg-[#57746D] rounded-xl p-4 text-sm mt-4">
-        <p className="text-[#FFFFFFCC] mb-2 text-[16px]">Need help?</p>
-        <p className="text-[#FFFFFF99]">
-          Contact support at <a href="mailto:admin@rxreleaf.com"
-          className="text-[#C3A260] block">admin@rxreleaf.com</a>
-        </p>
+        <button
+          onClick={handleLogout}
+          className="bg-[#57746D] rounded-xl p-4 text-sm mt-4 cursor-pointer w-full text-left hover:bg-[#4E6056]/70 transition"
+        >
+          <span className="inline-flex items-center">
+            <LogOut className="mr-2" size={18} />
+            Logout
+          </span>
+        </button>
       </div>
-    </div>
     </>
   )
 }
-function SidebarButton({
-    icon,
-    label,
-    active,
-    onClick,
-  }: {
-    icon: React.ReactNode;
-    label: string;
-    active: boolean;
-    onClick: () => void;
-  }) {
+function SidebarButton ({
+  icon,
+  label,
+  active,
+  onClick
+}: {
+  icon: React.ReactNode
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 w-full sm:px-4 px-3 sm:py-3 py-2 sm:rounded-xl rounded-lg max-sm:text-[15px] focus-visible:outline-none cursor-pointer transition ${active
-      ? "bg-[#57746D]"
-      : "hover:bg-[#4E6056]/70"
+      className={`flex items-center gap-3 w-full sm:px-4 px-3 sm:py-3 py-2 sm:rounded-xl rounded-lg max-sm:text-[15px] focus-visible:outline-none cursor-pointer transition ${
+        active ? 'bg-[#57746D]' : 'hover:bg-[#4E6056]/70'
       }`}
     >
       {icon}
       {label}
     </button>
-  );
+  )
 }
