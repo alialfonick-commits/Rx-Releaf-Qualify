@@ -19,6 +19,8 @@ export default function PaymentsPage() {
 
   if (!data) return <p>Loading...</p>
 
+  console.log(data)
+
   return (
     <div className="p-5">
       <h1 className="text-xl font-semibold mb-4">All Payments</h1>
