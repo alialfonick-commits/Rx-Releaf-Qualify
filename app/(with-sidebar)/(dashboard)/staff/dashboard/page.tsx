@@ -2,7 +2,7 @@
 
 import RecentVisit from "@/app/components/recentVisit"
 import Stats from "@/app/components/stats"
-import VisitRequest from "@/app/components/visitRequest"
+import { signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
 
 export default function StaffDashboard() {
@@ -25,7 +25,7 @@ export default function StaffDashboard() {
   return (
     <>
       <h1>Staff Dashboard</h1>
-      <VisitRequest />
+      <button onClick={() => signOut({ callbackUrl: "/login" })}>Logout</button>
       {/* Stats */}
       <Stats stats={data.stats} />
       <RecentVisit />
