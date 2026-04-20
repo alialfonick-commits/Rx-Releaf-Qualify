@@ -37,6 +37,7 @@ model Patient {
 
 model Exam {
   id               String           @id @default(uuid())
+  caseNumber       Int @unique @default(autoincrement())
   patientId        String
   staffId          String?
   createdAt        DateTime         @default(now())
@@ -53,6 +54,16 @@ model Exam {
   updatedAt        DateTime         @updatedAt
   patient          Patient          @relation(fields: [patientId], references: [id])
   staff            User?            @relation(fields: [staffId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  timestamp DateTime @default(now())
+  ipAddress String?
 }
 
 enum Role {
