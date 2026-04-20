@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 type Visit = {
   id: string;
+  caseNumber: number;
   createdAt: string;
   status: string;
   consultationType: string;
