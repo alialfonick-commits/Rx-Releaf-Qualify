@@ -30,7 +30,7 @@ import ViewCases from "./components/viewCases";
 import Payments from "./components/payments";
 import ExecutionMonitoring from "./components/executionMonitoring";
 // import VirtualStep2 from "./components/virtualStep2";
-import AdminOverview from "./components/adminOverview";
+import AdminOverview from "./components/adminStats";
 
 type PageType =
   | "welcome"
