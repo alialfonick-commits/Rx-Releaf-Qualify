@@ -2,13 +2,16 @@ import {
   ClipboardList,
   LayoutDashboard,
   Folder,
-  CreditCard
+  CreditCard,
+  Shield
 } from "lucide-react"
 
 export const sidebarConfig = {
   ADMIN: [
     { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
-    { label: "Staff", path: "/admin/staff", icon: Folder }
+    { label: "Execution Monitoring", path: "/admin/visits", icon: Shield },
+    { label: "Staff", path: "/admin/staff", icon: Folder },
+    { label: "Payment", path: "/admin/payments", icon: CreditCard },
   ],
   STAFF: [
     { label: "Dashboard", path: "/staff/dashboard", icon: ClipboardList },

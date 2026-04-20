@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,9 +7,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//////////////////////
-// ENUMS
-//////////////////////
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String
+  phone     String?
+  role      Role
+  isActive  Boolean  @default(true)
+  isDeleted Boolean  @default(false)
+  lastLogin DateTime?
+
+  createdAt DateTime @default(now())
+
+  exams     Exam[]
+}
+
+model Patient {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  dob       DateTime
+  createdAt DateTime @default(now())
+  birthSex  BirthSex
+  email     String
+  phone     String
+  exams     Exam[]
+}
+
+model Exam {
+  id               String           @id @default(uuid())
+  patientId        String
+  staffId          String?
+  createdAt        DateTime         @default(now())
+  consultationType ConsultationType
+  patientState     String
+  paymentId        String?
+  paymentLink      String?
+  paymentStatus    PaymentStatus
+  examId           Int
+  examName         String
+  isPhoneVisit     Boolean          @default(false)
+  providerName     String?
+  status           ExamStatus       @default(PENDING)
+  updatedAt        DateTime         @updatedAt
+  patient          Patient          @relation(fields: [patientId], references: [id])
+  staff            User?            @relation(fields: [staffId], references: [id])
+}
 
 enum Role {
   ADMIN
@@ -42,72 +81,4 @@ enum ExamStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
-}
-
-//////////////////////
-// USER (Admin / Staff)
-//////////////////////
-
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      Role
-  createdAt DateTime @default(now())
-
-  exams     Exam[]
-}
-
-//////////////////////
-// PATIENT
-//////////////////////
-
-model Patient {
-  id        String   @id @default(uuid())
-
-  firstName String
-  lastName  String
-  email     String
-  phone     String
-  dob       DateTime
-  birthSex  BirthSex
-
-  createdAt DateTime @default(now())
-
-  exams     Exam[]
-}
-
-//////////////////////
-// EXAM (Core Model)
-//////////////////////
-
-model Exam {
-  id            String   @id @default(uuid())
-
-  patientId     String
-  staffId       String?
-
-  patient       Patient  @relation(fields: [patientId], references: [id])
-  staff         User?    @relation(fields: [staffId], references: [id])
-
-  // Visit Info
-  patientState  String
-  consultationType ConsultationType
-  isPhoneVisit  Boolean @default(false)
-
-  // Qualiphy
-  examId        Int
-  examName      String
-  providerName  String?   // from webhook
-
-  // Status
-  status        ExamStatus @default(PENDING)
-
-  // Payment
-  paymentStatus PaymentStatus
-  paymentId     String?
-  paymentLink   String?
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
 }

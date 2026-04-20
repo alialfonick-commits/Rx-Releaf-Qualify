@@ -105,7 +105,7 @@ export default function SideBar () {
               className='mx-auto'
             />
           </div>
-          <div className='space-y-2 [&_button]:text-start'>
+          <div className='space-y-1.5 [&_button]:text-start'>
             {items.map(item => {
               const Icon = item.icon
               return (
@@ -203,9 +203,9 @@ export default function SideBar () {
 
         <button
           onClick={handleLogout}
-          className="bg-[#57746D] rounded-xl p-4 text-sm mt-4 cursor-pointer w-full text-left hover:bg-[#4E6056]/70 transition"
+          className="bg-[#57746D] rounded-lg 2xl:px-4 px-3.5 2xl:py-3 py-2.5 2xl:text-base text-[15px] mt-4 cursor-pointer w-full text-left hover:bg-[#4E6056]/70 transition"
         >
-          <span className="inline-flex items-center">
+          <span className="inline-flex items-center align-middle">
             <LogOut className="mr-2" size={18} />
             Logout
           </span>
@@ -228,7 +228,7 @@ function SidebarButton ({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 w-full sm:px-4 px-3 sm:py-3 py-2 sm:rounded-xl rounded-lg max-sm:text-[15px] focus-visible:outline-none cursor-pointer transition ${
+      className={`flex items-center gap-2.5 w-full 2xl:px-4 px-3.5 2xl:py-3 py-2.5 sm:rounded-lg rounded-base focus-visible:outline-none 2xl:text-base text-[15px] cursor-pointer transition ${
         active ? 'bg-[#57746D]' : 'hover:bg-[#4E6056]/70'
       }`}
     >

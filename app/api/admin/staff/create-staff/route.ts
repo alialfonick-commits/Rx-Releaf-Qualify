@@ -1,34 +1,33 @@
 import { NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
-import { PrismaClient, Role } from "@prisma/client"
 import { authOptions } from "@/lib/auth"
 import bcrypt from "bcrypt"
-
-const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
 
-  // 🔒 Only admin allowed
   if (!session || session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  // ✅ Type the request body
-  const body: { email: string; password: string } = await req.json()
+  const body = await req.json()
 
-  const { email, password } = body
+  const { name, email, phone, password, isActive } = body
 
-  if (!email || !password) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 })
+  if (!name || !email || !password) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    )
   }
 
-  // ✅ Check if user already exists
-  const existingUser = await prisma.user.findUnique({
+  // 🔍 Check if exists
+  const existing = await prisma.user.findUnique({
     where: { email }
   })
 
-  if (existingUser) {
+  if (existing) {
     return NextResponse.json(
       { error: "User already exists" },
       { status: 400 }
@@ -40,14 +39,14 @@ export async function POST(req: Request) {
 
   const user = await prisma.user.create({
     data: {
+      name,
       email,
+      phone,
       password: hashedPassword,
-      role: Role.STAFF
+      role: "STAFF",
+      isActive: isActive ?? true
     }
   })
 
-  return NextResponse.json({
-    message: "Staff created successfully",
-    user
-  })
+  return NextResponse.json({ success: true, user })
 }

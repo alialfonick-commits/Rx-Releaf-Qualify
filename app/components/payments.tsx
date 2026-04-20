@@ -39,7 +39,7 @@ export default function Payments() {
             </div>
         </div>
 
-<PaymentsTable />
+{/* <PaymentsTable /> */}
 
         </>
     );
