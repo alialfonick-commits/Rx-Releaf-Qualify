@@ -39,7 +39,7 @@ export default function SideBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return(
     <>
-      <div className="md:hidden fixed top-0 left-0 z-50 bg-[#708E86] w-full">
+      <div className="xl:hidden fixed top-0 left-0 z-50 bg-[#708E86] w-full">
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="text-white p-2 rounded-md bg-[#708E86]"
@@ -49,17 +49,17 @@ export default function SideBar() {
       </div>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          className="fixed inset-0 bg-black/40 z-40 xl:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
     <div
       className={`fixed top-0 left-0 w-75 h-full bg-[#708E86] text-white flex flex-col justify-between p-3 z-50 transform transition-transform duration-300
-      ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:h-auto`}
+      ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} xl:translate-x-0 xl:static xl:h-auto`}
     >
       {isSidebarOpen && (
-      <div className="flex justify-end mb-4 md:hidden absolute">
+      <div className="flex justify-end mb-4 xl:hidden absolute">
         <button
           onClick={() => setIsSidebarOpen(false)}
           className="text-white p-2 rounded-md hover:bg-[#4E6056]/50"
