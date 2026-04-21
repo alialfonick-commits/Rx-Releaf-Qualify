@@ -15,17 +15,24 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
+type NavbarProps = {
+  title: string;
+  subtitle?: string;
+};
 
-export default function Navbar () {
+export default function Navbar ({ title, subtitle }: NavbarProps) {
+  
   return (
     <div className='relative w-full border-b border-[#D7DED3] bg-white px-4 py-4 md:flex-row flex-col flex md:items-center max-md:gap-2.5 justify-between rounded-xl shadow-[0px_1px_3px_0px_#0000001A] mb-3 mt-1.5'>
       <div className='sm:[&_strong]:text-[20px] [&_strong]:text-[18px] 2xl:[&_p]:text-base sm:[&_p]:text-[15px] [&_p]:text-sm'>
         <strong className='text-2xl block font-medium text-[#222222]'>
-          Staff Dashboard
+          {title}
         </strong>
-        <p className='text-sm text-[#677E73]'>
-          Create and manage virtual visit requests
-        </p>
+        {subtitle && (
+          <p className='text-sm text-[#677E73]'>
+            {subtitle}
+          </p>
+        )}
       </div>
 
       <div className='flex items-center md:gap-4 gap-2 max-[600px]:flex-col max-[600px]:items-start'>

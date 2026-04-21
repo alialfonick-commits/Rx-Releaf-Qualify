@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import PaymentsTable from "@/app/components/paymentTable"
+import Navbar from "@/app/components/navbar"
 
 export default function PaymentsPage() {
   const [data, setData] = useState<any>(null)
@@ -23,8 +24,7 @@ export default function PaymentsPage() {
 
   return (
     <div className="p-5">
-      <h1 className="text-xl font-semibold mb-4">All Payments</h1>
-
+      <Navbar title="Payments" subtitle="View and manage all payment transactions" />
       <PaymentsTable payment={data.payments} page={data.page}
         total={data.total}
         totalPages={data.totalPages}

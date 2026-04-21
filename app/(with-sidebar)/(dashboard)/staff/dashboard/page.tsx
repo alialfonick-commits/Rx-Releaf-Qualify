@@ -30,7 +30,7 @@ export default function StaffDashboard() {
       {/* <h1>Staff Dashboard</h1>
       <button onClick={() => signOut({ callbackUrl: "/login" })}>Logout</button> */}
       {/* Stats */}
-      <Navbar />
+      <Navbar title="Staff Dashboard" subtitle="Create and manage virtual visit requests" />
       <VisitRequest />
       <Stats stats={data.stats} />
       <RecentVisit />

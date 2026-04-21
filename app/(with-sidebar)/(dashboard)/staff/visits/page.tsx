@@ -29,7 +29,7 @@ export default function VisitsPage () {
 
   return (
     <>
-    <Navbar />
+    <Navbar title='Exams / Visits' subtitle='View and manage all scheduled exams and virtual visits' />
       <div>
 
         {/* Reusable Table */}

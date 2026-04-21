@@ -27,7 +27,7 @@ export default function AdminDashboard () {
       <div className='grid grid-cols-12 gap-3.5 mt-3 items-start [&_strong]:font-medium [&_strong]:text-lg [&_strong]:text-[#2B3B33] '>
         {/* Execution Monitoring */}
         <div className='lg:col-span-8 col-span-12 mt-0 border border-[#D7DED3] rounded-xl p-4 h-111.5 overflow-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 bg-white'>
-          <div className='flex items-center gap-4 mb-6'>
+          <div className='flex items-center gap-4 mb-3'>
             {/* Icon Container */}
             <div className='flex items-center justify-center w-11 h-11 bg-[#D9E3D8] rounded-xl'>
               <Folder className='w-6 h-6 text-[#4A5D52]' />
