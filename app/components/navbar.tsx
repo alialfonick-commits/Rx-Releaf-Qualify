@@ -68,7 +68,7 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className='flex items-center gap-2 border hover:bg-[#E1EAE5] cursor-pointer border-[#5E6E66] px-3 py-2 rounded-md text-sm text-[#6A7C73] [&_span]:text-[#2E3833] focus-visible:outline-0 max-md:w-80 max-[600px]:w-full! justify-between max-[600px]:justify-center!'>
-              Viewing as: <span className='font-medium'>Staff</span>
+              Viewing as: <span className='font-medium'>John Doe</span>
               <ChevronDown size={16} />
             </button>
           </DropdownMenuTrigger>
@@ -78,7 +78,7 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
             className='border border-[#D7DED3] bg-white w-42 [&_div]:cursor-pointer [&_div]:flex [&_div]:hover:bg-[#E1EAE5]'
           >
             <DropdownMenuItem>
-              <User /> Staff
+              <User /> John Doe
             </DropdownMenuItem>
             {/* <DropdownMenuItem>
               <Shield />
