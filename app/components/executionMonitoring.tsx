@@ -1,5 +1,4 @@
 import { CircleCheckBig, Clock4, FolderOpen, Phone } from "lucide-react";
-import ExecutionTable from "./executionTable";
 
 export default function ExecutionMonitoring() {
  return (
@@ -34,7 +33,6 @@ export default function ExecutionMonitoring() {
      </div>
     </div>
    </div>
-   <ExecutionTable />
   </>
  );
 }
