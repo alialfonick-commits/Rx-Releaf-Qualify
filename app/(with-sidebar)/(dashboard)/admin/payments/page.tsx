@@ -23,7 +23,7 @@ export default function PaymentsPage() {
   console.log(data)
 
   return (
-    <div className="p-5">
+    <div>
       <Navbar title="Payments" subtitle="View and manage all payment transactions" />
       <PaymentsTable payment={data.payments} page={data.page}
         total={data.total}

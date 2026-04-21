@@ -25,7 +25,7 @@ import {
     PaginationPrevious,
     } from "./paymentPagination"
 
-import { MoreHorizontal, Pencil, Power, Archive } from "lucide-react"
+import { MoreHorizontal, Pencil, Power, Archive, Clock, Calendar, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // const payments = [
@@ -147,98 +147,106 @@ export default function PaymentsTable({
 
 return (
   <>
-   <div className="border border-[#DCE5DF] rounded-xl overflow-hidden">
-    <Table>
-     <TableHeader>
-      <TableRow className="bg-[#FCFCFC] text-[#6A7C73] font-medium [&_th]:text-center">
-       <TableHead>Payment ID</TableHead>
-       <TableHead>Case ID</TableHead>
-       <TableHead>Patient</TableHead>
-       <TableHead>Amount</TableHead>
-       <TableHead>Method</TableHead>
-       <TableHead>Date</TableHead>
-       <TableHead>Status</TableHead>
-       <TableHead>Actions</TableHead>
-      </TableRow>
-     </TableHeader>
+  <div className="rounded-xl border border-[#DCE5DF] bg-white overflow-hidden shadow-sm">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader className="bg-[#F8FAF9]">
+            <TableRow className="border-b border-[#DCE5DF] hover:bg-transparent [&_th]:text-center">
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Payment ID</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Case ID</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Patient</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Amount</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Method</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Date & Time</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Status</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73] text-right px-6">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
 
-     <TableBody className="text-[#2E3835] [&_td]:text-center [&_td]:text-sm [&_tr]:bg-white [&_tr]:hover:bg-gray-50">
-      {payment.map((p: any) => (
-       <TableRow key={p.id}>
-        <TableCell>
-            {p.paymentId || p.id.slice(0, 6)}
-        </TableCell>
+          <TableBody className="text-[#2E3835] [&_td]:text-center [&_td]:text-sm">
+            {payment.map((p: any) => (
+              <TableRow 
+                key={p.id} 
+                className="border-b capitalize border-[#F1F4F2] last:border-0 hover:bg-[#F8FAF9]/50 transition-colors"
+              >
+                {/* ID Columns with medium weighting */}
+                <TableCell className="py-4 font-medium text-[#476B59]">
+                  {p.paymentId || p.id.slice(0, 6)}
+                </TableCell>
 
-        <TableCell>
-            {p.id.slice(0, 6)}
-        </TableCell>
+                <TableCell className="py-4 text-[#6A7C73]">
+                  {p.id.slice(0, 6)}
+                </TableCell>
 
-        <TableCell>
-            {p.patient.firstName} {p.patient.lastName}
-        </TableCell>
+                {/* Patient Name with Icon */}
+                <TableCell className="py-4 font-semimedium text-[#2E3833]">
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="p-1.5 bg-[#F1F4F2] rounded-full text-[#6A7C73]">
+                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    {p.patient.firstName} {p.patient.lastName}
+                  </div>
+                </TableCell>
 
-        <TableCell>
-        $89
-        </TableCell>
+                <TableCell className="py-4 font-medium text-[#2E3833]">
+                  $89.00
+                </TableCell>
 
-        <TableCell>
-         Card
-        </TableCell>
+                <TableCell className="py-4">
+                   <span className="text-[#6A7C73] bg-[#F8FAF9] px-2 py-1 rounded border border-[#DCE5DF]">Card</span>
+                </TableCell>
 
-        <TableCell>
-            {new Date(p.updatedAt).toLocaleDateString()}
-        </TableCell>
+                {/* Multi-line Date/Time Style */}
+                <TableCell className="py-4">
+                  <div className="flex flex-col items-center gap-1 text-[12px]">
+                    <span className="flex items-center gap-1 text-[#2E3833] font-medium">
+                      <Calendar size={14} className="text-[#6A7C73]" />
+                      {new Date(p.updatedAt).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1 text-[#6A7C73]">
+                      <Clock size={14} />
+                      {new Date(p.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                </TableCell>
 
-        <TableCell>
-        <StatusBadge
-          status={
-                p.paymentStatus === "PAID"
-                ? "Completed"
-                : p.paymentStatus === "PENDING"
-                ? "Pending"
-                : "Cancelled"
-            }
-            />
-        </TableCell>
+                <TableCell className="py-4">
+                  <StatusBadge
+                    status={
+                      p.paymentStatus === "PAID" ? "Completed" : 
+                      p.paymentStatus === "PENDING" ? "Pending" : "Cancelled"
+                     } 
+                  />
+                </TableCell>
 
-        <TableCell>
-         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 p-0 cursor-pointer"
-           >
-            <MoreHorizontal className="h-4 w-4 text-[#2E3833]" />
-           </Button>
-          </DropdownMenuTrigger>
+                {/* Multi-icon Action Cell */}
+                <TableCell className="py-4 text-right px-6">
+                  <div className="flex items-center justify-end gap-1">
+ 
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-[#6A7C73] hover:bg-[#F1F4F2]">
+                          <MoreHorizontal size={16} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40 rounded-xl border border-[#DCE5DF]">
+                        <DropdownMenuItem className="cursor-pointer">
+                          <Power className="mr-2 h-4 w-4" /> Deactivate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="cursor-pointer text-[#D74242]">
+                          <Archive className="mr-2 h-4 w-4" /> Archive
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
 
-          <DropdownMenuContent
-           align="end"
-           className="w-40 rounded-xl border border-[#DCE5DF]"
-          >
-           <DropdownMenuItem className="cursor-pointer text-[#2E3833]">
-            <Pencil className="mr-2 h-4 w-4" />
-            Edit
-           </DropdownMenuItem>
-
-           <DropdownMenuItem className="cursor-pointer text-[#2E3833]">
-            <Power className="mr-2 h-4 w-4" />
-            Deactivate
-           </DropdownMenuItem>
-
-           <DropdownMenuItem className="cursor-pointer text-[#D74242]">
-            <Archive className="mr-2 h-4 w-4" />
-            Archive
-           </DropdownMenuItem>
-          </DropdownMenuContent>
-         </DropdownMenu>
-        </TableCell>
-       </TableRow>
-      ))}
-     </TableBody>
-    </Table>
-   </div>
    {page && total && (
   <div className="flex items-center justify-between pt-2">
     <p className="text-sm text-[#6A7C73]">
@@ -252,14 +260,14 @@ return (
         <PaginationItem>
           <PaginationPrevious
             onClick={() => onPageChange && onPageChange(page - 1)}
-            className={page === 1 ? "pointer-events-none opacity-50" : ""}
+            className={page === 1 ? "pointer-events-none opacity-60 text-[#2D4B3C]" : ""}
           />
         </PaginationItem>
 
         <PaginationItem>
           <PaginationNext
             onClick={() => onPageChange && onPageChange(page + 1)}
-            className={page === totalPages ? "pointer-events-none opacity-50" : ""}
+            className={page === totalPages ? "pointer-events-none opacity-0 text-[#2D4B3C]" : ""}
           />
         </PaginationItem>
 

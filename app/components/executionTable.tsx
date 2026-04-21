@@ -19,11 +19,20 @@ import {
 import { MoreHorizontal, Pencil, Power } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatCaseId } from "@/lib/formatters"
+import {
+  Hash,
+  User,
+  UserRound,
+  Stethoscope,
+  BadgeCheck,
+  CalendarDays,
+} from "lucide-react";
+
 
 function StatusBadge({ status }: { status: string }) {
   if (status === "PENDING") {
     return (
-      <span className="bg-[#DFA62026] text-[#322A1B] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
+      <span className="bg-[#DFA62026] text-[#322A1B] text-sm mx-auto w-fit flex justify-center py-0.5 px-5 rounded-full font-medium">
       Pending
       </span>
     )
@@ -31,7 +40,7 @@ function StatusBadge({ status }: { status: string }) {
 
   if (status === "INVITED") {
     return (
-      <span className="bg-[#3399CC26] text-[#3399CC] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
+      <span className="bg-[#3399CC26] text-[#3399CC] text-sm mx-auto w-fit flex justify-center py-0.5 px-5 rounded-full font-medium">
       Invited
       </span>
     )
@@ -39,7 +48,7 @@ function StatusBadge({ status }: { status: string }) {
 
   if (status === "COMPLETED") {
     return (
-      <span className="bg-[#39AC6326] text-[#39AC63] mx-auto sm:w-28 w-24 flex justify-center py-1 rounded-full font-medium">
+      <span className="bg-[#39AC6326] text-[#39AC63] text-sm mx-auto w-fit flex justify-center py-0.5 px-5 rounded-full font-medium">
       Completed
       </span>
     )
@@ -87,40 +96,94 @@ const formatDate = (dateString: string) => {
 export default function ExecutionTable({ visits }: { visits: Visit[] }) {
 
  return (
-  <div className="border border-[#DCE5DF] rounded-xl overflow-hidden">
-   <Table>
+
+<div className="border border-[#DCE5DF] rounded-xl overflow-hidden">
+  <Table>
     <TableHeader>
-     <TableRow className="bg-[#FCFCFC] text-[#6A7C73] font-medium [&_th]:text-center">
-      <TableHead>Case ID</TableHead>
-      <TableHead>Staff Name</TableHead>
-      <TableHead>Patient</TableHead>
-      <TableHead>Consultation Type</TableHead>
-      <TableHead>Status</TableHead>
-      <TableHead>Created At</TableHead>
-     </TableRow>
+      <TableRow className="bg-[#FCFCFC] text-[#6A7C73] font-medium [&_th]:text-center">
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <Hash size={16} /> Case ID
+          </span>
+        </TableHead>
+
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <User size={16} /> Staff Name
+          </span>
+        </TableHead>
+
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <UserRound size={16} /> Patient
+          </span>
+        </TableHead>
+
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <Stethoscope size={16} /> Consultation Type
+          </span>
+        </TableHead>
+
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <BadgeCheck size={16} /> Status
+          </span>
+        </TableHead>
+
+        <TableHead>
+          <span className="flex items-center justify-center gap-2">
+            <CalendarDays size={16} /> Created At
+          </span>
+        </TableHead>
+      </TableRow>
     </TableHeader>
 
     <TableBody className="text-[#2E3835] [&_td]:text-center [&_td]:text-sm [&_tr]:bg-white [&_tr]:hover:bg-gray-50">
-     {visits.map((item, index) => (
-      <TableRow key={index}>
-       <TableCell>{formatCaseId(item.caseNumber)}</TableCell>
-       <TableCell>{item.staff?.name}</TableCell>
+      {visits.map((item, index) => (
+        <TableRow key={index}>
+          <TableCell>
+            <span className="flex items-center justify-center gap-2">
+              <Hash size={14} />
+              {formatCaseId(item.caseNumber)}
+            </span>
+          </TableCell>
 
-       <TableCell>{item.patient.firstName} {item.patient.lastName}</TableCell>
+          <TableCell>
+            <span className="flex items-center justify-center gap-2">
+              <User size={14} />
+              {item.staff?.name}
+            </span>
+          </TableCell>
 
-       <TableCell>{item.consultationType}</TableCell>
+          <TableCell>
+            <span className="flex items-center justify-center gap-2">
+              <UserRound size={14} />
+              {item.patient.firstName} {item.patient.lastName}
+            </span>
+          </TableCell>
 
-       <TableCell>
-        <StatusBadge status={item.status} />
-       </TableCell>
+          <TableCell>
+            <span className="flex items-center justify-center gap-2">
+              <Stethoscope size={14} />
+              {item.consultationType}
+            </span>
+          </TableCell>
 
-       <TableCell>
-       {formatDate(item.createdAt)}
-       </TableCell>
-      </TableRow>
-     ))}
+          <TableCell>
+            <StatusBadge status={item.status} />
+          </TableCell>
+
+          <TableCell>
+            <span className="flex items-center justify-center gap-2">
+              <CalendarDays size={14} />
+              {formatDate(item.createdAt)}
+            </span>
+          </TableCell>
+        </TableRow>
+      ))}
     </TableBody>
-   </Table>
-  </div>
+  </Table>
+</div>
  )
 }

@@ -23,8 +23,8 @@ type NavbarProps = {
 export default function Navbar ({ title, subtitle }: NavbarProps) {
   
   return (
-    <div className='relative w-full border-b border-[#D7DED3] bg-white px-4 py-4 md:flex-row flex-col flex md:items-center max-md:gap-2.5 justify-between rounded-xl shadow-[0px_1px_3px_0px_#0000001A] mb-3 mt-1.5'>
-      <div className='sm:[&_strong]:text-[20px] [&_strong]:text-[18px] 2xl:[&_p]:text-base sm:[&_p]:text-[15px] [&_p]:text-sm'>
+    <div className='relative w-full border-b border-[#D7DED3] bg-white px-4 py-4 sm:flex-row flex-col flex md:items-center max-md:gap-2.5 justify-between rounded-xl shadow-[0px_1px_3px_0px_#0000001A] mb-3 mt-1.5'>
+      <div className='sm:w-full sm:[&_strong]:text-[20px] [&_strong]:text-[18px] 2xl:[&_p]:text-base sm:[&_p]:text-[15px] [&_p]:text-sm'>
         <strong className='text-2xl block font-medium text-[#222222]'>
           {title}
         </strong>
@@ -35,8 +35,8 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
         )}
       </div>
 
-      <div className='flex items-center md:gap-4 gap-2 max-[600px]:flex-col max-[600px]:items-start'>
-        <div className='relative md:w-65 w-full'>
+      <div className='flex items-center sm:w-fit md:gap-4 gap-2 max-[600px]:flex-col max-[600px]:items-start'>
+        {/* <div className='relative md:w-65 w-full'>
           <Search
             className='absolute left-3 top-1/2 -translate-y-1/2 text-[#6A7C73]'
             size={17}
@@ -63,7 +63,7 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
               You have no new notifications.
             </p>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -80,10 +80,10 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
             <DropdownMenuItem>
               <User /> Staff
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <Shield />
               Admin
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

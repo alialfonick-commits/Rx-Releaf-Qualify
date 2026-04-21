@@ -50,63 +50,88 @@ export default function CreateStaffForm({ onSuccess }: any) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-xl border space-y-3">
+<>
+      {/* Header */}
+      {/* <div className="flex items-center justify-between p-5 border-b border-[#F1F4F2]">
+        <h2 className="text-xl font-bold text-[#2E3833]">Create New Staff</h2>
+        
+      </div> */}
 
-      <h2 className="font-semibold">Create Staff</h2>
+      <form onSubmit={handleSubmit} className="p-6 space-y-4 bg-white">
+        {/* Full Name */}
+        <div className="space-y-1.5">
+          <label className="text-[13px] font-medium text-[#6A7C73]">Full Name</label>
+          <input
+            className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg p-2.5 outline-none focus:ring-1 focus:ring-[#476B59] placeholder:text-[#6A7C73]/50 text-[#2E3833]"
+            placeholder="e.g. John Doe"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-      <input
-        className="border p-2 w-full"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+        {/* Email & Phone Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-[#6A7C73]">Email Address</label>
+            <input
+              className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg p-2.5 outline-none focus:ring-1 focus:ring-[#476B59] placeholder:text-[#6A7C73]/50 text-[#2E3833]"
+              placeholder="john@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-[#6A7C73]">Phone Number</label>
+            <input
+              className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg p-2.5 outline-none focus:ring-1 focus:ring-[#476B59] placeholder:text-[#6A7C73]/50 text-[#2E3833]"
+              placeholder="+1..."
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+        </div>
 
-      <input
-        className="border p-2 w-full"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        {/* Password Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-[#6A7C73]">Password</label>
+            <input
+              type="password"
+              className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg p-2.5 outline-none focus:ring-1 focus:ring-[#476B59] text-[#2E3833]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-[#6A7C73]">Confirm</label>
+            <input
+              type="password"
+              className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg p-2.5 outline-none focus:ring-1 focus:ring-[#476B59] text-[#2E3833]"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+        </div>
 
-      <input
-        className="border p-2 w-full"
-        placeholder="Phone"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-      />
+        {/* Status Toggle */}
+        <div className="flex items-center justify-between py-2 border-t border-[#F1F4F2] mt-2">
+          <span className="text-[15px] text-[#6A7C73] font-medium">Account Status</span>
+          <button
+            type="button"
+            onClick={() => setIsActive(!isActive)}
+            className={`px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all ${
+              isActive ? "bg-[#E7F5ED] text-[#39AC63]" : "bg-gray-100 text-gray-500"
+            }`}
+          >
+            {isActive ? "ACTIVE" : "INACTIVE"}
+          </button>
+        </div>
 
-      <input
-        type="password"
-        className="border p-2 w-full"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-    <input
-    type="password"
-    className="border p-2 w-full"
-    placeholder="Confirm Password"
-    value={confirmPassword}
-    onChange={(e) => setConfirmPassword(e.target.value)}
-    />
-    <div className="flex items-center justify-between">
-  <span>Status</span>
-
-  <button
-    type="button"
-    onClick={() => setIsActive(!isActive)}
-    className={`px-4 py-1 rounded-full text-white ${
-      isActive ? "bg-green-600" : "bg-gray-400"
-    }`}
-  >
-    {isActive ? "Active" : "Inactive"}
-  </button>
-</div>
-
-      <button className="bg-[#476B59] text-white px-4 py-2 rounded">
-        Create Staff
-      </button>
-    </form>
+        {/* Submit Button */}
+        <button className="w-full cursor-pointer bg-[#D9A321] hover:bg-[#3a5849] text-white font-semibold py-3.5 rounded-xl transition-all shadow-sm shadow-[#476B59]/20">
+          Create Staff Member
+        </button>
+      </form>
+    </>
   )
 }
