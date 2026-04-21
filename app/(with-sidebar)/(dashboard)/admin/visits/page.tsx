@@ -1,6 +1,7 @@
 "use client";
 
 import ExecutionTable from "@/app/components/executionTable";
+import Navbar from "@/app/components/navbar";
 import { useEffect, useState } from "react";
 
 type Visit = {
@@ -54,8 +55,8 @@ export default function AdminVisitsPage() {
   if (error) return <p className="p-4 text-red-500">{error}</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Visits</h1>
+    <div>
+      <Navbar title="Execution Monitoring" subtitle="Monitor and manage case execution status" />
 			<ExecutionTable visits={visits} />
     </div>
   );

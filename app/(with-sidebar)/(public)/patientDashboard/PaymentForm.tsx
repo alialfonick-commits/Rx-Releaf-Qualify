@@ -125,9 +125,9 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
   return (
     <>
       {/* Card Container + Skeleton */}
-      <div className="col-span-12 relative h-[56px] overflow-hidden">
+      <div className="col-span-12 relative h-14 overflow-hidden">
         {loading && (
-          <div className="absolute inset-0 z-[9999]">
+          <div className="absolute inset-0 z-9999">
             <Skeleton className="h-full w-full rounded-md bg-gray-200" />
           </div>
         )}
