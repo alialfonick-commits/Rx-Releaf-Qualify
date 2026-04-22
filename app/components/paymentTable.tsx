@@ -155,11 +155,11 @@ return (
               <TableHead className="py-4 font-medium text-[#6A7C73]">Payment ID</TableHead>
               <TableHead className="py-4 font-medium text-[#6A7C73]">Case ID</TableHead>
               <TableHead className="py-4 font-medium text-[#6A7C73]">Patient</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Consultation Type</TableHead>
+              <TableHead className="py-4 font-medium text-[#6A7C73]">Status</TableHead>
               <TableHead className="py-4 font-medium text-[#6A7C73]">Amount</TableHead>
               <TableHead className="py-4 font-medium text-[#6A7C73]">Method</TableHead>
               <TableHead className="py-4 font-medium text-[#6A7C73]">Date & Time</TableHead>
-              <TableHead className="py-4 font-medium text-[#6A7C73]">Status</TableHead>
-              <TableHead className="py-4 font-medium text-[#6A7C73] text-right px-6">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -187,7 +187,17 @@ return (
                     {p.patient.firstName} {p.patient.lastName}
                   </div>
                 </TableCell>
-
+                <TableCell className="py-4 font-medium text-[#2E3833]">
+                  {p.examName}
+                </TableCell>
+                <TableCell className="py-4">
+                  <StatusBadge
+                    status={
+                      p.paymentStatus === "PAID" ? "Completed" : 
+                      p.paymentStatus === "PENDING" ? "Pending" : "Cancelled"
+                     } 
+                  />
+                </TableCell>
                 <TableCell className="py-4 font-medium text-[#2E3833]">
                   $89.00
                 </TableCell>
@@ -210,17 +220,8 @@ return (
                   </div>
                 </TableCell>
 
-                <TableCell className="py-4">
-                  <StatusBadge
-                    status={
-                      p.paymentStatus === "PAID" ? "Completed" : 
-                      p.paymentStatus === "PENDING" ? "Pending" : "Cancelled"
-                     } 
-                  />
-                </TableCell>
-
                 {/* Multi-icon Action Cell */}
-                <TableCell className="py-4 text-right px-6">
+                {/* <TableCell className="py-4 text-right px-6">
                   <div className="flex items-center justify-end gap-1">
  
                     <DropdownMenu>
@@ -239,7 +240,7 @@ return (
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
