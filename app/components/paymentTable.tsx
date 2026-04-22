@@ -27,6 +27,7 @@ import {
 
 import { MoreHorizontal, Pencil, Power, Archive, Clock, Calendar, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { formatCaseId } from "@/lib/formatters"
 
 // const payments = [
 //  {
@@ -175,7 +176,7 @@ return (
                 </TableCell>
 
                 <TableCell className="py-4 text-[#6A7C73]">
-                  {p.id.slice(0, 6)}
+                  {formatCaseId(p.caseNumber)}
                 </TableCell>
 
                 {/* Patient Name with Icon */}

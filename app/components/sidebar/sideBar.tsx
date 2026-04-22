@@ -200,8 +200,8 @@ export default function SideBar () {
           /> */}
           </div>
         </div>
-
-        <button
+        {session && (
+          <button
           onClick={handleLogout}
           className="bg-[#57746D] rounded-lg 2xl:px-4 px-3.5 2xl:py-3 py-2.5 2xl:text-base text-[15px] mt-4 cursor-pointer w-full text-left hover:bg-[#4E6056]/70 transition"
         >
@@ -210,6 +210,7 @@ export default function SideBar () {
             Logout
           </span>
         </button>
+        )}
       </div>
     </>
   )
