@@ -23,6 +23,21 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
+  // ✅ Handle root route "/"
+  if (pathname === "/") {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", req.url))
+    }
+  
+    // ✅ Only redirect STAFF
+    if (token.role === "STAFF") {
+      return NextResponse.redirect(new URL("/staff/create-exam", req.url))
+    }
+  
+    // ✅ ADMIN (or others) → do nothing, stay on "/"
+    return NextResponse.next()
+  }
+
   // ❌ Now protect routes
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url))
@@ -46,5 +61,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/staff/:path*", "/login"]
+  matcher: ["/", "/admin/:path*", "/staff/:path*", "/login"]
 }
