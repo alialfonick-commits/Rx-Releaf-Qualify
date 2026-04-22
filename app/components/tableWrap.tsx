@@ -128,7 +128,7 @@ export function TableWrap({
           </AlertDialogTrigger>
 
           <AlertDialogContent
-           className="rounded-xl p-6 bg-white">
+           className="rounded-xl p-6 bg-white xl:h-fit h-[calc(100%-4rem)] overflow-auto scrollbar-thin scrollbar-thumb-[#D9A52080] scrollbar-track-transparent max-sm:w-[calc(100vw-1rem)]">
            <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-[18px] font-semibold">
              <CreditCard color="#D9A520" />Send Payment Link
@@ -149,7 +149,7 @@ export function TableWrap({
             <div className="flex justify-between mt-1">
              <p>Patient</p>
              <span>
-              John Smith
+              {visit.patient.firstName} {visit.patient.lastName}
              </span>
             </div>
            </div>
@@ -158,7 +158,7 @@ export function TableWrap({
             <strong>Select Delivery Method</strong>
             <FieldSet>
              <FieldGroup className="gap-3">
-              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
+              {/* <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="sms"
                 name="sms"
@@ -177,7 +177,7 @@ export function TableWrap({
                  </div>
                 </div>
                </FieldLabel>
-              </Field>
+              </Field> */}
               <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="email"
