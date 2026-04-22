@@ -36,7 +36,8 @@ export const authOptions = {
         return {
           id: user.id,
           email: user.email,
-          role: user.role
+          role: user.role,
+          name: user.name
         }
       }
     })
@@ -53,12 +54,14 @@ export const authOptions = {
       if (user) {
         token.role = user.role
         token.id = user.id
+        token.name = user.name
       }
       return token
     },
     async session({ session, token }: any) {
       session.user.role = token.role
       session.user.id = token.id
+      session.user.name = token.name
       return session
     }
   },

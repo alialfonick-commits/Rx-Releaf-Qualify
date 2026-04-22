@@ -1,8 +1,8 @@
 'use client'
 import AdminStats from '@/app/components/adminStats'
 import PaymentsTable from '@/app/components/paymentTable'
+import { formatCaseId, timeAgo } from '@/lib/formatters'
 import { CheckCircle2, Clock, Folder, RotateCw } from 'lucide-react'
-import { signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 export default function AdminDashboard () {
@@ -16,6 +16,7 @@ export default function AdminDashboard () {
     const res = await fetch('/api/admin/dashboard')
     const json = await res.json()
     setData(json)
+    console.log(json)
   }
 
   if (!data) return <p>Loading...</p>
@@ -44,23 +45,44 @@ export default function AdminDashboard () {
           <div className='flex flex-col gap-2.5'>
             {data.monitoring.map((v: any) => {
               // Logic for Status Styles
-              const isCompleted = v.status === 'Completed'
-              const theme = isCompleted
-                ? {
-                    color: 'text-emerald-600',
-                    bg: 'bg-emerald-50',
-                    badge: 'bg-emerald-100 text-emerald-700',
-                    label: 'Completed',
-                    icon: <CheckCircle2 className='w-4.5 h-4.5' />
-                  }
-                : {
-                    color: 'text-amber-600',
-                    bg: 'bg-amber-50',
-                    badge: 'bg-amber-100 text-amber-700',
-                    label: 'Pending',
-                    icon: <Clock className='w-4.5 h-4.5' />
-                  }
-
+              const statusTheme: Record<string, any> = {
+                COMPLETED: {
+                  color: "text-emerald-600",
+                  bg: "bg-emerald-50",
+                  badge: "bg-emerald-100 text-emerald-700",
+                  label: "Completed",
+                  icon: <CheckCircle2 className="w-4.5 h-4.5" />,
+                },
+                PENDING: {
+                  color: "text-amber-600",
+                  bg: "bg-amber-50",
+                  badge: "bg-amber-100 text-amber-700",
+                  label: "Pending",
+                  icon: <Clock className="w-4.5 h-4.5" />,
+                },
+                IN_PROGRESS: {
+                  color: "text-blue-600",
+                  bg: "bg-blue-50",
+                  badge: "bg-blue-100 text-blue-700",
+                  label: "In Progress",
+                  icon: <Clock className="w-4.5 h-4.5" />,
+                },
+                INVITED: {
+                  color: "text-purple-600",
+                  bg: "bg-purple-50",
+                  badge: "bg-purple-100 text-purple-700",
+                  label: "Invited",
+                  icon: <Clock className="w-4.5 h-4.5" />,
+                },
+                CANCELLED: {
+                  color: "text-red-600",
+                  bg: "bg-red-50",
+                  badge: "bg-red-100 text-red-700",
+                  label: "Cancelled",
+                  icon: <Clock className="w-4.5 h-4.5" />,
+                },
+              }
+              const theme = statusTheme[v.status] || statusTheme["PENDING"]
               return (
                 <div
                   key={v.id}
@@ -78,7 +100,7 @@ export default function AdminDashboard () {
                         {v.patient.firstName} {v.patient.lastName}
                       </h4>
                       <p className='text-[11px] text-gray-400 font-medium uppercase mt-0.5'>
-                        Case # {v.id.slice(0, 6)}
+                        Case # {formatCaseId(v.caseNumber)}
                       </p>
                     </div>
                   </div>
@@ -90,9 +112,9 @@ export default function AdminDashboard () {
                     >
                       {theme.label}
                     </span>
-                    <button className='p-2 text-gray-400 hover:bg-gray-50 border border-gray-100 rounded-lg transition-colors'>
+                    {/* <button className='p-2 text-gray-400 hover:bg-gray-50 border border-gray-100 rounded-lg transition-colors'>
                       <RotateCw className='w-4 h-4' />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               )
@@ -129,7 +151,7 @@ export default function AdminDashboard () {
                       </span>
                       <span className='text-slate-300'>•</span>
                       <span className='text-teal-600 font-semibold uppercase tracking-tight'>
-                        CASE-{v.id.slice(0, 7)}
+                        CASE # {formatCaseId(v.caseNumber)}
                       </span>
                     </div>
 
@@ -143,7 +165,7 @@ export default function AdminDashboard () {
 
                   {/* Timestamp - Responsive: shifts to top right on desktop */}
                   <div className='text-[12px] text-slate-400 whitespace-nowrap pt-1'>
-                    8 min ago
+                    {timeAgo(v.updatedAt)}
                   </div>
                 </div>
               </div>

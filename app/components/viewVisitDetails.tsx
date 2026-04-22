@@ -4,7 +4,6 @@ import {
   Activity,
   ArrowLeft,
   Calendar,
-  CircleX,
   Clock4,
   CreditCard,
   Hash,
@@ -14,9 +13,7 @@ import {
   Stethoscope,
   User
 } from 'lucide-react'
-import AdminDashboard from '../(with-sidebar)/(dashboard)/admin/dashboard/page'
-import Navbar from './navbar'
-import VisitDetail from '../(with-sidebar)/(public)/patientDashboard/visitDetail'
+import { formatCaseId } from '@/lib/formatters'
 import VisitRequest from './visitRequest'
 
 export default function ViewVisitDetails ({ visit }: { visit: any }) {
@@ -43,14 +40,14 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
           </div>
 
           <div className='grid grid-cols-2 gap-2 [&_Button]:py-5 [&_Button]:w-full [&_Button]:cursor-pointer [&_button]:uppercase [&_Button]:flex [&_Button]:gap-1 [&_Button]:items-center'>
-            <Button className='bg-white border border-[#EFEFEF]'>
+            {/* <Button className='bg-white border border-[#EFEFEF]'>
               <SquarePen />
               Edit Visit
             </Button>
             <Button className='bg-[#FDD2D2] border border-[#ED9B9B] text-[#D30C05]'>
               <CircleX color='#D30C05' />
               Cancel Visit
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -71,8 +68,8 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
                 <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
                   <Hash size={16} /> Visit ID
                 </p>
-                <span className='text-[13px] font-bold text-[#2E3833]'>
-                  {visit.id.slice(0, 6)}
+                <span className='text-[15px] font-bold text-[#2E3833]'>
+                  {formatCaseId(visit.caseNumber)}
                 </span>
                 
               </div>

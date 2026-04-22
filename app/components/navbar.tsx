@@ -15,12 +15,14 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
+import { useSession } from "next-auth/react"
 type NavbarProps = {
   title: string;
   subtitle?: string;
 };
 
 export default function Navbar ({ title, subtitle }: NavbarProps) {
+  const { data: session } = useSession()
   
   return (
     <div className='relative w-full border-b border-[#D7DED3] bg-white px-4 py-4 sm:flex-row flex-col flex md:items-center max-md:gap-2.5 justify-between rounded-xl shadow-[0px_1px_3px_0px_#0000001A] mb-3 mt-1.5'>
@@ -64,28 +66,29 @@ export default function Navbar ({ title, subtitle }: NavbarProps) {
             </p>
           </DialogContent>
         </Dialog> */}
+        {session?.user?.role !== "ADMIN" && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className='flex items-center gap-2 border hover:bg-[#E1EAE5] cursor-pointer border-[#5E6E66] px-3 py-2 rounded-md text-sm text-[#6A7C73] [&_span]:text-[#2E3833] focus-visible:outline-0 max-md:w-80 max-[600px]:w-full! justify-between max-[600px]:justify-center!'>
+                Viewing as: <span className='font-medium'>{session?.user?.name}</span>
+                {/* <ChevronDown size={16} /> */}
+              </button>
+            </DropdownMenuTrigger>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className='flex items-center gap-2 border hover:bg-[#E1EAE5] cursor-pointer border-[#5E6E66] px-3 py-2 rounded-md text-sm text-[#6A7C73] [&_span]:text-[#2E3833] focus-visible:outline-0 max-md:w-80 max-[600px]:w-full! justify-between max-[600px]:justify-center!'>
-              Viewing as: <span className='font-medium'>John Doe</span>
-              {/* <ChevronDown size={16} /> */}
-            </button>
-          </DropdownMenuTrigger>
-
-          {/* <DropdownMenuContent
-            align='end'
-            className='border border-[#D7DED3] bg-white w-42 [&_div]:cursor-pointer [&_div]:flex [&_div]:hover:bg-[#E1EAE5]'
-          >
-            <DropdownMenuItem>
-              <User /> John Doe
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Shield />
-              Admin
-            </DropdownMenuItem>
-          </DropdownMenuContent> */}
-        </DropdownMenu>
+            {/* <DropdownMenuContent
+              align='end'
+              className='border border-[#D7DED3] bg-white w-42 [&_div]:cursor-pointer [&_div]:flex [&_div]:hover:bg-[#E1EAE5]'
+            >
+              <DropdownMenuItem>
+                <User /> John Doe
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Shield />
+                Admin
+              </DropdownMenuItem>
+            </DropdownMenuContent> */}
+          </DropdownMenu>
+        )}
       </div>
     </div>
   )
