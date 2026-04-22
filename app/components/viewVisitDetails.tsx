@@ -15,6 +15,7 @@ import {
   User
 } from 'lucide-react'
 import AdminDashboard from '../(with-sidebar)/(dashboard)/admin/dashboard/page'
+import { formatCaseId } from '@/lib/formatters'
 
 export default function ViewVisitDetails ({ visit }: { visit: any }) {
   return (
@@ -35,14 +36,14 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
           </div>
 
           <div className='grid grid-cols-2 gap-2 [&_Button]:py-5 [&_Button]:w-full [&_Button]:cursor-pointer [&_button]:uppercase [&_Button]:flex [&_Button]:gap-1 [&_Button]:items-center'>
-            <Button className='bg-white border border-[#EFEFEF]'>
+            {/* <Button className='bg-white border border-[#EFEFEF]'>
               <SquarePen />
               Edit Visit
             </Button>
             <Button className='bg-[#FDD2D2] border border-[#ED9B9B] text-[#D30C05]'>
               <CircleX color='#D30C05' />
               Cancel Visit
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -64,7 +65,7 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
                   <Hash size={14} /> Visit ID
                 </p>
                 <span className='text-[15px] font-bold text-[#2E3833]'>
-                  {visit.id.slice(0, 6)}
+                  {formatCaseId(visit.caseNumber)}
                 </span>
               </div>
 
