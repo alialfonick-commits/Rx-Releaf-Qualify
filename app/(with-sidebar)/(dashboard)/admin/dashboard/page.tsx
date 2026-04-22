@@ -160,6 +160,7 @@ export default function AdminDashboard () {
       </div>
 
       <div className='pt-3'>
+        <strong className="text-lg text-[#2E3833] font-medium mb-2 mt-1 block">Pending Payments</strong>
         <PaymentsTable payment={data.paymentsList} />
       </div>
     </>

@@ -15,10 +15,14 @@ import {
   User
 } from 'lucide-react'
 import AdminDashboard from '../(with-sidebar)/(dashboard)/admin/dashboard/page'
+import Navbar from './navbar'
+import VisitDetail from '../(with-sidebar)/(public)/patientDashboard/visitDetail'
+import VisitRequest from './visitRequest'
 
 export default function ViewVisitDetails ({ visit }: { visit: any }) {
   return (
     <>
+    <VisitRequest />
       <div className='[&_p]:text-[#6A7C73] [&_span]:text-sm [&_span]:capitalize [&_strong]:font-semibold [&_strong]:text-[18px]'>
         <div className='flex justify-between items-center pb-4 gap-3 md:flex-row flex-col max-md:items-start'>
           <div className='flex items-center gap-2 [&_Button]:p-0 [&_strong]:font-medium [&_strong]:text-[20px] [&_p]:text-sm [&_Button]:cursor-pointer'>
@@ -29,7 +33,11 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
               <strong>Visit Details</strong>
               <p>
                 Created on{' '}
-                <span>{new Date(visit.createdAt).toLocaleString()}</span>
+                <span> {new Date(visit.createdAt).toLocaleDateString()} at{' '}
+                  {new Date(visit.createdAt).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</span>
               </p>
             </div>
           </div>
@@ -60,46 +68,47 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
 
             <div className='grid sm:grid-cols-3 grid-cols-2 gap-y-6 gap-x-4'>
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <Hash size={14} /> Visit ID
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <Hash size={16} /> Visit ID
                 </p>
-                <span className='text-[15px] font-bold text-[#2E3833]'>
+                <span className='text-[13px] font-bold text-[#2E3833]'>
                   {visit.id.slice(0, 6)}
                 </span>
+                
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <User size={14} /> Patient Name
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <User size={16} /> Patient Name
                 </p>
-                <span className='text-[15px] font-bold text-[#2E3833]'>
+                <span className='text-[13px] font-bold text-[#2E3833]'>
                   {visit.patient.firstName} {visit.patient.lastName}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <Phone size={14} /> Contact
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <Phone size={16} /> Contact
                 </p>
-                <span className='text-[15px] font-semibold text-[#2E3833]'>
+                <span className='text-[13px] font-semibold text-[#2E3833]'>
                   {visit.patient.phone}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <Activity size={14} /> Type
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <Activity size={16} /> Type
                 </p>
-                <span className='text-[14px] text-[#2E3833] font-medium'>
+                <span className='text-[13px] text-[#2E3833] font-medium'>
                   {visit.consultationType}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <Calendar size={14} /> Date & Time
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <Calendar size={16} /> Date & Time
                 </p>
-                <span className='text-[14px] text-[#2E3833] font-medium'>
+                <span className='text-[13px] text-[#2E3833] font-medium'>
                   {new Date(visit.createdAt).toLocaleDateString()} at{' '}
                   {new Date(visit.createdAt).toLocaleTimeString([], {
                     hour: '2-digit',
@@ -109,33 +118,33 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <MapPin size={14} /> Location
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <MapPin size={16} /> Location
                 </p>
-                <span className='text-[14px] text-[#2E3833] font-medium'>
+                <span className='text-[13px] text-[#2E3833] font-medium'>
                   {visit.patientState}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <Stethoscope size={14} /> Provider
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <Stethoscope size={16} /> Provider
                 </p>
-                <span className='text-[14px] text-[#2E3833] font-medium'>
+                <span className='text-[13px] text-[#2E3833] font-medium'>
                   {visit.providerName || 'Pending'}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73]'>Status</p>
+                <p className='text-[15px] font-medium text-[#6A7C73]'>Status</p>
                 <span className='bg-[#E7F5ED] rounded-full px-4 py-1 text-[#39AC63] text-xs font-medium capitalize tracking-wider block w-fit mt-1'>
                   {visit.status}
                 </span>
               </div>
 
               <div className='space-y-1'>
-                <p className='text-[13px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
-                  <CreditCard size={14} /> Payment
+                <p className='text-[15px] font-medium text-[#6A7C73] flex items-center gap-1.5'>
+                  <CreditCard size={16} /> Payment
                 </p>
                 <span className='bg-[#FFF9E6] rounded-full px-4 py-1 text-[#D9A321] text-xs font-medium capitalize tracking-wider block w-fit mt-1'>
                   {visit.paymentStatus}
@@ -159,7 +168,7 @@ export default function ViewVisitDetails ({ visit }: { visit: any }) {
                 <span className='text-[16px] font-bold text-[#2E3833]'>
                   Visit Schedule
                 </span>
-                <p className='text-[13px] text-[#6A7C73] leading-tight'>
+                <p className='text-sm text-[#6A7C73] leading-tight'>
                   Your visit has been scheduled
                 </p>
               </div>
