@@ -1,3 +1,4 @@
+'use client'
 import {
  Table,
  TableBody,
@@ -37,19 +38,28 @@ import {
 } from "lucide-react"
 import { Link as LinkIcon } from "lucide-react"
 import Link from "next/link"
+import { formatCaseId } from "@/lib/formatters"
+import { useState } from "react"
 
-export function TableWrap({
-    visits,
-    loading
-  }: {
+export function TableWrap({visits, loading}: {
     visits: any[]
     loading?: boolean
   }) {
+  
+  const [sendSMS, setSendSMS] = useState(true)
+  const [sendEmail, setSendEmail] = useState(true)
 
   const handleSend = async (id: string) => {
     await fetch("/api/staff/send-payment", {
       method: "POST",
-      body: JSON.stringify({ examId: id })
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        examId: id,
+        sendSMS,
+        sendEmail,
+      }),
     })
   
     alert("Payment link sent")
@@ -84,7 +94,7 @@ export function TableWrap({
      {visits.map((visit) => (
       <TableRow key={visit.id}>
        <TableCell className="font-medium text-[#486B57]">
-            {visit.id.slice(0, 6)}
+        {formatCaseId(visit.caseNumber)}
        </TableCell>
 
        <TableCell>
@@ -143,13 +153,13 @@ export function TableWrap({
             <div className="flex justify-between">
              <p>Case ID</p>
              <span>
-              SVC-001
+              {formatCaseId(visit.caseNumber)}
              </span>
             </div>
             <div className="flex justify-between mt-1">
              <p>Patient</p>
              <span>
-              John Smith
+              {visit.patient.firstName} {visit.patient.lastName}
              </span>
             </div>
            </div>
@@ -158,10 +168,12 @@ export function TableWrap({
             <strong>Select Delivery Method</strong>
             <FieldSet>
              <FieldGroup className="gap-3">
-              <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
+              {/* <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="sms"
                 name="sms"
+                checked={sendSMS}
+                onCheckedChange={(val) => setSendSMS(!!val)}
                 defaultChecked
                 className="cursor-pointer"
                />
@@ -173,15 +185,17 @@ export function TableWrap({
                  <MessageSquare className="bg-[#F1F4F2] p-2.5 rounded-xl" color="#6A7C73" size={40} />
                  <div>
                   SMS
-                  <span>(555) 123-4567</span>
+                  <span>{visit.patient.phone}</span>
                  </div>
                 </div>
                </FieldLabel>
-              </Field>
+              </Field> */}
               <Field orientation="horizontal" className="bg-[#D9A5200D] border border-[#D9A5204D] rounded-xl py-4 px-3 cursor-pointer">
                <Checkbox
                 id="email"
                 name="email"
+                checked={sendEmail}
+                onCheckedChange={(val) => setSendEmail(!!val)}
                 defaultChecked
                 className="cursor-pointer"
                />
@@ -193,7 +207,7 @@ export function TableWrap({
                  <Mail className="bg-[#F1F4F2] p-2.5 rounded-xl" color="#6A7C73" size={40} />
                  <div>
                   Email
-                  <span>john.smith@email.com</span>
+                  <span>{visit.patient.email}</span>
                  </div>
                 </div>
                </FieldLabel>
@@ -221,7 +235,9 @@ export function TableWrap({
              Cancel
             </AlertDialogCancel>
 
-            <button className="bg-[#D9A520] cursor-pointer text-white px-4 py-2 rounded-[10px] font-normal flex items-center gap-2">
+            <button 
+              onClick={() => handleSend(visit.id)}
+              className="bg-[#D9A520] cursor-pointer text-white px-4 py-2 rounded-[10px] font-normal flex items-center gap-2">
              <LinkIcon size={16} />
              Generate & Send Link
             </button>
