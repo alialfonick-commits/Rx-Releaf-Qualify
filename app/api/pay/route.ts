@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         patientState: visit.state,
         consultationType: ConsultationType.URGENT_CARE,
         examId: visit.examId,
-        examName: visit.examName,
+        examName: "Urgent Care Visit",
     
         paymentStatus: PaymentStatus.PAID,
         paymentId: payment.id,
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
  
     try {
       const qualiphyRes = await fetch(
-        `https://api.qualiphy.me/api/exam_invite_test`,
+        `https://api.qualiphy.me/api/exam_invite`,
         {
           method: "POST",
           headers: {
@@ -129,12 +129,13 @@ export async function POST(req: Request) {
             phone_number: patient.phone,
             tele_state: visit.state,
             dob: formatDOB(patient.dob),
+            webhook_url: "https://rx-releaf-qualify.vercel.app/api/webhook/qualiphy"
           })
         }
       )
 
       qualiphyData = await qualiphyRes.json()
-      console.log(qualiphyData)
+
     } catch (err) {
       console.error("Qualiphy API error:", err)
     }
