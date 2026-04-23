@@ -18,6 +18,7 @@ import {
 
 import { MoreHorizontal, Pencil, Key } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { formatStaffId } from '@/lib/formatters'
 
 export default function StaffTable ({ staff }: { staff: any[] }) {
   const toggleStatus = async (id: string, current: boolean) => {
@@ -85,7 +86,7 @@ export default function StaffTable ({ staff }: { staff: any[] }) {
                 className='border-b border-[#F1F4F2] last:border-0 hover:bg-[#F8FAF9]/50 transition-colors'
               >
                 <TableCell className='py-4 font-semibold text-[#2E3833]'>
-                  {s.id.slice(0, 8)}
+                  {formatStaffId(s.staffNumber)}
                 </TableCell>
 
                 <TableCell className='py-4 font-semibold text-[#2E3833]'>
