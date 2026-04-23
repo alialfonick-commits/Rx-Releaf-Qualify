@@ -20,7 +20,7 @@ interface Props {
 export default function CreatePopup ({ open, setOpen, fetchData }: Props) {
   return (
     <>
-      <div className='bg-white w-full max-w-md rounded-2xl shadow-xl border border-[#DCE5DF] overflow-hidden'>
+      <div className='bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden'>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className='max-w-md p-0 overflow-hidden'>
             {/* Header */}
