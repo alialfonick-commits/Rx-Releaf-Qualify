@@ -2,6 +2,11 @@ export const formatCaseId = (num: number) => {
   return `SVC-${num.toString().padStart(3, "0")}`
 }
 
+export const formatStaffId = (num?: number) => {
+  if (!num) return "PUBLIC"
+  return `STF-${num.toString().padStart(3, "0")}`
+}
+
 export const timeAgo = (dateString: string | Date) => {
   const now = new Date()
   const past = new Date(dateString)

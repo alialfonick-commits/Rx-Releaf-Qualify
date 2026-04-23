@@ -37,6 +37,13 @@ export async function POST(req: Request) {
   // 🔐 Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
 
+  const lastStaff = await prisma.user.findFirst({
+    where: { role: "STAFF" },
+    orderBy: { staffNumber: "desc" },
+  })
+
+  const nextStaffNumber = (lastStaff?.staffNumber || 0) + 1
+
   const user = await prisma.user.create({
     data: {
       name,
@@ -44,7 +51,8 @@ export async function POST(req: Request) {
       phone,
       password: hashedPassword,
       role: "STAFF",
-      isActive: isActive ?? true
+      isActive: isActive ?? true,
+      staffNumber: nextStaffNumber,
     }
   })
 

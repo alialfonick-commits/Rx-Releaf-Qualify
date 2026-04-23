@@ -16,11 +16,16 @@ export async function POST(req: Request) {
 
   // Email
   if (sendEmail) {
-    await sendPaymentEmail(
-      exam.patient.email,
-      `${exam.patient.firstName} ${exam.patient.lastName}`,
-      exam.paymentLink
-    )
+    try {
+      await sendPaymentEmail(
+        exam.patient.email,
+        `${exam.patient.firstName} ${exam.patient.lastName}`,
+        exam.paymentLink
+      )
+      console.log("✅ Email sent")
+    } catch (error) {
+      console.error("❌ Email failed:", error)
+    }
   }
 
   // SMS (you implement this)

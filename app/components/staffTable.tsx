@@ -18,6 +18,7 @@ import {
 
 import { MoreHorizontal, Pencil, Key, Fingerprint, Mail, Phone, ShieldAlert, Trash2, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { formatStaffId } from "@/lib/formatters"
 
 export default function StaffTable({ staff }: { staff: any[] }) {
 
@@ -50,7 +51,7 @@ export default function StaffTable({ staff }: { staff: any[] }) {
   }
 
   return (
-<div className='rounded-xl border border-[#DCE5DF] bg-white overflow-hidden shadow-sm'>
+    <div className='rounded-xl border border-[#DCE5DF] bg-white overflow-hidden shadow-sm'>
       <div className='overflow-x-auto'>
         <Table className="min-w-[1000px]">
           <TableHeader className='bg-[#F8FAF9]'>
@@ -85,6 +86,12 @@ export default function StaffTable({ staff }: { staff: any[] }) {
                 key={s.id}
                 className='border-b border-[#F1F4F2] last:border-0 hover:bg-[#F8FAF9]/50 transition-colors'
               >
+                <TableCell className='py-4 font-semibold text-[#2E3833]'>
+                  <div className="flex items-center gap-2 font-bold text-[#476B59]">
+                    <Fingerprint size={16} className="text-[#6A7C73] opacity-70" />
+                    {formatStaffId(s.staffNumber)}
+                  </div>
+                </TableCell>
                 {/* Staff ID with Fingerprint Icon */}
                 <TableCell className='py-4 pl-6'>
                   <div className="flex items-center gap-2 font-bold text-[#476B59]">
