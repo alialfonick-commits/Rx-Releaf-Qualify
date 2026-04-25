@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { Role } from "@prisma/client"
+import { safeUserSelect } from "@/lib/userSelect"
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -29,7 +30,8 @@ export async function GET() {
   
     prisma.user.findMany({
       where: baseWhere,
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
+      select: safeUserSelect,
     })
   ])
 

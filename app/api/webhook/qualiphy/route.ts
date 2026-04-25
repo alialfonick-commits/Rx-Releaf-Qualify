@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { ExamStatus } from "@prisma/client"
+import { verifyWebhookSecret } from "@/lib/security"
 
 export async function POST(req: Request) {
+  if (!verifyWebhookSecret(req, "QUALIPHY_WEBHOOK_SECRET")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
   try {
     const body = await req.json()
 
-    console.log("Qualiphy Webhook:", body)
+    console.log("Qualiphy webhook received")
 
     /**
      * MUST confirm actual payload from Qualiphy
@@ -18,7 +23,7 @@ export async function POST(req: Request) {
     const providerName = body?.provider_name || body?.provider
 
     if (!examId) {
-      console.error("Missing examId")
+      console.error("Qualiphy webhook missing examId")
       return NextResponse.json({ received: true })
     }
 
@@ -28,13 +33,13 @@ export async function POST(req: Request) {
     })
 
     if (!exam) {
-      console.error("Exam not found:", examId)
+      console.error("Qualiphy webhook exam not found")
       return NextResponse.json({ received: true })
     }
 
     // Prevent duplicate updates
     if (exam.status === ExamStatus.COMPLETED) {
-      console.log("Already completed:", exam.id)
+      console.log("Qualiphy webhook already completed")
       return NextResponse.json({ received: true })
     }
 
@@ -48,7 +53,7 @@ export async function POST(req: Request) {
         }
       })
 
-      console.log("Exam completed:", exam.id)
+      console.log("Qualiphy webhook exam completed")
     }
 
     return NextResponse.json({ received: true })

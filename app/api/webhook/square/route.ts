@@ -2,10 +2,31 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendToQualiphy } from "@/lib/qualiphy"
 import { ExamStatus, PaymentStatus } from "@prisma/client"
+import { WebhooksHelper } from "square"
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
+    const requestBody = await req.text()
+    const signatureHeader = req.headers.get("x-square-hmacsha256-signature")
+    const signatureKey = process.env.SQUARE_WEBHOOK_SIGNATURE_KEY
+    const notificationUrl = process.env.SQUARE_WEBHOOK_NOTIFICATION_URL
+
+    if (!signatureHeader || !signatureKey || !notificationUrl) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const isValid = WebhooksHelper.verifySignature({
+      requestBody,
+      signatureHeader,
+      signatureKey,
+      notificationUrl,
+    })
+
+    if (!isValid) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const body = JSON.parse(requestBody)
 
     console.log("Square Webhook:")
 
@@ -40,7 +61,7 @@ export async function POST(req: Request) {
       }
         
       try {
-        const qualiphyRes = await sendToQualiphy({
+        await sendToQualiphy({
           examId: exam.examId,
           firstName: exam.patient.firstName,
           lastName: exam.patient.lastName,
@@ -49,8 +70,8 @@ export async function POST(req: Request) {
           state: exam.patientState,
           dob: exam.patient.dob
         })
-      
-      console.log("Qualiphy success:")
+       
+      console.log("Qualiphy invite sent")
         
       await prisma.exam.update({
         where: { id: exam.id },

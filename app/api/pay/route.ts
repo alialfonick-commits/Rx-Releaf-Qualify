@@ -65,7 +65,7 @@ export async function POST(req: Request) {
         }
     })
     
-    const exam = await prisma.exam.create({
+    await prisma.exam.create({
       data: {
         patientId: createdPatient.id,
         staffId: null,
@@ -81,33 +81,29 @@ export async function POST(req: Request) {
       }
     })
 
-    let hubspotData = null
-
-    try {
-      const hubspotRes = await fetch(
-        "https://api.hubapi.com/crm/v3/objects/contacts",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            properties: {
-              email: patient.email,
-              firstname: patient.firstName,
-              lastname: patient.lastName,
-              phone: patient.phone,
+    if (process.env.HUBSPOT_PHI_ENABLED === "true") {
+      try {
+        await fetch(
+          "https://api.hubapi.com/crm/v3/objects/contacts",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+              "Content-Type": "application/json",
             },
-          }),
-        }
-      )
-
-      hubspotData = await hubspotRes.json()
-      console.log("HubSpot:", hubspotData)
-
-    } catch (err) {
-      console.error("HubSpot API error:", err)
+            body: JSON.stringify({
+              properties: {
+                email: patient.email,
+                firstname: patient.firstName,
+                lastname: patient.lastName,
+                phone: patient.phone,
+              },
+            }),
+          }
+        )
+      } catch {
+        console.error("HubSpot API error")
+      }
     }
 
     let qualiphyData = null
@@ -136,8 +132,8 @@ export async function POST(req: Request) {
 
       qualiphyData = await qualiphyRes.json()
 
-    } catch (err) {
-      console.error("Qualiphy API error:", err)
+    } catch {
+      console.error("Qualiphy API error")
     }
 
     return NextResponse.json({
@@ -149,15 +145,15 @@ export async function POST(req: Request) {
       date: payment.createdAt,
       receiptUrl: payment.receiptUrl,
       status: payment.status,
-      qualiphy: qualiphyData
+      qualiphySent: Boolean(qualiphyData)
     })
 
-  } catch (error: any) {
-    console.error(error)
+  } catch {
+    console.error("Payment route failed")
 
     return NextResponse.json({
       success: false,
-      error: error.message,
-    })
+      error: "Payment failed",
+    }, { status: 500 })
   }
 }

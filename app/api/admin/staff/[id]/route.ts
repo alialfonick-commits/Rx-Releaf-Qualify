@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { safeUserSelect } from "@/lib/userSelect"
 
 export async function PATCH(
     req: Request,
@@ -25,13 +26,14 @@ export async function PATCH(
     try {
       const user = await prisma.user.update({
         where: { id },
-        data: { isActive }
+        data: { isActive },
+        select: safeUserSelect,
       })
   
       return NextResponse.json({ success: true, user })
   
-    } catch (error) {
-      console.error(error)
+    } catch {
+      console.error("Staff update failed")
       return NextResponse.json({ error: "Failed to update" }, { status: 500 })
     }
   }
@@ -56,8 +58,8 @@ export async function PATCH(
   
       return NextResponse.json({ success: true })
   
-    } catch (error) {
-      console.error(error)
+    } catch {
+      console.error("Staff delete failed")
       return NextResponse.json({ error: "Delete failed" }, { status: 500 })
     }
   }

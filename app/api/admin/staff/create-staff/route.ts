@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import bcrypt from "bcrypt"
+import { safeUserSelect } from "@/lib/userSelect"
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
@@ -53,7 +54,8 @@ export async function POST(req: Request) {
       role: "STAFF",
       isActive: isActive ?? true,
       staffNumber: nextStaffNumber,
-    }
+    },
+    select: safeUserSelect,
   })
 
   return NextResponse.json({ success: true, user })

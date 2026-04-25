@@ -8,20 +8,22 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String?
-  email     String   @unique
-  password  String
-  phone     String?
-  role      Role
-  staffNumber  Int?     @unique
-  isActive  Boolean  @default(true)
-  isDeleted Boolean  @default(false)
-  lastLogin DateTime?
+  id          String    @id @default(uuid())
+  name        String?
+  email       String    @unique
+  password    String
+  phone       String?
+  role        Role
+  staffNumber Int?      @unique
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  lastLogin   DateTime?
 
   createdAt DateTime @default(now())
 
-  exams     Exam[]
+  exams Exam[]
+
+  sessions Session[]
 }
 
 model Patient {
@@ -38,7 +40,7 @@ model Patient {
 
 model Exam {
   id               String           @id @default(uuid())
-  caseNumber       Int @unique @default(autoincrement())
+  caseNumber       Int              @unique @default(autoincrement())
   patientId        String
   staffId          String?
   createdAt        DateTime         @default(now())
@@ -55,6 +57,14 @@ model Exam {
   updatedAt        DateTime         @updatedAt
   patient          Patient          @relation(fields: [patientId], references: [id])
   staff            User?            @relation(fields: [staffId], references: [id])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog {
