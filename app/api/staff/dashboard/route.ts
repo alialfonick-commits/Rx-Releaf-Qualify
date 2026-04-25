@@ -2,8 +2,9 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { writeAuditLog } from "@/lib/audit"
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
 
   if (!session || session.user.role !== "STAFF") {
@@ -87,9 +88,44 @@ export async function GET() {
 
   const cases = await prisma.exam.findMany({
     where: { staffId },
-    include: { patient: true },
+    select: {
+      id: true,
+      caseNumber: true,
+      createdAt: true,
+      updatedAt: true,
+      consultationType: true,
+      patientState: true,
+      paymentStatus: true,
+      examId: true,
+      examName: true,
+      isPhoneVisit: true,
+      providerName: true,
+      status: true,
+      patient: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          dob: true,
+        },
+      },
+      staff: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
     take: 5
+  })
+
+  await writeAuditLog({
+    userId: staffId,
+    action: "VIEW_STAFF_DASHBOARD",
+    entity: "Exam",
+    entityId: "bulk",
+    req,
   })
 
   return NextResponse.json({

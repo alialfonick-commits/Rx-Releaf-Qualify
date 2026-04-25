@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { writeAuditLog } from "@/lib/audit";
 
 export async function GET(req: NextRequest) {
   try {
@@ -47,19 +48,17 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // 4. AUDIT LOG (CRITICAL)
-    // await prisma.auditLog.create({
-    //   data: {
-    //     userId: session.user.id,
-    //     action: "VIEW_VISITS",
-    //     entity: "Exam",
-    //     entityId: "bulk",
-    //   },
-    // });
+    await writeAuditLog({
+      userId: session.user.id,
+      action: "VIEW_ADMIN_VISITS",
+      entity: "Exam",
+      entityId: "bulk",
+      req,
+    });
 
     return NextResponse.json({ visits });
 
-  } catch (error) {
+  } catch {
     // 5. SAFE ERROR HANDLING (no PHI leak)
     console.error("Visits fetch error"); // don't log sensitive data
 

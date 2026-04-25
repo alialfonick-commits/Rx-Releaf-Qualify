@@ -36,7 +36,7 @@ import {
  CreditCard,
  User,
 } from "lucide-react"
-import { Link as LinkIcon } from "lucide-react"
+import { Link as LinkIcon, Eye, Trash2, Check  } from "lucide-react"
 import Link from "next/link"
 import { formatCaseId } from "@/lib/formatters"
 import { useState } from "react"
@@ -45,7 +45,6 @@ export function TableWrap({visits, loading}: {
     visits: any[]
     loading?: boolean
   }) {
-  
   const [sendSMS, setSendSMS] = useState(true)
   const [sendEmail, setSendEmail] = useState(true)
 
@@ -73,16 +72,34 @@ export function TableWrap({visits, loading}: {
     return <p className="p-4">No visits found</p>
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this exam?")) return
+  
+    try {
+      await fetch(`/api/staff/visits/${id}`, {
+        method: "DELETE",
+      })
+  
+      alert("Deleted successfully")
+  
+      // refresh page (simple way)
+      window.location.reload()
+  
+    } catch (err) {
+      console.error(err)
+      alert("Delete failed")
+    }
+  }
  return (
   <div className="border border-[#DCE5DF] rounded-xl overflow-hidden">
    <Table>
     <TableHeader>
      <TableRow className="bg-[#F4F6F44D] text-[#6A7C73] font-medium">
       <TableHead>Visit ID</TableHead>
+      <TableHead>Staff</TableHead>
       <TableHead>Patient</TableHead>
       <TableHead>Type</TableHead>
       <TableHead>Date & Time</TableHead>
-      <TableHead>Provider</TableHead>
       <TableHead>Payment</TableHead>
       <TableHead>Location</TableHead>
       <TableHead>Status</TableHead>
@@ -95,6 +112,9 @@ export function TableWrap({visits, loading}: {
       <TableRow key={visit.id}>
        <TableCell className="font-medium text-[#486B57]">
         {formatCaseId(visit.caseNumber)}
+       </TableCell>
+       <TableCell>
+        {visit.staff?.name || "Unassigned"}
        </TableCell>
 
        <TableCell>
@@ -121,10 +141,8 @@ export function TableWrap({visits, loading}: {
         </div>
        </TableCell>
 
-       <TableCell>{visit.providerName || "Pending"}</TableCell>
-
        <TableCell>
-        {visit.paymentStatus === "Paid" ? (
+        {visit.paymentStatus === "PAID" ? (
          <span className="bg-[#39AC6326] text-[#39AC63] px-9.5 py-1 rounded-full font-semibold">
           Paid
          </span>
@@ -282,14 +300,32 @@ export function TableWrap({visits, loading}: {
         )}
        </TableCell>
 
-       <TableCell>
+       <TableCell className="flex items-center justify-center gap-2">
         <Link
-         href={`/staff/visits/${visit.id}`}
-         className="font-medium hover:text-[#DFA620]"
+          href={`/staff/visits/${visit.id}`}
+          className="bg-[#3399CC26] text-[#3399CC] p-2 rounded-full hover:bg-[#3399CC40] transition cursor-pointer"
+          title="View details"
         >
-         View
+          <Eye size={15} />
         </Link>
-       </TableCell>
+
+        {visit.paymentStatus === "PAID" ? (
+          <div
+            className="bg-[#39AC6326] text-[#39AC63] p-2 rounded-full cursor-not-allowed"
+            title="Paid items cannot be deleted"
+          >
+            <Check size={15} />
+          </div>
+        ) : (
+          <button
+            onClick={() => handleDelete(visit.id)}
+            className="bg-[#D74242] text-white p-2 rounded-full hover:bg-red-600 transition cursor-pointer"
+            title="Delete exam"
+          >
+            <Trash2 size={15} />
+          </button>
+        )}
+      </TableCell>
       </TableRow>
      ))}
     </TableBody>
