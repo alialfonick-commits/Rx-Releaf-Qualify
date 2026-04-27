@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { sendToQualiphy } from "@/lib/qualiphy"
 import { ExamStatus, PaymentStatus } from "@prisma/client"
 import { WebhooksHelper } from "square"
+import { writeAuditLog } from "@/lib/audit"
 
 export async function POST(req: Request) {
   try {
@@ -80,23 +81,39 @@ export async function POST(req: Request) {
           status: ExamStatus.IN_PROGRESS
         }
       })
+
+      await writeAuditLog({
+        userId: null,
+        action: "SQUARE_WEBHOOK_PAYMENT_PAID",
+        entity: "Exam",
+        entityId: exam.id,
+        req,
+      })
         
-    } catch (err) {
-      console.error("Qualiphy failed:", err)
+    } catch {
+      console.error("Qualiphy invite failed")
         
-      await prisma.exam.update({
+        await prisma.exam.update({
           where: { id: exam.id },
           data: {
             paymentStatus: PaymentStatus.PAID
           }
+        })
+
+        await writeAuditLog({
+          userId: null,
+          action: "SQUARE_WEBHOOK_PAYMENT_PAID",
+          entity: "Exam",
+          entityId: exam.id,
+          req,
         })
       }
     }
 
     return NextResponse.json({ received: true })
 
-  } catch (error) {
-    console.error("Webhook error:", error)
+  } catch {
+    console.error("Square webhook error")
 
     return NextResponse.json(
       { error: "Webhook failed" },

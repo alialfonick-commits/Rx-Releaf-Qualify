@@ -25,16 +25,9 @@ export async function middleware(req: NextRequest) {
 
   // ✅ Handle root route "/"
   if (pathname === "/") {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url))
-    }
-  
-    // ✅ Only redirect STAFF
-    if (token.role === "STAFF") {
+    if (token?.role === "STAFF") {
       return NextResponse.redirect(new URL("/staff/create-exam", req.url))
     }
-  
-    // ✅ ADMIN (or others) → do nothing, stay on "/"
     return NextResponse.next()
   }
 

@@ -1,15 +1,37 @@
 import { SquareClient, SquareEnvironment } from "square"
 import { v4 as uuid } from "uuid"
 import { NextResponse } from "next/server"
-import { PrismaClient, BirthSex, ConsultationType, PaymentStatus } from "@prisma/client"
+import { BirthSex, ConsultationType, PaymentStatus } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
+import { writeAuditLog } from "@/lib/audit"
+import { rateLimit } from "@/lib/rateLimit"
+import {
+  isNonEmptyString,
+  isValidBirthSex,
+  isValidEmail,
+  isValidPhone,
+  parseDOB,
+  parsePositiveNumber,
+} from "@/lib/validation"
 
 const client = new SquareClient({
   token: process.env.SQUARE_ACCESS_TOKEN,
-  environment: SquareEnvironment.Sandbox,
+  environment:
+    process.env.SQUARE_ENVIRONMENT === "production"
+      ? SquareEnvironment.Production
+      : SquareEnvironment.Sandbox,
 })
 
 export async function POST(req: Request) {
-  const prisma = new PrismaClient()
+  const limited = rateLimit(req, {
+    key: "pay",
+    limit: 20,
+    windowMs: 15 * 60 * 1000,
+  })
+
+  if (limited) {
+    return limited
+  }
 
   function formatDOB(dob: string) {
     // already correct format
@@ -32,12 +54,32 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { token, amount, visit, patient } = body
+    const amountValue = parsePositiveNumber(amount)
+    const parsedDOB = parseDOB(patient?.dob)
+
+    if (
+      !isNonEmptyString(token) ||
+      !amountValue ||
+      amountValue > 5000 ||
+      !visit ||
+      !patient ||
+      !isNonEmptyString(visit.state) ||
+      !parsePositiveNumber(visit.examId) ||
+      !isNonEmptyString(patient.firstName) ||
+      !isNonEmptyString(patient.lastName) ||
+      !isValidEmail(patient.email) ||
+      !isValidPhone(patient.phone) ||
+      !parsedDOB ||
+      !isValidBirthSex(patient.birthSex)
+    ) {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 })
+    }
 
     const response = await client.payments.create({
       sourceId: token,
       idempotencyKey: uuid(),
       amountMoney: {
-        amount: BigInt(Math.round(amount * 100)),
+        amount: BigInt(Math.round(amountValue * 100)),
         currency: "USD",
       },
     })
@@ -60,19 +102,19 @@ export async function POST(req: Request) {
           lastName: patient.lastName,
           email: patient.email,
           phone: patient.phone,
-          dob: new Date(patient.dob),
+          dob: parsedDOB,
           birthSex: patient.birthSex as BirthSex
         }
     })
     
-    await prisma.exam.create({
+    const exam = await prisma.exam.create({
       data: {
         patientId: createdPatient.id,
         staffId: null,
     
         patientState: visit.state,
         consultationType: ConsultationType.URGENT_CARE,
-        examId: visit.examId,
+        examId: Number(visit.examId),
         examName: "Urgent Care Visit",
     
         paymentStatus: PaymentStatus.PAID,
@@ -125,7 +167,7 @@ export async function POST(req: Request) {
             phone_number: patient.phone,
             tele_state: visit.state,
             dob: formatDOB(patient.dob),
-            webhook_url: "https://rx-releaf-qualify.vercel.app/api/webhook/qualiphy"
+            webhook_url: `${process.env.WEBHOOK_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL}/api/webhook/qualiphy`
           })
         }
       )
@@ -135,6 +177,14 @@ export async function POST(req: Request) {
     } catch {
       console.error("Qualiphy API error")
     }
+
+    await writeAuditLog({
+      userId: null,
+      action: "CREATE_PUBLIC_PAID_EXAM",
+      entity: "Exam",
+      entityId: exam.id,
+      req,
+    })
 
     return NextResponse.json({
       success: true,

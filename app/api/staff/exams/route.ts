@@ -5,8 +5,27 @@ import { prisma } from "@/lib/prisma"
 import { ConsultationType, BirthSex, PaymentStatus, ExamStatus } from "@prisma/client"
 import { sendPaymentEmail } from "@/lib/sendEmail"
 import { createPaymentLink } from "@/lib/square"
+import { writeAuditLog } from "@/lib/audit"
+import { rateLimit } from "@/lib/rateLimit"
+import {
+  isNonEmptyString,
+  isValidBirthSex,
+  isValidEmail,
+  isValidPhone,
+  parseDOB,
+} from "@/lib/validation"
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, {
+    key: "staff-exams",
+    limit: 30,
+    windowMs: 15 * 60 * 1000,
+  })
+
+  if (limited) {
+    return limited
+  }
+
   const session = await getServerSession(authOptions)
 
   if (!session || session.user.role !== "STAFF") {
@@ -32,19 +51,18 @@ export async function POST(req: Request) {
 
   const { state, examId, examName } = visit
 
-  // Basic validation
   if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !phone ||
-    !dob ||
-    !birthSex ||
-    !state ||
+    !isNonEmptyString(firstName) ||
+    !isNonEmptyString(lastName) ||
+    !isValidEmail(email) ||
+    !isValidPhone(phone) ||
+    !parseDOB(dob) ||
+    !isValidBirthSex(birthSex) ||
+    !isNonEmptyString(state) ||
     !examId
   ) {
     return NextResponse.json(
-      { error: "Missing required fields" },
+      { error: "Invalid or missing required fields" },
       { status: 400 }
     )
   }
@@ -52,15 +70,15 @@ export async function POST(req: Request) {
   try {
     const { url: paymentLink, id: paymentId } = await createPaymentLink(
       89,
-      `${firstName} ${lastName} - ${examName}`
+      examName || "Urgent Care Visit"
     )
   
     const existingPatient = await prisma.patient.findFirst({
       where: { email }
     })
   
-    const parsedDOB = new Date(dob)
-    if (isNaN(parsedDOB.getTime())) {
+    const parsedDOB = parseDOB(dob)
+    if (!parsedDOB) {
       return NextResponse.json({ error: "Invalid DOB" }, { status: 400 })
     }
   
@@ -102,14 +120,30 @@ export async function POST(req: Request) {
         `${firstName} ${lastName}`,
         paymentLink
       )
-    } catch (err) {
-      console.error("Email failed:", err)
+    } catch {
+      console.error("Payment email failed")
     }
-  
-    return NextResponse.json({ success: true, exam })
-  
-  } catch (error) {
-    console.error(error)
+
+    await writeAuditLog({
+      userId: session.user.id,
+      action: "CREATE_STAFF_EXAM",
+      entity: "Exam",
+      entityId: exam.id,
+      req,
+    })
+   
+    return NextResponse.json({
+      success: true,
+      exam: {
+        id: exam.id,
+        caseNumber: exam.caseNumber,
+        status: exam.status,
+        paymentStatus: exam.paymentStatus,
+      },
+    })
+   
+  } catch {
+    console.error("Staff exam creation failed")
   
     return NextResponse.json(
       { error: "Something went wrong" },

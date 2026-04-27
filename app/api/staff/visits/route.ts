@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { writeAuditLog } from "@/lib/audit"
+import { examListSelect } from "@/lib/examSelect"
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
@@ -22,34 +23,7 @@ export async function GET(req: Request) {
   const [visits, total] = await Promise.all([
     prisma.exam.findMany({
       where: { staffId },
-      select: {
-        id: true,
-        caseNumber: true,
-        createdAt: true,
-        updatedAt: true,
-        consultationType: true,
-        patientState: true,
-        paymentStatus: true,
-        examId: true,
-        examName: true,
-        isPhoneVisit: true,
-        providerName: true,
-        status: true,
-        patient: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            dob: true,
-          },
-        },
-        staff: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      select: examListSelect,
       orderBy: { createdAt: "desc" },
       skip,
       take: limit
