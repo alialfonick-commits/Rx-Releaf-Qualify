@@ -13,6 +13,7 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
   key: 'root',
   storage,
+  // Only non-PHI visit/package choices are persisted. Patient identity stays memory-only.
   whitelist: ['visit'],
 }
 

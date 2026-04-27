@@ -24,6 +24,7 @@ model User {
   exams Exam[]
 
   sessions Session[]
+  mfaChallenges MfaChallenge[]
 }
 
 model Patient {
@@ -75,6 +76,19 @@ model AuditLog {
   entityId  String
   timestamp DateTime @default(now())
   ipAddress String?
+}
+
+model MfaChallenge {
+  id         String    @id @default(uuid())
+  userId     String
+  codeHash   String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  attempts   Int       @default(0)
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
 }
 
 enum Role {

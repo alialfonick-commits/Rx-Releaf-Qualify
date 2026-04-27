@@ -1,6 +1,17 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const limited = rateLimit(req, {
+    key: "exam-list",
+    limit: 60,
+    windowMs: 15 * 60 * 1000,
+  });
+
+  if (limited) {
+    return limited;
+  }
+
   const res = await fetch(
     `${process.env.QUALIPHY_BASE_URL}/api/exam_list`,
     {
@@ -15,8 +26,7 @@ export async function GET() {
   );
 
   if (!res.ok) {
-    const text = await res.text();
-    console.error("Qualiphy Error:", text);
+    console.error("Qualiphy exam list fetch failed");
     return NextResponse.json(
       { error: "Failed to fetch exams" },
       { status: 500 }
@@ -27,8 +37,8 @@ export async function GET() {
 
   // Filter urgent care exams
   const urgentCareExams = data.exams.filter(
-    (exam: any) =>
-      exam.title.startsWith("Urgent Care -") &&
+    (exam: { title?: string; rx_type?: number }) =>
+      exam.title?.startsWith("Urgent Care -") &&
       exam.rx_type === 2
   );
 

@@ -2,9 +2,11 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { PaymentStatus, ExamStatus } from "@prisma/client"
+import { PaymentStatus } from "@prisma/client"
+import { writeAuditLog } from "@/lib/audit"
+import { examListSelect, paymentListSelect } from "@/lib/examSelect"
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
 
   if (!session || session.user.role !== "ADMIN") {
@@ -47,14 +49,14 @@ export async function GET() {
   const monitoring = await prisma.exam.findMany({
     take: 5,
     orderBy: { createdAt: "desc" },
-    include: { patient: true }
+    select: examListSelect,
   })
 
   // Recent Activity (latest updates)
   const activity = await prisma.exam.findMany({
     take: 5,
     orderBy: { updatedAt: "desc" },
-    include: { patient: true }
+    select: examListSelect,
   })
 
   // Payments (top 5 recent paid)
@@ -64,7 +66,15 @@ export async function GET() {
     },
     take: 5,
     orderBy: { updatedAt: "desc" },
-    include: { patient: true }
+    select: paymentListSelect,
+  })
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "VIEW_ADMIN_DASHBOARD",
+    entity: "Exam",
+    entityId: "bulk",
+    req,
   })
 
   return NextResponse.json({

@@ -2,6 +2,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthOptions } from "next-auth"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcrypt"
+import { isRateLimitedKey } from "@/lib/rateLimit"
+import { verifyMfaCode } from "@/lib/mfa"
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
@@ -17,14 +19,27 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        mfaCode: { label: "Verification code", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Missing credentials")
         }
 
+        const normalizedEmail = credentials.email.trim().toLowerCase()
+
+        if (
+          isRateLimitedKey({
+            key: `login:${normalizedEmail}`,
+            limit: 10,
+            windowMs: 15 * 60 * 1000,
+          })
+        ) {
+          throw new Error("Too many login attempts")
+        }
+
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email: normalizedEmail },
         })
 
         if (!user) throw new Error("User not found")
@@ -39,6 +54,16 @@ export const authOptions: NextAuthOptions = {
         )
 
         if (!valid) throw new Error("Invalid password")
+
+        if (!credentials.mfaCode) {
+          throw new Error("Verification code required")
+        }
+
+        const validMfa = await verifyMfaCode(user.id, credentials.mfaCode)
+
+        if (!validMfa) {
+          throw new Error("Invalid verification code")
+        }
 
         await prisma.user.update({
           where: { id: user.id },

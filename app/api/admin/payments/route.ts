@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { writeAuditLog } from "@/lib/audit"
+import { paymentListSelect } from "@/lib/examSelect"
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
@@ -21,11 +23,19 @@ export async function GET(req: Request) {
       skip,
       take: limit,
       orderBy: { updatedAt: "desc" },
-      include: { patient: true }
+      select: paymentListSelect,
     }),
 
     prisma.exam.count()
   ])
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "VIEW_ADMIN_PAYMENTS",
+    entity: "Exam",
+    entityId: "bulk",
+    req,
+  })
 
   return NextResponse.json({
     payments,

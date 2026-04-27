@@ -2,6 +2,8 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+const fromAddress = "Rx Releaf <info@rxreleaf.net>"
+
 export async function sendPaymentEmail(
   email: string,
   name: string,
@@ -10,7 +12,7 @@ export async function sendPaymentEmail(
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   try {
     const response = await resend.emails.send({
-      from: "Rx Releaf <info@rxreleaf.net>", // later use your domain
+      from: fromAddress,
       to: email,
       subject: "Complete Your Payment",
       html: `<div style="font-family: sans-serif; background: #F4F6F4; padding: 40px 0;">
@@ -65,5 +67,30 @@ export async function sendPaymentEmail(
   } catch (error) {
     console.error("Email error:", error)
     throw error
+  }
+}
+
+export async function sendMfaCodeEmail(email: string, code: string) {
+  try {
+    return await resend.emails.send({
+      from: fromAddress,
+      to: email,
+      subject: "Your Rx Releaf verification code",
+      html: `<div style="font-family: sans-serif; background: #F4F6F4; padding: 32px 0;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 480px; margin: 0 auto; background: #FFFFFF; border-radius: 10px; overflow: hidden;">
+          <tr>
+            <td style="padding: 28px 24px;">
+              <h2 style="margin: 0 0 12px; color: #2E3833; font-size: 20px;">Verification code</h2>
+              <p style="margin: 0 0 18px; color: #6A7C73; font-size: 14px; line-height: 1.5;">Use this code to finish signing in to Rx Releaf. It expires in 10 minutes.</p>
+              <p style="letter-spacing: 8px; font-size: 28px; font-weight: 700; color: #2E3833; margin: 0 0 18px;">${code}</p>
+              <p style="margin: 0; color: #6A7C73; font-size: 12px;">If you did not request this code, contact your administrator.</p>
+            </td>
+          </tr>
+        </table>
+      </div>`,
+    })
+  } catch {
+    console.error("MFA email failed")
+    throw new Error("Failed to send verification code")
   }
 }

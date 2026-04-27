@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { ExamStatus } from "@prisma/client"
 import { verifyWebhookSecret } from "@/lib/security"
+import { writeAuditLog } from "@/lib/audit"
 
 export async function POST(req: Request) {
   if (!verifyWebhookSecret(req, "QUALIPHY_WEBHOOK_SECRET")) {
@@ -51,6 +52,14 @@ export async function POST(req: Request) {
           status: ExamStatus.COMPLETED,
           providerName: providerName || "Provider"
         }
+      })
+
+      await writeAuditLog({
+        userId: null,
+        action: "QUALIPHY_WEBHOOK_COMPLETE_EXAM",
+        entity: "Exam",
+        entityId: exam.id,
+        req,
       })
 
       console.log("Qualiphy webhook exam completed")
