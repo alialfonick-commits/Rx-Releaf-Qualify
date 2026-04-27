@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://web.squarecdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.squareupsandbox.com https://*.squareup.com https://api.qualiphy.me https://api.hubapi.com; frame-src https://web.squarecdn.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://web.squarecdn.com https://sandbox.web.squarecdn.com; style-src 'self' 'unsafe-inline' https://web.squarecdn.com https://sandbox.web.squarecdn.com; font-src 'self' data: https://*.squarecdn.com https://*.cloudfront.net; img-src 'self' data: https:; connect-src 'self' https://*.squareupsandbox.com https://*.squareup.com https://api.qualiphy.me https://api.hubapi.com; frame-src https://web.squarecdn.com https://sandbox.web.squarecdn.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
           },
         ],
       },
