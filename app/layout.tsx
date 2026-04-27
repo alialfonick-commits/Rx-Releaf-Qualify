@@ -19,18 +19,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const squareScriptSrc =
+    process.env.SQUARE_ENVIRONMENT === "production"
+      ? "https://web.squarecdn.com/v1/square.js"
+      : "https://sandbox.web.squarecdn.com/v1/square.js";
+
   return (
     <html lang="en">
+      <head>
+        <Script
+          src={squareScriptSrc}
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${poppins.className} font-sans antialiased bg-[#F6F7F2]`}
       >
         <Providers>
           {children}
         </Providers>
-      <Script
-          src="https://sandbox.web.squarecdn.com/v1/square.js"
-          strategy="beforeInteractive"
-        />
       </body>
     </html>
   );
