@@ -319,12 +319,30 @@ const validateForm = () => {
           <SelectValue placeholder="Select treatment" />
         </SelectTrigger>
 
-        <SelectContent className='sm:max-w-108.75 max-w-80'>
+        {/* <SelectContent className='sm:max-w-108.75 max-w-80'>
           {exams.map((exam: any) => (
             <SelectItem key={exam.id} value={exam.id}>
               {exam.title}
             </SelectItem>
           ))}
+        </SelectContent> */}
+        <SelectContent className='sm:max-w-108.75 max-w-80'>
+          <SelectItem value="2547">Urgent Care - Dandruff (Ketoconazole) Treatment</SelectItem>
+          <SelectItem value="2548">Urgent Care - Acne (Doxycycline, Clindamycin, Benzoyl Peroxide) Treatment</SelectItem>
+          <SelectItem value="2889">Urgent Care - Anti-Aging Cream (Tretinoin & Retinoid) Treatment</SelectItem>
+          <SelectItem value="2550">Urgent Care - Cold Sore (Valtrex - Valacyclovir/Acyclovir) Treatment</SelectItem>
+          <SelectItem value="3947">Urgent Care - Eczema and Skin Rash (Hydrocortisone, Triamcinolone, Betamethasone Dipropionate, Valtrex, Keflex, Bactrim, Clindamycin, Augmentin, Doxycycline) Treatment</SelectItem>
+          <SelectItem value="2552">Urgent Care - Epi-Pen (Epinephrine Auto-Injector) Treatment</SelectItem>
+          <SelectItem value="3835">Urgent Care - Erectile Dysfunction - Viagra (Sildenafil), Cialis (Tadalafil), Levitra (Vardenafil), Spedra (Avanafil) Treatment</SelectItem>
+          <SelectItem value="2554">Urgent Care - Eyelash Growth (Latisse - Bimatoprost ophthalmic solution 0.03%) Treatment</SelectItem>
+          <SelectItem value="2555">Urgent Care - Female Urinary Tract Infection UTI - (Augmentin, Amoxicillin, Macrobid, Bactrim, Keflex, Fosfomycin, & Cipro) Treatment</SelectItem>
+          <SelectItem value="2311">Urgent Care - Male Hair Loss (Finasteride / Minoxodil / Biotin) Treatment</SelectItem>
+          <SelectItem value="4660">Urgent Care - Nausea/Vomiting - Ondansetron (Zofran), Promethazine (Phenergan), or Prochlorperazine (Compazine)</SelectItem>
+          <SelectItem value="2557">Urgent Care - Pink Eye (Conjunctivitis) Treatment</SelectItem>
+          <SelectItem value="2029">Urgent Care - Rosacea (Metronidazole 1% gel, Azelaic Acid 15% gel) Treatment</SelectItem>
+          <SelectItem value="2558">Urgent Care - Sinusitis (Augmentin, Amoxicillin, Cefdinir, Doxycycline, or Levofloxacin) Treatment</SelectItem>
+          <SelectItem value="2559">Urgent Care - Vaginal Infection (Metronidazole, Clindamycin, Fluconazole, Clotrimazole, Miconazole) Treatment</SelectItem>
+          <SelectItem value="2699">Urgent Care - Weight loss / Longevity (Metformin) Treatment</SelectItem>
         </SelectContent>
       </Select>
       {errors.selectedExamId && (
