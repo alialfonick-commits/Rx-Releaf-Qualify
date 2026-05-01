@@ -34,13 +34,12 @@ export async function GET(req: Request) {
   }
 
   const data = await res.json();
-
   // Filter urgent care exams
   const urgentCareExams = data.exams.filter(
     (exam: { title?: string; rx_type?: number }) =>
       exam.title?.startsWith("Urgent Care -") &&
-      exam.rx_type === 2
+    exam.rx_type === 2
   );
-
+  
   return NextResponse.json(urgentCareExams);
 }
