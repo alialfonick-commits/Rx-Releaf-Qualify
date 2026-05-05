@@ -3,6 +3,7 @@ import {
   LayoutDashboard,
   Folder,
   CreditCard,
+  Settings,
   Shield
 } from "lucide-react"
 
@@ -12,6 +13,7 @@ export const sidebarConfig = {
     { label: "Execution Monitoring", path: "/admin/visits", icon: Shield },
     { label: "Staff", path: "/admin/staff", icon: Folder },
     { label: "Payment", path: "/admin/payments", icon: CreditCard },
+    { label: "Consultations", path: "/admin/consultations", icon: Settings },
   ],
   STAFF: [
     { label: "Dashboard", path: "/staff/dashboard", icon: ClipboardList },

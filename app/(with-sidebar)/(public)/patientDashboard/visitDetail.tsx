@@ -37,45 +37,61 @@ import { setPatientInfo } from "@/store/patientSlice"
 import { useRouter } from "next/navigation"
 import { format } from "date-fns"
 
-type PharmacyPackage = {
-  exam_pos_id: number
-  order_set_id: number
+type ConsultationOption = {
+  id: string
+  qualiphyExamId: number
   title: string
-  pharmacy_id: number
-  turnaround_time: string
-  pharmacy_name: string
-  integration_partner: number
-  qualiphy_total_price: string
+  rxType: number | null
 }
 
-type Exam = {
-  id: number
-  title: string
+type ConsultationTypeConfig = {
+  id: string
+  typeKey: string
+  label: string
+  options: ConsultationOption[]
 }
+
+type FormErrors = Partial<Record<
+  | "selectedState"
+  | "selectedConsultationTypeId"
+  | "selectedExamId"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "dob"
+  | "birthSex",
+  string
+>>
 
 export default function VisitDetail({ mode = "public" }: { mode?: "public" | "staff" }) {
 
  const [open, setOpen] = React.useState(false)
  const [date, setDate] = React.useState<Date | undefined>()
  const [selectedState, setSelectedState] = React.useState("");
- const [exams, setExams] = React.useState<Exam[]>([]);
- const [selectedExamId, setSelectedExamId] = React.useState("");
- const [pharmacyPackages, setPharmacyPackages] = React.useState<PharmacyPackage[]>([]);
- const [selectedPackage, setSelectedPackage] = React.useState("");
- const [selectedPackagePrice, setselectedPackagePrice] = React.useState("");
- const [firstName, setFirstName] = React.useState("")
- const [lastName, setLastName] = React.useState("")
- const [email, setEmail] = React.useState("")
- const [phone, setPhone] = React.useState("")
- const [birthSex, setBirthSex] = React.useState("")
- const [errors, setErrors] = React.useState<any>({});
+  const [consultationTypes, setConsultationTypes] = React.useState<ConsultationTypeConfig[]>([]);
+  const [selectedConsultationTypeId, setSelectedConsultationTypeId] = React.useState("");
+  const [selectedExamId, setSelectedExamId] = React.useState("");
+  const selectedPackage = "";
+  const [firstName, setFirstName] = React.useState("")
+  const [lastName, setLastName] = React.useState("")
+  const [email, setEmail] = React.useState("")
+  const [phone, setPhone] = React.useState("")
+  const [birthSex, setBirthSex] = React.useState("")
+  const [errors, setErrors] = React.useState<FormErrors>({});
+
+  const selectedConsultationType = consultationTypes.find(
+    (type) => type.id === selectedConsultationTypeId
+  );
+  const selectedExam = selectedConsultationType?.options.find(
+    (option) => String(option.qualiphyExamId) === selectedExamId
+  );
 
  React.useEffect(() => {
   async function fetchExams() {
     const res = await fetch("/api/exams");
     const data = await res.json();
-    // Adjust this depending on actual response shape
-    setExams(data.exams || data);
+    setConsultationTypes(data.consultationTypes || []);
   }
 
   fetchExams();
@@ -116,7 +132,10 @@ if (!validateForm()) return;
 
  dispatch(setVisitDetails({
   state: selectedState,
+  consultationType: selectedConsultationType?.typeKey || "",
+  consultationTypeLabel: selectedConsultationType?.label || "",
   examId: selectedExamId,
+  examName: selectedExam?.title || "",
   packageId: selectedPackage,
   packagePrice: 89
  }))
@@ -150,7 +169,8 @@ const createExamForStaff = async () => {
         visit: {
           state: selectedState,
           examId: selectedExamId,
-          examName: exams.find((e: any) => e.id === Number(selectedExamId))?.title
+          consultationType: selectedConsultationType?.typeKey,
+          examName: selectedExam?.title
         },
         patient: {
           firstName,
@@ -178,9 +198,10 @@ const createExamForStaff = async () => {
 }
 
 const validateForm = () => {
-  let newErrors: any = {};
+  const newErrors: FormErrors = {};
 
   if (!selectedState) newErrors.selectedState = "State is required";
+  if (!selectedConsultationTypeId) newErrors.selectedConsultationTypeId = "Consultation type is required";
   if (!selectedExamId) newErrors.selectedExamId = "Please select a treatment";
 
   if (!firstName.trim()) newErrors.firstName = "First name is required";
@@ -260,7 +281,7 @@ const validateForm = () => {
         value={selectedState}
         onValueChange={(value) => {
           setSelectedState(value);
-          setErrors((prev: any) => ({ ...prev, selectedState: "" }));
+          setErrors((prev) => ({ ...prev, selectedState: "" }));
         }}
         >
         <SelectTrigger id="form-Patient-State">
@@ -281,9 +302,9 @@ const validateForm = () => {
       
      </div>
 
-     <div>
-      <div className="flex items-center gap-2">
-       <label htmlFor="form-type">Consultation Type</label>
+      <div>
+       <div className="flex items-center gap-2">
+        <label htmlFor="form-type">Consultation Type</label>
        <TooltipProvider>
         <Tooltip>
          <TooltipTrigger asChild>
@@ -293,58 +314,58 @@ const validateForm = () => {
           <p>Consultation Type</p>
          </TooltipContent>
         </Tooltip>
-       </TooltipProvider>
-      </div>
-      <Input
-       id="form-type"
-       className="cursor-not-allowed"
-       type="text"
-       placeholder="Urgent Care Visit: Consultation + Prescription  sent to your.."
-       readOnly
-       required
-      />
-     </div>
-
-     <div className="overflow-hidden">
-      <label htmlFor="form-visit" className="sm:whitespace-nowrap flex overflow-hidden">Urgent Care Visit: Consultation + Prescription  sent to your..</label>
-      <Select
-        value={selectedExamId}
-        onValueChange={(value) => {
-          setSelectedExamId(value);
-          setErrors((prev: any) => ({ ...prev, selectedExamId: "" }));
-          // console.log("Selected Exam ID:", value);
-        }}
-      >
-        <SelectTrigger className="whitespace-nowrap">
-          <SelectValue placeholder="Select treatment" />
+        </TooltipProvider>
+       </div>
+       <Select
+         value={selectedConsultationTypeId}
+         onValueChange={(value) => {
+           setSelectedConsultationTypeId(value);
+           setSelectedExamId("");
+           setErrors((prev) => ({ ...prev, selectedConsultationTypeId: "", selectedExamId: "" }));
+         }}
+       >
+        <SelectTrigger id="form-type">
+          <SelectValue placeholder="Select consultation type" />
         </SelectTrigger>
 
-        {/* <SelectContent className='sm:max-w-108.75 max-w-80'>
-          {exams.map((exam: any) => (
-            <SelectItem key={exam.id} value={exam.id}>
-              {exam.title}
+        <SelectContent className='sm:max-w-108.75 max-w-80'>
+          {consultationTypes.map((type) => (
+            <SelectItem key={type.id} value={type.id}>
+              {type.label}
             </SelectItem>
           ))}
-        </SelectContent> */}
-        <SelectContent className='sm:max-w-108.75 max-w-80'>
-          <SelectItem value="2547">Urgent Care - Dandruff (Ketoconazole) Treatment</SelectItem>
-          <SelectItem value="2548">Urgent Care - Acne (Doxycycline, Clindamycin, Benzoyl Peroxide) Treatment</SelectItem>
-          <SelectItem value="2889">Urgent Care - Anti-Aging Cream (Tretinoin & Retinoid) Treatment</SelectItem>
-          <SelectItem value="2550">Urgent Care - Cold Sore (Valtrex - Valacyclovir/Acyclovir) Treatment</SelectItem>
-          <SelectItem value="3947">Urgent Care - Eczema and Skin Rash (Hydrocortisone, Triamcinolone, Betamethasone Dipropionate, Valtrex, Keflex, Bactrim, Clindamycin, Augmentin, Doxycycline) Treatment</SelectItem>
-          <SelectItem value="2552">Urgent Care - Epi-Pen (Epinephrine Auto-Injector) Treatment</SelectItem>
-          <SelectItem value="3835">Urgent Care - Erectile Dysfunction - Viagra (Sildenafil), Cialis (Tadalafil), Levitra (Vardenafil), Spedra (Avanafil) Treatment</SelectItem>
-          <SelectItem value="2554">Urgent Care - Eyelash Growth (Latisse - Bimatoprost ophthalmic solution 0.03%) Treatment</SelectItem>
-          <SelectItem value="2555">Urgent Care - Female Urinary Tract Infection UTI - (Augmentin, Amoxicillin, Macrobid, Bactrim, Keflex, Fosfomycin, & Cipro) Treatment</SelectItem>
-          <SelectItem value="2311">Urgent Care - Male Hair Loss (Finasteride / Minoxodil / Biotin) Treatment</SelectItem>
-          <SelectItem value="4660">Urgent Care - Nausea/Vomiting - Ondansetron (Zofran), Promethazine (Phenergan), or Prochlorperazine (Compazine)</SelectItem>
-          <SelectItem value="2557">Urgent Care - Pink Eye (Conjunctivitis) Treatment</SelectItem>
-          <SelectItem value="2029">Urgent Care - Rosacea (Metronidazole 1% gel, Azelaic Acid 15% gel) Treatment</SelectItem>
-          <SelectItem value="2558">Urgent Care - Sinusitis (Augmentin, Amoxicillin, Cefdinir, Doxycycline, or Levofloxacin) Treatment</SelectItem>
-          <SelectItem value="2559">Urgent Care - Vaginal Infection (Metronidazole, Clindamycin, Fluconazole, Clotrimazole, Miconazole) Treatment</SelectItem>
-          <SelectItem value="2699">Urgent Care - Weight loss / Longevity (Metformin) Treatment</SelectItem>
         </SelectContent>
-      </Select>
+       </Select>
+       {errors.selectedConsultationTypeId && (
+        <p className="text-red-500 text-xs">{errors.selectedConsultationTypeId}</p>
+       )}
+      </div>
+
+      <div className="overflow-hidden">
+       <label htmlFor="form-visit" className="sm:whitespace-nowrap flex overflow-hidden">
+        {selectedConsultationType?.label || "Consultation Option"}
+       </label>
+       <Select
+         value={selectedExamId}
+         onValueChange={(value) => {
+          setSelectedExamId(value);
+          setErrors((prev) => ({ ...prev, selectedExamId: "" }));
+          // console.log("Selected Exam ID:", value);
+         }}
+         disabled={!selectedConsultationTypeId}
+       >
+         <SelectTrigger className="whitespace-nowrap">
+           <SelectValue placeholder={selectedConsultationTypeId ? "Select option" : "Select consultation type first"} />
+         </SelectTrigger>
+
+         <SelectContent className='sm:max-w-108.75 max-w-80'>
+           {selectedConsultationType?.options.map((exam) => (
+            <SelectItem key={exam.id} value={String(exam.qualiphyExamId)}>
+              {exam.title}
+            </SelectItem>
+           ))}
+         </SelectContent>
+       </Select>
       {errors.selectedExamId && (
         <p className="text-red-500 text-xs">{errors.selectedExamId}</p>
       )}
@@ -362,37 +383,6 @@ const validateForm = () => {
         <SelectContent>
         </SelectContent>
       </Select>
-      {/* <Select
-        value={selectedPackage}
-        onValueChange={(value) => {
-          setSelectedPackage(value);
-          const selected = pharmacyPackages.find(
-            (pkg: any) => String(pkg.exam_pos_id) === value
-          )
-      
-          if (selected) {
-            setselectedPackagePrice(selected.qualiphy_total_price)
-          }
-      
-          console.log("Selected Pharmacy Package:", value)
-        }}
-        disabled={!selectedState || !selectedExamId}
-      >
-        <SelectTrigger id="form-package">
-          <SelectValue placeholder="Select pharmacy package" />
-        </SelectTrigger>
-
-        <SelectContent>
-          {pharmacyPackages.map((pkg: any) => (
-            <SelectItem
-              key={pkg.exam_pos_id}
-              value={String(pkg.exam_pos_id)}
-            >
-              {pkg.title} - ${pkg.qualiphy_total_price}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select> */}
      </div>
 
     </div>
@@ -417,7 +407,7 @@ const validateForm = () => {
        placeholder="Enter first name"
        onChange={(e) => {
         setFirstName(e.target.value)
-        setErrors((prev: any) => ({ ...prev, firstName: "" }));
+         setErrors((prev) => ({ ...prev, firstName: "" }));
        }}
        required
       />
@@ -434,7 +424,7 @@ const validateForm = () => {
        placeholder="Enter last name"
        onChange={(e) => {
         setLastName(e.target.value)
-        setErrors((prev: any) => ({ ...prev, lastName: "" }));
+         setErrors((prev) => ({ ...prev, lastName: "" }));
        }}
        required
       />
@@ -451,7 +441,7 @@ const validateForm = () => {
        placeholder="you@example.com"
        onChange={(e) => {
         setEmail(e.target.value)
-        setErrors((prev: any) => ({ ...prev, email: "" }));
+         setErrors((prev) => ({ ...prev, email: "" }));
       }}
        required
       />
@@ -469,7 +459,7 @@ const validateForm = () => {
        placeholder="(555) 123-4567"
        onChange={(e) => {
         setPhone(e.target.value)
-        setErrors((prev: any) => ({ ...prev, phone: "" }));
+         setErrors((prev) => ({ ...prev, phone: "" }));
       }}
       required
       />
@@ -543,7 +533,7 @@ const validateForm = () => {
         value={birthSex} 
         onValueChange={(value) => {
           setBirthSex(value)
-          setErrors((prev: any) => ({ ...prev, birthSex: "" }));
+          setErrors((prev) => ({ ...prev, birthSex: "" }));
         }}>
        <SelectTrigger id="birth-sex">
         <SelectValue placeholder="Gender" />

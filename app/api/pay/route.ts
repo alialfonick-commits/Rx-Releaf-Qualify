@@ -5,6 +5,7 @@ import { BirthSex, ConsultationType, PaymentStatus } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { writeAuditLog } from "@/lib/audit"
 import { rateLimit } from "@/lib/rateLimit"
+import { isConsultationTypeKey } from "@/lib/consultationConfig"
 import {
   isNonEmptyString,
   isValidBirthSex,
@@ -64,6 +65,7 @@ export async function POST(req: Request) {
       !visit ||
       !patient ||
       !isNonEmptyString(visit.state) ||
+      !isConsultationTypeKey(visit.consultationType) ||
       !parsePositiveNumber(visit.examId) ||
       !isNonEmptyString(patient.firstName) ||
       !isNonEmptyString(patient.lastName) ||
@@ -113,9 +115,9 @@ export async function POST(req: Request) {
         staffId: null,
     
         patientState: visit.state,
-        consultationType: ConsultationType.URGENT_CARE,
+        consultationType: visit.consultationType as ConsultationType,
         examId: Number(visit.examId),
-        examName: "Urgent Care Visit",
+        examName: isNonEmptyString(visit.examName) ? visit.examName : "Consultation",
     
         paymentStatus: PaymentStatus.PAID,
         paymentId: payment.id,
