@@ -27,6 +27,34 @@ model User {
   mfaChallenges MfaChallenge[]
 }
 
+model ConsultationTypeSetting {
+  id          String   @id @default(uuid())
+  typeKey     String   @unique
+  label       String
+  isEnabled   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  options     ConsultationOptionSetting[]
+}
+
+model ConsultationOptionSetting {
+  id                String   @id @default(uuid())
+  consultationTypeId String
+  qualiphyExamId    Int
+  title             String
+  rxType            Int?
+  isEnabled         Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  rawData           Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  consultationType  ConsultationTypeSetting @relation(fields: [consultationTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([consultationTypeId, qualiphyExamId])
+  @@index([qualiphyExamId])
+}
+
 model Patient {
   id        String   @id @default(uuid())
   firstName String
@@ -103,6 +131,9 @@ enum BirthSex {
 
 enum ConsultationType {
   URGENT_CARE
+  GOOD_FAITH
+  QUALIPHY_RX
+  CHOOSE_PHARMACY
 }
 
 enum PaymentStatus {

@@ -7,6 +7,7 @@ import { sendPaymentEmail } from "@/lib/sendEmail"
 import { createPaymentLink } from "@/lib/square"
 import { writeAuditLog } from "@/lib/audit"
 import { rateLimit } from "@/lib/rateLimit"
+import { isConsultationTypeKey } from "@/lib/consultationConfig"
 import {
   isNonEmptyString,
   isValidBirthSex,
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
     birthSex
   } = patient
 
-  const { state, examId, examName } = visit
+  const { state, examId, examName, consultationType } = visit
 
   if (
     !isNonEmptyString(firstName) ||
@@ -59,6 +60,7 @@ export async function POST(req: Request) {
     !parseDOB(dob) ||
     !isValidBirthSex(birthSex) ||
     !isNonEmptyString(state) ||
+    !isConsultationTypeKey(consultationType) ||
     !examId
   ) {
     return NextResponse.json(
@@ -101,7 +103,7 @@ export async function POST(req: Request) {
         staffId: session.user.id,
   
         patientState: state,
-        consultationType: ConsultationType.URGENT_CARE,
+        consultationType: consultationType as ConsultationType,
   
         examId: Number(examId),
         examName,

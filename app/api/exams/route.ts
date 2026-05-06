@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
+import { prisma } from "@/lib/prisma";
+import { ensureConsultationTypes } from "@/lib/consultationConfig";
 
 export async function GET(req: Request) {
   const limited = rateLimit(req, {
@@ -12,35 +14,27 @@ export async function GET(req: Request) {
     return limited;
   }
 
-  const res = await fetch(
-    `${process.env.QUALIPHY_BASE_URL}/api/exam_list`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  await ensureConsultationTypes();
+
+  const consultationTypes = await prisma.consultationTypeSetting.findMany({
+    where: { isEnabled: true },
+    orderBy: { sortOrder: "asc" },
+    select: {
+      id: true,
+      typeKey: true,
+      label: true,
+      options: {
+        where: { isEnabled: true },
+        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+        select: {
+          id: true,
+          qualiphyExamId: true,
+          title: true,
+          rxType: true,
+        },
       },
-      body: JSON.stringify({
-        api_key: process.env.QUALIPHY_API_KEY,
-      }),
-    }
-  );
+    },
+  });
 
-  if (!res.ok) {
-    console.error("Qualiphy exam list fetch failed");
-    return NextResponse.json(
-      { error: "Failed to fetch exams" },
-      { status: 500 }
-    );
-  }
-
-  const data = await res.json();
-
-  // Filter urgent care exams
-  const urgentCareExams = data.exams.filter(
-    (exam: { title?: string; rx_type?: number }) =>
-      exam.title?.startsWith("Urgent Care -") &&
-      exam.rx_type === 2
-  );
-
-  return NextResponse.json(urgentCareExams);
+  return NextResponse.json({ consultationTypes });
 }
