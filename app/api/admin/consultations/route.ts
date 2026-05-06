@@ -76,6 +76,13 @@ export async function POST(req: Request) {
     const rxType = typeof exam.rx_type === "number" ? exam.rx_type : null
     const typeKey = classifyConsultationType(title, rxType)
 
+    if (qualiphyExamId && !typeKey) {
+      await prisma.consultationOptionSetting.deleteMany({
+        where: { qualiphyExamId },
+      })
+      continue
+    }
+
     if (!title || !qualiphyExamId || !typeKey) {
       continue
     }
@@ -85,6 +92,15 @@ export async function POST(req: Request) {
     if (!consultationType) {
       continue
     }
+
+    await prisma.consultationOptionSetting.deleteMany({
+      where: {
+        qualiphyExamId,
+        consultationTypeId: {
+          not: consultationType.id,
+        },
+      },
+    })
 
     await prisma.consultationOptionSetting.upsert({
       where: {

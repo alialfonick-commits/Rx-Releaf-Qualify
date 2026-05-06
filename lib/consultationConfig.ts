@@ -38,10 +38,29 @@ type QualiphyExam = {
 export function classifyConsultationType(title: string, rxType?: number | null): ConsultationTypeKey | null {
   const normalized = title.toLowerCase()
 
-  if (normalized.includes("good faith") || rxType === 1) return "GOOD_FAITH"
+  if (normalized.includes("automation test") || normalized.includes("pbm example")) {
+    return null
+  }
+
+  if (
+    normalized.includes("rx only") ||
+    normalized.includes("lillydirect") ||
+    normalized.includes("prescription only")
+  ) {
+    return "CHOOSE_PHARMACY"
+  }
+  if (
+    normalized.includes("medication shipping") ||
+    normalized.includes("3 month supply") ||
+    normalized.startsWith("async compounded") ||
+    normalized.includes("methylene blue capsules")
+  ) {
+    return "QUALIPHY_RX"
+  }
   if (normalized.includes("qualiphyrx")) return "QUALIPHY_RX"
   if (normalized.includes("choose your pharmacy")) return "CHOOSE_PHARMACY"
   if (normalized.includes("urgent care") || rxType === 2) return "URGENT_CARE"
+  if (rxType === 1 || normalized.includes("good faith")) return "GOOD_FAITH"
 
   return null
 }
