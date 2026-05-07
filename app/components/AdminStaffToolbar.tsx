@@ -28,7 +28,7 @@ const handleAddStaff = () => {
 }
 
   return (
-    <div className="bg-white border border-[#DCE5DF] p-3 rounded-xl flex items-center gap-3 flex-wrap">
+    <div className="bg-white border border-[#DCE5DF] p-3 rounded-xl flex items-center gap-3 flex-wrap shadow-sm">
       
       {/* Search Input */}
       <div className="relative flex-1 min-w-50">
@@ -38,7 +38,7 @@ const handleAddStaff = () => {
           placeholder="Search staff..."
           value={search}
           onChange={handleSearchChange}
-          className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg py-2.5 pl-10 pr-4 text-[#2E3833] placeholder:text-[#6A7C73] focus:outline-none focus:ring-1 focus:ring-[#476B59] transition-all"
+          className="w-full bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg py-2.5 pl-10 pr-4 text-[#2E3833] placeholder:text-[#6A7C73] focus:outline-none focus:ring-2 focus:ring-[#476B5933] focus:border-[#476B59] transition-all"
         />
       </div>
 
@@ -46,7 +46,7 @@ const handleAddStaff = () => {
       <div className="relative">
         <select
           onChange={(e) => onFilterChange(e.target.value)}
-          className="appearance-none bg-white border border-[#DCE5DF] rounded-lg py-2.5 pl-10 pr-10 text-[#2E3833] font-medium cursor-pointer focus:outline-none hover:bg-[#F8FAF9] transition-all"
+          className="appearance-none bg-[#F8FAF9] border border-[#DCE5DF] rounded-lg py-2.5 pl-10 pr-10 text-[#2E3833] font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#476B5933] focus:border-[#476B59] hover:bg-white transition-all"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
@@ -58,7 +58,7 @@ const handleAddStaff = () => {
       {/* Add Staff Button - Now properly linked */}
       <button
         onClick={handleAddStaff}
-        className="bg-[#D9A321] hover:bg-[#C2921D] text-white px-5 py-2.5 rounded-lg font-semibold flex items-center gap-2 transition-colors active:scale-95"
+        className="bg-[#DFA620] hover:bg-[#708E86] text-white px-5 py-2.5 rounded-lg font-semibold flex items-center gap-2 transition-colors active:scale-95"
       >
         <Plus size={20} />
         Add Staff

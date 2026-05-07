@@ -4,6 +4,7 @@ import { sendToQualiphy } from "@/lib/qualiphy"
 import { ExamStatus, PaymentStatus } from "@prisma/client"
 import { WebhooksHelper } from "square"
 import { writeAuditLog } from "@/lib/audit"
+import { updateExamAfterQualiphyInvite } from "@/lib/qualiphyExamUpdate"
 
 export async function POST(req: Request) {
   try {
@@ -62,7 +63,7 @@ export async function POST(req: Request) {
       }
         
       try {
-        await sendToQualiphy({
+        const qualiphyResult = await sendToQualiphy({
           examId: exam.examId,
           firstName: exam.patient.firstName,
           lastName: exam.patient.lastName,
@@ -74,12 +75,19 @@ export async function POST(req: Request) {
        
       console.log("Qualiphy invite sent")
         
+      await updateExamAfterQualiphyInvite({
+        examId: exam.id,
+        status: ExamStatus.IN_PROGRESS,
+        patientExamId: qualiphyResult.patientExamId,
+        meetingUrl: qualiphyResult.meetingUrl,
+        meetingUuid: qualiphyResult.meetingUuid,
+      })
+
       await prisma.exam.update({
         where: { id: exam.id },
         data: {
           paymentStatus: PaymentStatus.PAID,
-          status: ExamStatus.IN_PROGRESS
-        }
+        },
       })
 
       await writeAuditLog({

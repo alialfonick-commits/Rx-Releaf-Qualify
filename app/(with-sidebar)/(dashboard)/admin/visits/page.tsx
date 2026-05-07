@@ -1,15 +1,23 @@
 "use client";
 
-import ExecutionTable from "@/app/components/executionTable";
+import { TableWrap } from "@/app/components/tableWrap";
 import Navbar from "@/app/components/navbar";
+import SatffNewExam from "@/app/components/StaffExamVisit";
 import { useEffect, useState } from "react";
 
 type Visit = {
   id: string;
   caseNumber: number;
   createdAt: string;
+  updatedAt: string;
   status: string;
+  paymentStatus: string;
   consultationType: string;
+  patientState: string;
+  examId: number;
+  examName: string;
+  isPhoneVisit: boolean;
+  providerName?: string | null;
   patient: {
     id: string;
     firstName: string;
@@ -41,7 +49,7 @@ export default function AdminVisitsPage() {
 
         const data = await res.json();
         setVisits(data.visits);
-      } catch (err) {
+      } catch {
         setError("Unable to load visits");
       } finally {
         setLoading(false);
@@ -57,7 +65,18 @@ export default function AdminVisitsPage() {
   return (
     <div>
       <Navbar title="Execution Monitoring" subtitle="Monitor and manage case execution status" />
-			<ExecutionTable visits={visits} />
+      <SatffNewExam />
+      <div className="bg-[#FFFFFF] border border-[#D7DED3] rounded-xl px-3.5 py-3.5 mt-3">
+        <TableWrap
+          visits={visits}
+          allowPaymentActions
+          allowDelete
+          allowDeletePaid
+          detailsBasePath="/admin/visits"
+          deleteEndpointBase="/api/admin/visits"
+          sendPaymentEndpoint="/api/admin/send-payment"
+        />
+      </div>
     </div>
   );
 }

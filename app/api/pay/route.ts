@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma"
 import { writeAuditLog } from "@/lib/audit"
 import { rateLimit } from "@/lib/rateLimit"
 import { isConsultationTypeKey } from "@/lib/consultationConfig"
+import { getQualiphyInviteConfig, sendQualiphyInvite } from "@/lib/qualiphyInvite"
+import { updateExamAfterQualiphyInvite } from "@/lib/qualiphyExamUpdate"
 import {
   isNonEmptyString,
   isValidBirthSex,
@@ -22,14 +24,6 @@ const client = new SquareClient({
       ? SquareEnvironment.Production
       : SquareEnvironment.Sandbox,
 })
-
-function formatDOB(dob: Date) {
-  const year = dob.getFullYear()
-  const month = String(dob.getMonth() + 1).padStart(2, "0")
-  const day = String(dob.getDate()).padStart(2, "0")
-
-  return `${year}-${month}-${day}`
-}
 
 function normalizeSquarePhone(phone: string) {
   const digits = phone.replace(/\D/g, "")
@@ -53,20 +47,6 @@ function truncateSquareText(value: string, maxLength: number) {
   return value.length > maxLength ? value.slice(0, maxLength) : value
 }
 
-async function readJsonOrText(res: Response) {
-  const text = await res.text()
-
-  if (!text) {
-    return null
-  }
-
-  try {
-    return JSON.parse(text)
-  } catch {
-    return text
-  }
-}
-
 export async function POST(req: Request) {
   const limited = rateLimit(req, {
     key: "pay",
@@ -84,9 +64,7 @@ export async function POST(req: Request) {
     const amountValue = parsePositiveNumber(amount)
     const parsedDOB = parseDOB(patient?.dob)
     const squareLocationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID
-    const qualiphyBaseUrl = process.env.QUALIPHY_BASE_URL
-    const qualiphyApiKey = process.env.QUALIPHY_API_KEY
-    const webhookBaseUrl = process.env.WEBHOOK_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
+    const qualiphyConfig = getQualiphyInviteConfig()
 
     if (
       !isNonEmptyString(token) ||
@@ -112,21 +90,13 @@ export async function POST(req: Request) {
       process.env.SQUARE_ACCESS_TOKEN.trim().length === 0 ||
       typeof squareLocationId !== "string" ||
       squareLocationId.trim().length === 0 ||
-      typeof qualiphyBaseUrl !== "string" ||
-      qualiphyBaseUrl.trim().length === 0 ||
-      typeof qualiphyApiKey !== "string" ||
-      qualiphyApiKey.trim().length === 0 ||
-      typeof webhookBaseUrl !== "string" ||
-      webhookBaseUrl.trim().length === 0
+      !qualiphyConfig
     ) {
       console.error("Payment route missing required vendor configuration")
       return NextResponse.json({ error: "Payment configuration is incomplete" }, { status: 500 })
     }
 
     const squareLocation = squareLocationId.trim()
-    const qualiphyInviteUrl = `${qualiphyBaseUrl.trim().replace(/\/$/, "")}/api/exam_invite`
-    const qualiphyKey = qualiphyApiKey.trim()
-    const qualiphyWebhookUrl = `${webhookBaseUrl.trim().replace(/\/$/, "")}/api/webhook/qualiphy`
 
     const referenceId = uuid()
     const serviceName = truncateSquareText(
@@ -272,29 +242,17 @@ export async function POST(req: Request) {
     let qualiphyStatus: number | null = null
  
     try {
-      const qualiphyRes = await fetch(
-        qualiphyInviteUrl,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            api_key: qualiphyKey,
-            exams: visit.examId,
-            first_name: patientFirstName,
-            last_name: patientLastName,
-            email: patientEmail,
-            phone_number: patientPhone,
-            tele_state: visit.state,
-            dob: formatDOB(parsedDOB),
-            webhook_url: qualiphyWebhookUrl
-          })
-        }
-      )
+      const qualiphyRes = await sendQualiphyInvite({
+        examId: Number(visit.examId),
+        firstName: patientFirstName,
+        lastName: patientLastName,
+        email: patientEmail,
+        phone: patientPhone,
+        state: visit.state,
+        dob: parsedDOB,
+      })
 
       qualiphyStatus = qualiphyRes.status
-      await readJsonOrText(qualiphyRes)
 
       if (!qualiphyRes.ok) {
         console.error("Qualiphy invite failed", {
@@ -304,9 +262,12 @@ export async function POST(req: Request) {
       } else {
         qualiphySent = true
 
-        await prisma.exam.update({
-          where: { id: exam.id },
-          data: { status: ExamStatus.INVITED },
+        await updateExamAfterQualiphyInvite({
+          examId: exam.id,
+          status: ExamStatus.INVITED,
+          patientExamId: qualiphyRes.patientExamId,
+          meetingUrl: qualiphyRes.meetingUrl,
+          meetingUuid: qualiphyRes.meetingUuid,
         })
 
         await writeAuditLog({
@@ -319,9 +280,15 @@ export async function POST(req: Request) {
       }
 
     } catch (error) {
+      const errorCause =
+        error instanceof Error && "cause" in error
+          ? String(error.cause)
+          : undefined
+
       console.error("Qualiphy invite request failed", {
         examId: exam.id,
         error: error instanceof Error ? error.message : "Unknown error",
+        ...(errorCause ? { cause: errorCause } : {}),
       })
     }
 

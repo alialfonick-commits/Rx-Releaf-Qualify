@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { writeAuditLog } from "@/lib/audit"
 import { paymentListSelect } from "@/lib/examSelect"
+import { PaymentStatus } from "@prisma/client"
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
   const limit = 10
   const skip = (page - 1) * limit
 
-  const [payments, total] = await Promise.all([
+  const [payments, total, paid, pending, failed] = await Promise.all([
     prisma.exam.findMany({
       skip,
       take: limit,
@@ -26,7 +27,19 @@ export async function GET(req: Request) {
       select: paymentListSelect,
     }),
 
-    prisma.exam.count()
+    prisma.exam.count(),
+
+    prisma.exam.count({
+      where: { paymentStatus: PaymentStatus.PAID },
+    }),
+
+    prisma.exam.count({
+      where: { paymentStatus: PaymentStatus.PENDING },
+    }),
+
+    prisma.exam.count({
+      where: { paymentStatus: PaymentStatus.FAILED },
+    })
   ])
 
   await writeAuditLog({
@@ -39,6 +52,12 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     payments,
+    stats: {
+      total,
+      paid,
+      pending,
+      failed,
+    },
     total,
     page,
     totalPages: Math.ceil(total / limit)

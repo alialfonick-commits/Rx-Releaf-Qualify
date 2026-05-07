@@ -19,6 +19,7 @@ import {
 import { MoreHorizontal, Pencil, Power } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatCaseId } from "@/lib/formatters"
+import RetryQualiphyButton from "./RetryQualiphyButton"
 import {
   Hash,
   User,
@@ -72,6 +73,7 @@ type Visit = {
   caseNumber: number
   createdAt: string
   status: string
+  paymentStatus: string
   consultationType: string
   patient: {
     firstName: string
@@ -136,6 +138,10 @@ export default function ExecutionTable({ visits }: { visits: Visit[] }) {
             <CalendarDays size={16} /> Created At
           </span>
         </TableHead>
+
+        <TableHead>
+          Actions
+        </TableHead>
       </TableRow>
     </TableHeader>
 
@@ -179,6 +185,17 @@ export default function ExecutionTable({ visits }: { visits: Visit[] }) {
               <CalendarDays size={14} />
               {formatDate(item.createdAt)}
             </span>
+          </TableCell>
+
+          <TableCell>
+            {item.paymentStatus === "PAID" && item.status === "PENDING" ? (
+              <RetryQualiphyButton
+                examId={item.id}
+                onSuccess={() => window.location.reload()}
+              />
+            ) : (
+              <span className="text-xs text-[#8A9891]">-</span>
+            )}
           </TableCell>
         </TableRow>
       ))}

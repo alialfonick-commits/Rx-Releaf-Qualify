@@ -25,41 +25,83 @@ import {
  FieldSet,
 } from "@/components/ui/field"
 import {
- UserRound,
  Calendar,
  Clock,
  Send,
  MapPin,
- MessageSquare,
  Mail,
  Shield,
  CreditCard,
  User,
+ Loader2,
 } from "lucide-react"
 import { Link as LinkIcon, Eye, Trash2, Check  } from "lucide-react"
 import Link from "next/link"
 import { formatCaseId } from "@/lib/formatters"
 import { useState } from "react"
+import RetryQualiphyButton from "./RetryQualiphyButton"
 
-export function TableWrap({visits, loading}: {
-    visits: any[]
-    loading?: boolean
-  }) {
-  const [sendSMS, setSendSMS] = useState(true)
+export type VisitRow = {
+  id: string
+  caseNumber: number
+  createdAt: string
+  consultationType: string
+  patientState: string
+  paymentStatus: string
+  status: string
+  patient: {
+    firstName: string
+    lastName: string
+    email?: string
+    phone?: string
+  }
+  staff?: {
+    id?: string
+    name?: string | null
+  } | null
+}
+
+export function TableWrap({
+  visits,
+  loading,
+  allowPaymentActions = true,
+  allowDelete = true,
+  allowDeletePaid = false,
+  detailsBasePath = "/staff/visits",
+  deleteEndpointBase = "/api/staff/visits",
+  sendPaymentEndpoint = "/api/staff/send-payment",
+  currentStaffId,
+}: {
+  visits: VisitRow[]
+  loading?: boolean
+  allowPaymentActions?: boolean
+  allowDelete?: boolean
+  allowDeletePaid?: boolean
+  detailsBasePath?: string
+  deleteEndpointBase?: string
+  sendPaymentEndpoint?: string
+  currentStaffId?: string
+}) {
   const [sendEmail, setSendEmail] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const handleSend = async (id: string) => {
-    await fetch("/api/staff/send-payment", {
+    const res = await fetch(sendPaymentEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         examId: id,
-        sendSMS,
+        sendSMS: false,
         sendEmail,
       }),
     })
+
+    if (!res.ok) {
+      alert("Payment link could not be sent")
+      return
+    }
   
     alert("Payment link sent")
   }
@@ -76,9 +118,14 @@ export function TableWrap({visits, loading}: {
     if (!confirm("Are you sure you want to delete this exam?")) return
   
     try {
-      await fetch(`/api/staff/visits/${id}`, {
+      setDeletingId(id)
+      const res = await fetch(`${deleteEndpointBase}/${id}`, {
         method: "DELETE",
       })
+
+      if (!res.ok) {
+        throw new Error("Delete failed")
+      }
   
       alert("Deleted successfully")
   
@@ -88,6 +135,7 @@ export function TableWrap({visits, loading}: {
     } catch (err) {
       console.error(err)
       alert("Delete failed")
+      setDeletingId(null)
     }
   }
  return (
@@ -146,7 +194,7 @@ export function TableWrap({visits, loading}: {
          <span className="bg-[#39AC6326] text-[#39AC63] px-9.5 py-1 rounded-full font-semibold">
           Paid
          </span>
-        ) : (
+        ) : allowPaymentActions && (!currentStaffId || visit.staff?.id === currentStaffId) ? (
          <AlertDialog>
           <AlertDialogTrigger asChild>
            <button className="flex items-center gap-1.5 border w-fit bg-[#EEB32B26] border-[#F5A623] text-[#322A1B] px-2 py-1 rounded-lg font-medium cursor-pointer text-[13px]">
@@ -225,7 +273,7 @@ export function TableWrap({visits, loading}: {
                  <Mail className="bg-[#F1F4F2] p-2.5 rounded-xl" color="#6A7C73" size={40} />
                  <div>
                   Email
-                  <span>{visit.patient.email}</span>
+                  <span>{visit.patient.email || "Patient email"}</span>
                  </div>
                 </div>
                </FieldLabel>
@@ -263,6 +311,10 @@ export function TableWrap({visits, loading}: {
           </AlertDialogContent>
          </AlertDialog>
 
+        ) : (
+         <span className="bg-[#DFA62026] text-[#322A1B] px-6 py-1 rounded-full font-semibold">
+          Pending
+         </span>
         )}
        </TableCell>
 
@@ -273,6 +325,7 @@ export function TableWrap({visits, loading}: {
         </span>
        </TableCell>
        <TableCell className="[&_span]:px-3.5 [&_span]:py-1 [&_span]:rounded-full [&_span]:font-medium [&_span]:text-[13px]">
+        <div className="flex flex-col items-center gap-2">
         {visit.status === "IN_PROGRESS" && (
          <span className="bg-[#DFA62026] text-[#322A1B]">
           In Progress
@@ -298,32 +351,67 @@ export function TableWrap({visits, loading}: {
           Scheduled
          </span>
         )}
+        {visit.paymentStatus === "PAID" &&
+          visit.status === "PENDING" &&
+          (!currentStaffId || visit.staff?.id === currentStaffId) && (
+          <RetryQualiphyButton
+            examId={visit.id}
+            onSuccess={() => window.location.reload()}
+          />
+        )}
+        </div>
        </TableCell>
 
        <TableCell className="flex items-center justify-center gap-2">
-        <Link
-          href={`/staff/visits/${visit.id}`}
-          className="bg-[#3399CC26] text-[#3399CC] p-2 rounded-full hover:bg-[#3399CC40] transition cursor-pointer"
-          title="View details"
-        >
-          <Eye size={15} />
-        </Link>
+        {detailsBasePath && (
+          <Link
+            href={`${detailsBasePath}/${visit.id}`}
+            className="bg-[#3399CC26] text-[#3399CC] p-2 rounded-full hover:bg-[#3399CC40] transition cursor-pointer"
+            title="View details"
+          >
+            <Eye size={15} />
+          </Link>
+        )}
 
         {visit.paymentStatus === "PAID" ? (
-          <div
-            className="bg-[#39AC6326] text-[#39AC63] p-2 rounded-full cursor-not-allowed"
-            title="Paid items cannot be deleted"
-          >
-            <Check size={15} />
-          </div>
-        ) : (
+          <>
+            {allowDelete && allowDeletePaid && (!currentStaffId || visit.staff?.id === currentStaffId) ? (
+              <button
+                onClick={() => handleDelete(visit.id)}
+                disabled={deletingId === visit.id}
+                className="bg-[#D74242] text-white p-2 rounded-full hover:bg-red-600 transition cursor-pointer disabled:cursor-wait disabled:opacity-70 disabled:hover:bg-[#D74242]"
+                title={deletingId === visit.id ? "Deleting exam" : "Delete exam"}
+              >
+                {deletingId === visit.id ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <Trash2 size={15} />
+                )}
+              </button>
+            ) : (
+              <div
+                className="bg-[#39AC6326] text-[#39AC63] p-2 rounded-full cursor-not-allowed"
+                title="Paid items cannot be deleted"
+              >
+                <Check size={15} />
+              </div>
+            )}
+          </>
+        ) : allowDelete && (!currentStaffId || visit.staff?.id === currentStaffId) ? (
           <button
             onClick={() => handleDelete(visit.id)}
-            className="bg-[#D74242] text-white p-2 rounded-full hover:bg-red-600 transition cursor-pointer"
-            title="Delete exam"
+            disabled={deletingId === visit.id}
+            className="bg-[#D74242] text-white p-2 rounded-full hover:bg-red-600 transition cursor-pointer disabled:cursor-wait disabled:opacity-70 disabled:hover:bg-[#D74242]"
+            title={deletingId === visit.id ? "Deleting exam" : "Delete exam"}
           >
-            <Trash2 size={15} />
+            {deletingId === visit.id ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : (
+              <Trash2 size={15} />
+            )}
           </button>
+        ) : (
+          <span className="text-xs text-[#8A9891]">-</span>
         )}
       </TableCell>
       </TableRow>

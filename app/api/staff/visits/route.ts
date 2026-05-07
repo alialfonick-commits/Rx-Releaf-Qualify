@@ -22,16 +22,13 @@ export async function GET(req: Request) {
 
   const [visits, total] = await Promise.all([
     prisma.exam.findMany({
-      where: { staffId },
       select: examListSelect,
       orderBy: { createdAt: "desc" },
       skip,
       take: limit
     }),
 
-    prisma.exam.count({
-      where: { staffId }
-    })
+    prisma.exam.count()
   ])
 
   await writeAuditLog({
@@ -46,6 +43,7 @@ export async function GET(req: Request) {
     visits,
     total,
     page,
-    totalPages: Math.ceil(total / limit)
+    totalPages: Math.ceil(total / limit),
+    currentStaffId: staffId
   })
 }

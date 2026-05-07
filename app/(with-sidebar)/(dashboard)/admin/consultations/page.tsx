@@ -145,7 +145,6 @@ export default function AdminConsultationsPage() {
 
           <Accordion
             type="multiple"
-            defaultValue={consultationTypes.map((type) => type.id)}
             className="divide-y divide-[#E7ECE5]"
           >
           {consultationTypes.map((type) => {

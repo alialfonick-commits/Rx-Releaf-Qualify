@@ -24,5 +24,5 @@ export default async function VisitPage({
     return <p>Visit not found</p>
   }
 
-  return <ViewVisitDetails visit={visit} />
+  return <ViewVisitDetails visit={visit} backHref="/staff/visits" />
 }
