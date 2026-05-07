@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { writeAuditLog } from "@/lib/audit"
+import { deleteExamWithQualiphyCancel } from "@/lib/deleteExam"
 
 export async function DELETE(
     req: Request,
@@ -18,28 +17,14 @@ export async function DELETE(
     const staffId = session.user.id
    
     try {
-      const exam = await prisma.exam.findFirst({
-        where: { id: examId, staffId },
-        select: { id: true },
-      })
-
-      if (!exam) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-      }
-
-      await prisma.exam.delete({
-        where: { id: exam.id }
-      })
-
-      await writeAuditLog({
+      const result = await deleteExamWithQualiphyCancel({
+        examId,
         userId: staffId,
         action: "DELETE_STAFF_VISIT",
-        entity: "Exam",
-        entityId: exam.id,
         req,
       })
    
-      return NextResponse.json({ success: true })
+      return NextResponse.json(result.body, { status: result.status })
     } catch {
       return NextResponse.json(
         { error: "Failed to delete exam" },

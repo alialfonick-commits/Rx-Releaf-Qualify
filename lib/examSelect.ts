@@ -36,6 +36,7 @@ export const paymentListSelect = {
   paymentId: true,
   paymentLink: true,
   status: true,
+  consultationType: true,
   examName: true,
   patient: {
     select: {

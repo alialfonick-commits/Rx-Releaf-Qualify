@@ -80,6 +80,9 @@ model Exam {
   paymentStatus    PaymentStatus
   examId           Int
   examName         String
+  qualiphyPatientExamId String?
+  qualiphyMeetingUrl String?
+  qualiphyMeetingUuid String?
   isPhoneVisit     Boolean          @default(false)
   providerName     String?
   status           ExamStatus       @default(PENDING)

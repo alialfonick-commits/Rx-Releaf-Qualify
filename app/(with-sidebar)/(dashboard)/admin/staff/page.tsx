@@ -1,61 +1,70 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import StaffTable from '@/app/components/staffTable'
+import StaffTable, { type StaffRow } from '@/app/components/staffTable'
 import { Users, UserCheck, UserX } from 'lucide-react' // Ensure lucide-react is installed
 import Navbar from '@/app/components/navbar'
 import StaffToolbar from "@/app/components/AdminStaffToolbar"
 import CreatePopup from "./popup/page"
 
+type StaffResponse = {
+  stats: {
+    total: number
+    active: number
+    inactive: number
+  }
+  staff: StaffRow[]
+}
+
 export default function StaffPage () {
-const [isModalOpen, setIsModalOpen] = useState(false)
-  const [data, setData] = useState<any>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [data, setData] = useState<StaffResponse | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
-const [statusFilter, setStatusFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-   const fetchData = async () => {
+  const fetchData = async () => {
     const res = await fetch("/api/admin/staff")
     const json = await res.json()
     setData(json)
   }
-  useEffect(() => {
-    fetchData()
-  }, [])
 
-  const handleSearch = () => {}
-  const handleFilter = () => {}
+  useEffect(() => {
+    let cancelled = false
+
+    fetch("/api/admin/staff")
+      .then((res) => res.json())
+      .then((json) => {
+        if (!cancelled) {
+          setData(json)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   if (!data) return <p>Loading...</p>
 
-  const filteredStaff = data.staff.filter((staff: any) => {
-  const matchesSearch =
-    staff.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    staff.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    staff.phone?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredStaff = data.staff.filter((staff) => {
+    const normalizedSearch = searchQuery.toLowerCase()
+    const matchesSearch =
+      staff.name?.toLowerCase().includes(normalizedSearch) ||
+      staff.email?.toLowerCase().includes(normalizedSearch) ||
+      staff.phone?.toLowerCase().includes(normalizedSearch)
 
-  const matchesStatus =
-    statusFilter === "all" ||
-    (statusFilter === "active" && staff.isActive) ||
-    (statusFilter === "inactive" && !staff.isActive)
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "active" && staff.isActive) ||
+      (statusFilter === "inactive" && !staff.isActive)
 
-  return matchesSearch && matchesStatus
-})
+    return matchesSearch && matchesStatus
+  })
 
   return (
     <>
     <Navbar title={'Staff Management'} subtitle='Manage staff members, permissions and access control.' />
       
-      {/* Toolbar */}
-      <StaffToolbar
-        onSearch={setSearchQuery}
-        onFilterChange={setStatusFilter}
-        onAddStaff={() => setIsModalOpen(true)}
-      />
-
       {/* Popup */}
       <CreatePopup
         open={isModalOpen}
@@ -86,8 +95,13 @@ const [statusFilter, setStatusFilter] = useState("all")
           />
         </div>
 
+        <StaffToolbar
+          onSearch={setSearchQuery}
+          onFilterChange={setStatusFilter}
+          onAddStaff={() => setIsModalOpen(true)}
+        />
+
         {/* Table */}
-        {/* <StaffTable staff={data.staff} /> */}
         <StaffTable staff={filteredStaff} />
       </div>
 

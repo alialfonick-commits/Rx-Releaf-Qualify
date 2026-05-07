@@ -1,20 +1,23 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { TableWrap } from '@/app/components/tableWrap'
+import { useCallback, useEffect, useState } from 'react'
+import { TableWrap, type VisitRow } from '@/app/components/tableWrap'
 import Navbar from '@/app/components/navbar'
 import SatffNewExam from '@/app/components/StaffExamVisit'
 
+type StaffVisitsResponse = {
+  visits: VisitRow[]
+  total: number
+  page: number
+  totalPages: number
+}
+
 export default function VisitsPage () {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<StaffVisitsResponse | null>(null)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    fetchData()
-  }, [page])
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true)
 
     try {
@@ -26,7 +29,11 @@ export default function VisitsPage () {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   return (
     <>
@@ -35,7 +42,10 @@ export default function VisitsPage () {
       <SatffNewExam />
         {/* Reusable Table */}
         <div className='bg-[#FFFFFF] border border-[#D7DED3] rounded-xl px-3.5 py-3.5 mt-3'>
-          <TableWrap visits={data?.visits || []} loading={loading} />
+          <TableWrap
+            visits={data?.visits || []}
+            loading={loading}
+          />
         </div>
 
         {/* Pagination */}

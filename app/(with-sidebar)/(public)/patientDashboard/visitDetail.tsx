@@ -64,7 +64,42 @@ type FormErrors = Partial<Record<
   string
 >>
 
-export default function VisitDetail({ mode = "public" }: { mode?: "public" | "staff" }) {
+function getPhoneDigits(value: string) {
+  return value.replace(/\D/g, "")
+}
+
+function normalizeUSPhone(value: string) {
+  const digits = getPhoneDigits(value)
+
+  if (digits.length === 10) {
+    return `+1${digits}`
+  }
+
+  if (digits.length === 11 && digits.startsWith("1")) {
+    return `+${digits}`
+  }
+
+  return null
+}
+
+function formatUSPhoneInput(value: string) {
+  const digits = getPhoneDigits(value).slice(0, 11)
+  const nationalDigits = digits.length === 11 && digits.startsWith("1")
+    ? digits.slice(1)
+    : digits.slice(0, 10)
+
+  if (nationalDigits.length <= 3) {
+    return nationalDigits
+  }
+
+  if (nationalDigits.length <= 6) {
+    return `(${nationalDigits.slice(0, 3)}) ${nationalDigits.slice(3)}`
+  }
+
+  return `(${nationalDigits.slice(0, 3)}) ${nationalDigits.slice(3, 6)}-${nationalDigits.slice(6)}`
+}
+
+export default function VisitDetail({ mode = "public" }: { mode?: "public" | "staff" | "admin" }) {
 
  const [open, setOpen] = React.useState(false)
  const [date, setDate] = React.useState<Date | undefined>()
@@ -129,6 +164,9 @@ const router = useRouter()
 
 const handleNext = () => {
 if (!validateForm()) return;
+ const normalizedPhone = normalizeUSPhone(phone)
+
+ if (!normalizedPhone) return;
 
  dispatch(setVisitDetails({
   state: selectedState,
@@ -144,7 +182,7 @@ if (!validateForm()) return;
   firstName,
   lastName,
   email,
-  phone,
+  phone: normalizedPhone,
   dob: date ? format(date, "MM/dd/yyyy") : "",
   birthSex
  }))
@@ -153,14 +191,17 @@ if (!validateForm()) return;
     router.push("/payment")
   }
 
-  if (mode === "staff") {
-    createExamForStaff()
+  if (mode === "staff" || mode === "admin") {
+    createExamForStaff(normalizedPhone)
   }
 }
 
-const createExamForStaff = async () => {
+const createExamForStaff = async (normalizedPhone: string) => {
   try {
-    const res = await fetch("/api/staff/exams", {
+    const endpoint = mode === "admin" ? "/api/admin/exams" : "/api/staff/exams"
+    const redirectTo = mode === "admin" ? "/admin/visits" : "/staff/visits"
+
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -176,7 +217,7 @@ const createExamForStaff = async () => {
           firstName,
           lastName,
           email,
-          phone,
+          phone: normalizedPhone,
           dob: date,
           birthSex
         }
@@ -187,7 +228,7 @@ const createExamForStaff = async () => {
 
     if (data.success) {
       alert("Exam created successfully")
-      router.push("/staff/visits")
+      router.push(redirectTo)
     } else {
       alert("Failed to create exam")
     }
@@ -213,8 +254,12 @@ const validateForm = () => {
     newErrors.email = "Invalid email";
   }
 
+  const normalizedPhone = normalizeUSPhone(phone)
+
   if (!phone.trim()) {
     newErrors.phone = "Phone is required";
+  } else if (!normalizedPhone) {
+    newErrors.phone = "Enter a valid US phone number, e.g. (555) 123-4567";
   }
 
   if (!date) newErrors.dob = "Date of birth is required";
@@ -456,10 +501,13 @@ const validateForm = () => {
        maxLength={20}
        type="text"
        placeholder="(555) 123-4567"
-       onChange={(e) => {
-        setPhone(e.target.value)
+        value={phone}
+        inputMode="tel"
+        autoComplete="tel"
+        onChange={(e) => {
+         setPhone(formatUSPhoneInput(e.target.value))
          setErrors((prev) => ({ ...prev, phone: "" }));
-      }}
+       }}
       required
       />
       {errors.phone && (

@@ -38,12 +38,12 @@ export async function POST(req: Request) {
   // 🔐 Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const lastStaff = await prisma.user.findFirst({
+  const staffNumberAggregate = await prisma.user.aggregate({
     where: { role: "STAFF" },
-    orderBy: { staffNumber: "desc" },
+    _max: { staffNumber: true },
   })
 
-  const nextStaffNumber = (lastStaff?.staffNumber || 0) + 1
+  const nextStaffNumber = (staffNumberAggregate._max.staffNumber || 0) + 1
 
   const user = await prisma.user.create({
     data: {

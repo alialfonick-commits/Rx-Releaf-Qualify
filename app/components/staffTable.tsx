@@ -8,176 +8,202 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/paymentsActionMenu"
-
-import { MoreHorizontal, Pencil, Key, Fingerprint, Mail, Phone, ShieldAlert, Trash2, User } from "lucide-react"
+import {
+  Calendar,
+  Fingerprint,
+  Mail,
+  MoreHorizontal,
+  Phone,
+  ShieldAlert,
+  Trash2,
+  User,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatStaffId } from "@/lib/formatters"
 
-export default function StaffTable({ staff }: { staff: any[] }) {
+export type StaffRow = {
+  id: string
+  name?: string | null
+  email?: string | null
+  phone?: string | null
+  staffNumber?: number | null
+  isActive: boolean
+  lastLogin?: string | Date | null
+  createdAt?: string | Date
+}
 
+function StatusBadge({ active }: { active: boolean }) {
+  return active ? (
+    <span className="inline-flex min-w-20 justify-center rounded-full bg-[#39AC6326] px-3 py-1 text-xs font-semibold text-[#24924D]">
+      Active
+    </span>
+  ) : (
+    <span className="inline-flex min-w-20 justify-center rounded-full bg-[#DFA62026] px-3 py-1 text-xs font-semibold text-[#322A1B]">
+      Inactive
+    </span>
+  )
+}
+
+function formatDate(value?: string | Date | null) {
+  if (!value) return "Never"
+
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })
+}
+
+export default function StaffTable({ staff }: { staff: StaffRow[] }) {
   const toggleStatus = async (id: string, current: boolean) => {
     try {
-      await fetch(`/api/admin/staff/${id}`, {
+      const res = await fetch(`/api/admin/staff/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isActive: !current })
+        body: JSON.stringify({ isActive: !current }),
       })
+
+      if (!res.ok) throw new Error("Update failed")
+
       window.location.reload()
-    } catch (err) {
-      console.error(err)
+    } catch {
+      alert("Staff status could not be updated")
     }
   }
 
   const deleteStaff = async (id: string) => {
-    const confirmDelete = confirm("Are you sure you want to delete this staff?")
-    if (!confirmDelete) return
+    if (!confirm("Are you sure you want to delete this staff member?")) return
+
     try {
-      await fetch(`/api/admin/staff/${id}`, { method: "DELETE" })
+      const res = await fetch(`/api/admin/staff/${id}`, { method: "DELETE" })
+
+      if (!res.ok) throw new Error("Delete failed")
+
       window.location.reload()
-    } catch (err) {
-      console.error(err)
+    } catch {
+      alert("Staff member could not be deleted")
     }
   }
 
   if (!staff || staff.length === 0) {
-    return <p>No staff found</p>
+    return (
+      <div className="rounded-xl border border-[#DCE5DF] bg-white p-8 text-center text-[#6A7C73]">
+        No staff found
+      </div>
+    )
   }
 
   return (
-    <div className='rounded-xl border border-[#DCE5DF] bg-white overflow-hidden shadow-sm'>
-      <div className='overflow-x-auto'>
-        <Table className="min-w-[1000px]">
-          <TableHeader className='bg-[#F8FAF9]'>
-            <TableRow className='border-b border-[#DCE5DF] hover:bg-transparent'>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73] pl-6'>
-                Staff ID
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73]'>
-                Name
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73]'>
-                Email
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73]'>
-                Phone
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73] text-center'>
-                Status
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73]'>
-                Last Log In
-              </TableHead>
-              <TableHead className='py-5 text-[15px] font-bold text-[#6A7C73] text-right pr-8'>
-                Actions
-              </TableHead>
+    <div className="rounded-xl border border-[#DCE5DF] bg-white shadow-sm">
+      <div className="border-b border-[#DCE5DF] bg-[#F8FAF9] px-4 py-4">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-[18px] font-semibold text-[#2E3833]">Staff Directory</h2>
+            <p className="text-sm text-[#6A7C73]">Manage staff accounts, login access, and contact details.</p>
+          </div>
+          <div className="rounded-lg border border-[#DCE5DF] bg-white px-3 py-2 text-sm font-medium text-[#476B59]">
+            {staff.length} shown
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <Table className="min-w-[980px]">
+          <TableHeader>
+            <TableRow className="bg-[#FCFCFC] text-[#6A7C73]">
+              <TableHead>Staff ID</TableHead>
+              <TableHead>Staff Member</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last Login</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
-          <TableBody>
-            {staff.map((s: any) => (
-              <TableRow
-                key={s.id}
-                className='border-b border-[#F1F4F2] last:border-0 hover:bg-[#F8FAF9]/50 transition-colors'
-              >
-                <TableCell className='py-4 font-semibold text-[#2E3833]'>
-                  <div className="flex items-center gap-2 font-bold text-[#476B59]">
-                    <Fingerprint size={16} className="text-[#6A7C73] opacity-70" />
-                    {formatStaffId(s.staffNumber)}
-                  </div>
-                </TableCell>
-                {/* Staff ID with Fingerprint Icon */}
-                <TableCell className='py-4 pl-6'>
-                  <div className="flex items-center gap-2 font-bold text-[#476B59]">
-                    <Fingerprint size={16} className="text-[#6A7C73] opacity-70" />
-                    {s.id.slice(0, 8).toUpperCase()}
-                  </div>
+          <TableBody className="text-[#2E3835] [&_td]:text-sm [&_tr]:hover:bg-gray-50">
+            {staff.map((s) => (
+              <TableRow key={s.id} className="border-b border-[#F1F4F2] last:border-0">
+                <TableCell>
+                  <span className="inline-flex items-center gap-2 font-semibold text-[#486B57]">
+                    <Fingerprint size={15} className="text-[#6A7C73]" />
+                    {s.staffNumber ? formatStaffId(s.staffNumber) : "Unassigned"}
+                  </span>
                 </TableCell>
 
-                {/* Name with User Icon */}
-                <TableCell className='py-4'>
-                  <div className="flex items-center gap-2 font-bold text-[#2E3833] text-[15px]">
-                    <div className="bg-[#F1F4F2] p-1.5 rounded-full text-[#6A7C73]">
-                      <User size={14} />
-                    </div>
-                    {s.name || 'N/A'}
-                  </div>
-                </TableCell>
-
-                {/* Email with Wrap Fix */}
-                <TableCell className='py-4 max-w-[200px]'>
-                   <div className="flex items-center gap-2 text-[#6A7C73] break-all">
-                     <Mail size={14} className="opacity-60 flex-shrink-0" />
-                     <span className="truncate hover:whitespace-normal hover:overflow-visible" title={s.email}>
-                        {s.email}
-                     </span>
-                   </div>
-                </TableCell>
-
-                <TableCell className='py-4 text-[#6A7C73]'>
+                <TableCell>
                   <div className="flex items-center gap-2">
-                    <Phone size={14} className="opacity-60 flex-shrink-0" />
-                    {s.phone || '-'}
+                    <span className="rounded-full bg-[#F1F4F2] p-1.5 text-[#6A7C73]">
+                      <User size={14} />
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-[#2E3833]">{s.name || "N/A"}</span>
+                      <span className="text-xs text-[#8A9891]">{s.id.slice(0, 8).toUpperCase()}</span>
+                    </div>
                   </div>
                 </TableCell>
 
-                <TableCell className='py-4 text-center'>
-                  {s.isActive ? (
-                    <span className='bg-[#E7F5ED] text-[#39AC63] px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider'>
-                      Active
-                    </span>
-                  ) : (
-                    <span className='bg-[#F1F4F2] text-[#6A7C73] px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider'>
-                      Inactive
-                    </span>
-                  )}
+                <TableCell>
+                  <span className="inline-flex max-w-[260px] items-center gap-2 rounded-full bg-[#DFA62026] px-2.5 py-1 text-xs normal-case text-[#322A1B]">
+                    <Mail size={13} className="shrink-0" />
+                    <span className="truncate" title={s.email || undefined}>{s.email || "-"}</span>
+                  </span>
                 </TableCell>
 
-                <TableCell className='py-4 text-[#6A7C73] font-medium'>
-                  {s.lastLogin
-                    ? new Date(s.lastLogin).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })
-                    : 'Never'}
+                <TableCell>
+                  <span className="inline-flex items-center gap-2 text-[#6A7C73]">
+                    <Phone size={14} />
+                    {s.phone || "-"}
+                  </span>
                 </TableCell>
 
-                <TableCell className='py-4 text-right pr-6'>
-                  <div className="flex items-center justify-end gap-1">
+                <TableCell>
+                  <StatusBadge active={s.isActive} />
+                </TableCell>
 
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon' className='h-8 w-8 text-[#6A7C73] hover:bg-[#F1F4F2]'>
-                          <MoreHorizontal size={16} />
-                        </Button>
-                      </DropdownMenuTrigger>
+                <TableCell>
+                  <span className="inline-flex items-center gap-2 text-[#6A7C73]">
+                    <Calendar size={14} />
+                    {formatDate(s.lastLogin)}
+                  </span>
+                </TableCell>
 
-                      <DropdownMenuContent align="end" className="w-48 rounded-xl border-[#DCE5DF] shadow-lg">
-                        <DropdownMenuItem
-                          onClick={() => toggleStatus(s.id, s.isActive)}
-                          className='cursor-pointer py-2.5 text-[#2E3833]'
-                        >
-                          <ShieldAlert className="mr-2 h-4 w-4" />
-                          {s.isActive ? 'Deactivate Account' : 'Activate Account'}
-                        </DropdownMenuItem>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-[#6A7C73] hover:bg-[#F1F4F2]"
+                      >
+                        <MoreHorizontal size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                        <DropdownMenuItem
-                          onClick={() => deleteStaff(s.id)}
-                          className='text-red-500 cursor-pointer py-2.5 focus:bg-red-50 focus:text-red-600'
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete Staff
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                    <DropdownMenuContent align="end" className="w-48 rounded-xl border-[#DCE5DF] shadow-lg">
+                      <DropdownMenuItem
+                        onClick={() => toggleStatus(s.id, s.isActive)}
+                        className="cursor-pointer py-2.5 text-[#2E3833]"
+                      >
+                        <ShieldAlert className="mr-2 h-4 w-4" />
+                        {s.isActive ? "Deactivate Account" : "Activate Account"}
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        onClick={() => deleteStaff(s.id)}
+                        className="cursor-pointer py-2.5 text-[#D74242] focus:bg-red-50 focus:text-red-600"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete Staff
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}

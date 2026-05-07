@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { sendPaymentEmail } from "@/lib/sendEmail"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { sendPaymentEmail } from "@/lib/sendEmail"
 import { writeAuditLog } from "@/lib/audit"
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
 
-  if (!session || session.user.role !== "STAFF") {
+  if (!session?.user || session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
         exam.paymentLink
       )
     } catch {
-      console.error("Payment email failed")
+      console.error("Admin payment email failed")
     }
   }
 
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
   await writeAuditLog({
     userId: session.user.id,
-    action: "SEND_PAYMENT_LINK",
+    action: "SEND_ADMIN_PAYMENT_LINK",
     entity: "Exam",
     entityId: exam.id,
     req,
