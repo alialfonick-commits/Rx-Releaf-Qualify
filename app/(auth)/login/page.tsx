@@ -34,7 +34,8 @@ export default function LoginPage() {
       setIsSubmitting(false)
 
       if (!res.ok) {
-        setError("Unable to send verification code")
+        const data = await res.json().catch(() => null)
+        setError(data?.error || "Invalid email or password.")
         return
       }
 
@@ -52,7 +53,7 @@ export default function LoginPage() {
     setIsSubmitting(false)
 
     if (res?.error) {
-      setError("Invalid email, password, or verification code")
+      setError("Invalid verification code.")
       return
     }
 
@@ -136,9 +137,12 @@ export default function LoginPage() {
           )}
 
           {error && (
-            <p className="!mb-0 text-sm text-red-600">
+            <div
+              role="alert"
+              className="rounded-lg border border-[#D7424233] bg-[#D742420D] px-3 py-2 text-sm font-medium text-[#D74242]"
+            >
               {error}
-            </p>
+            </div>
           )}
 
           <button

@@ -7,6 +7,12 @@ import { writeAuditLog } from "@/lib/audit"
 import { isRateLimitedKey, rateLimit } from "@/lib/rateLimit"
 import { isValidEmail } from "@/lib/validation"
 
+const invalidLoginResponse = () =>
+  NextResponse.json(
+    { ok: false, error: "Invalid email or password." },
+    { status: 401 }
+  )
+
 export async function POST(req: Request) {
   const limited = rateLimit(req, {
     key: "mfa-start",
@@ -23,7 +29,7 @@ export async function POST(req: Request) {
   const password = typeof body.password === "string" ? body.password : ""
 
   if (!isValidEmail(email) || !password) {
-    return NextResponse.json({ ok: true })
+    return invalidLoginResponse()
   }
 
   if (
@@ -33,7 +39,10 @@ export async function POST(req: Request) {
       windowMs: 15 * 60 * 1000,
     })
   ) {
-    return NextResponse.json({ ok: true })
+    return NextResponse.json(
+      { ok: false, error: "Too many login attempts. Please try again later." },
+      { status: 429 }
+    )
   }
 
   const user = await prisma.user.findUnique({
@@ -41,13 +50,13 @@ export async function POST(req: Request) {
   })
 
   if (!user || !user.isActive || user.isDeleted) {
-    return NextResponse.json({ ok: true })
+    return invalidLoginResponse()
   }
 
   const validPassword = await bcrypt.compare(password, user.password)
 
   if (!validPassword) {
-    return NextResponse.json({ ok: true })
+    return invalidLoginResponse()
   }
 
   const { code } = await createMfaChallenge(user.id)
