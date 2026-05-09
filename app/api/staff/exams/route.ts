@@ -144,11 +144,11 @@ export async function POST(req: Request) {
       },
     })
    
-  } catch {
-    console.error("Staff exam creation failed")
+  } catch (error) {
+    console.error("Staff exam creation failed", error instanceof Error ? error.message : "Unknown error")
   
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: "Exam could not be created. Please check payment configuration and try again." },
       { status: 500 }
     )
   }

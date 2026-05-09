@@ -121,11 +121,11 @@ export async function POST(req: Request) {
         paymentStatus: exam.paymentStatus,
       },
     })
-  } catch {
-    console.error("Admin exam creation failed")
+  } catch (error) {
+    console.error("Admin exam creation failed", error instanceof Error ? error.message : "Unknown error")
 
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: "Exam could not be created. Please check payment configuration and try again." },
       { status: 500 }
     )
   }

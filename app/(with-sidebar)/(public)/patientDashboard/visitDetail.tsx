@@ -230,11 +230,12 @@ const createExamForStaff = async (normalizedPhone: string) => {
       alert("Exam created successfully")
       router.push(redirectTo)
     } else {
-      alert("Failed to create exam")
+      alert(data.error || "Failed to create exam")
     }
 
   } catch (err) {
     console.error(err)
+    alert("Failed to create exam")
   }
 }
 
