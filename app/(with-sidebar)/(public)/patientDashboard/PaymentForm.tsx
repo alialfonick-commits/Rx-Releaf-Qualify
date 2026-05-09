@@ -12,28 +12,48 @@ interface PaymentFormProps {
   amount: number
 }
 
+type SquareCard = {
+  attach: (selector: string) => Promise<void>
+  tokenize: () => Promise<{ status: string; token?: string }>
+}
+
+type SquarePayments = {
+  card: () => Promise<SquareCard>
+}
+
+type SquareSdk = {
+  payments: (appId?: string, locationId?: string) => SquarePayments
+}
+
+declare global {
+  interface Window {
+    Square?: SquareSdk
+  }
+}
+
 export default function PaymentForm({ amount }: PaymentFormProps) {
   const [loading, setLoading] = useState(true)
   const [paying, setPaying] = useState(false)
+  const [paymentError, setPaymentError] = useState("")
   const router = useRouter()
   const visit = useSelector((state: RootState) => state.visit)
   const patient = useSelector((state: RootState) => state.patient)
   
 
   const initialized = useRef(false)
-  const cardRef = useRef<any>(null)
+  const cardRef = useRef<SquareCard | null>(null)
 
   const dispatch = useDispatch()
 
   // ✅ wait for Square SDK
   const waitForSquare = async () => {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<SquareSdk>((resolve, reject) => {
       const start = Date.now()
 
       const interval = setInterval(() => {
-        if ((window as any).Square) {
+        if (window.Square) {
           clearInterval(interval)
-          resolve((window as any).Square)
+          resolve(window.Square)
         }
 
         if (Date.now() - start > 5000) {
@@ -78,11 +98,13 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
     if (paying || !cardRef.current) return
 
     setPaying(true)
+    setPaymentError("")
 
     const result = await cardRef.current.tokenize()
 
     if (result.status !== "OK") {
       console.error("Tokenization failed")
+      setPaymentError("Please check your card details and try again.")
       setPaying(false)
       return
     }
@@ -113,11 +135,12 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
         await persistor.purge()
 
       } else {
-        alert("Payment failed")
+        setPaymentError(data.error || "Payment failed. Please try again or contact support.")
         setPaying(false)
       }
     } catch (err) {
       console.error(err)
+      setPaymentError("Payment failed. Please try again or contact support.")
       setPaying(false)
     }
   }
@@ -137,6 +160,12 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
           className={`h-full w-full ${loading ? "invisible" : "visible"}`}
         />
       </div>
+
+      {paymentError && (
+        <p className="col-span-12 rounded-lg border border-[#D7424233] bg-[#D742420D] px-3 py-2 text-sm text-[#D74242]">
+          {paymentError}
+        </p>
+      )}
 
       {/* Back Button */}
       <Button

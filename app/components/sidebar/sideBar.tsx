@@ -42,12 +42,11 @@ export default function SideBar () {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const handleLogout = async () => {
-    // Optional: call your API to revoke tokens, log activity, etc.
-
     await signOut({
-      callbackUrl: "/login", // where to go after logout
-      redirect: true,        // default is true; explicit for clarity
-    });
+      redirect: false,
+    })
+
+    router.replace("/login")
   };
 
   return (

@@ -264,9 +264,8 @@ export default function VirtualStep1({
        </SelectTrigger>
        <SelectContent>
         <SelectItem value="bs">Select birth sex</SelectItem>
-        <SelectItem value="men">Men</SelectItem>
-        <SelectItem value="women">Women</SelectItem>
-        <SelectItem value="custom">Custom</SelectItem>
+        <SelectItem value="MALE">Male</SelectItem>
+        <SelectItem value="FEMALE">Female</SelectItem>
        </SelectContent>
       </Select>
      </div>

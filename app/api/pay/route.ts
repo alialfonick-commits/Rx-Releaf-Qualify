@@ -47,6 +47,29 @@ function truncateSquareText(value: string, maxLength: number) {
   return value.length > maxLength ? value.slice(0, maxLength) : value
 }
 
+function getPaymentErrorResponse(error: unknown) {
+  const message = error instanceof Error ? error.message : ""
+
+  if (message.includes("INVALID_PHONE_NUMBER") || message.includes("phone_number")) {
+    return {
+      status: 400,
+      body: {
+        success: false,
+        error: "Please enter a valid phone number.",
+        field: "phone",
+      },
+    }
+  }
+
+  return {
+    status: 500,
+    body: {
+      success: false,
+      error: "Payment failed. Please try again or contact support.",
+    },
+  }
+}
+
 export async function POST(req: Request) {
   const limited = rateLimit(req, {
     key: "pay",
@@ -318,10 +341,8 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error("Payment route failed", error instanceof Error ? error.message : "Unknown error")
+    const response = getPaymentErrorResponse(error)
 
-    return NextResponse.json({
-      success: false,
-      error: "Payment failed",
-    }, { status: 500 })
+    return NextResponse.json(response.body, { status: response.status })
   }
 }
